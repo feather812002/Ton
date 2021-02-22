@@ -1,0 +1,114 @@
+{
+  "ABI version": 2,
+  "header": [
+    "pubkey",
+    "time",
+    "expire"
+  ],
+  "functions": [
+  {
+    "name": "constructor",
+    "inputs": [
+    { "name":"name", "type":"bytes" },
+    { "name":"symbol", "type":"bytes" },
+    { "name":"decimals", "type":"uint8" },
+    { "name":"root_public_key", "type":"uint256" },
+    { "name":"wallet_public_key", "type":"uint256" },
+    { "name":"root_address", "type":"address" },
+    { "name":"code", "type":"cell" }
+    ],
+    "outputs": [
+    ],
+    "id": "0xb"
+  },
+  {
+    "name": "transferUTXO",
+    "inputs": [
+    { "name":"workchain_dest", "type":"int8" },
+    { "name":"pubkey_dest", "type":"uint256" },
+    { "name":"workchain_rest", "type":"int8" },
+    { "name":"pubkey_rest", "type":"uint256" },
+    { "name":"tokens", "type":"uint128" },
+    { "name":"grams_dest", "type":"uint128" }
+    ],
+    "outputs": [
+    ],
+    "id": "0xc"
+  },
+  {
+    "name": "accept",
+    "inputs": [
+    { "name":"tokens", "type":"uint128" }
+    ],
+    "outputs": [
+    ],
+    "id": "0xd"
+  },
+  {
+    "name": "internalTransfer",
+    "inputs": [
+    { "name":"tokens", "type":"uint128" },
+    { "name":"pubkey", "type":"uint256" }
+    ],
+    "outputs": [
+    ],
+    "id": "0xe"
+  },
+  {
+    "name": "getName",
+    "inputs": [
+    ],
+    "outputs": [
+    { "name":"value0", "type":"bytes" }
+    ],
+    "id": "0xf"
+  },
+  {
+    "name": "getSymbol",
+    "inputs": [
+    ],
+    "outputs": [
+    { "name":"value0", "type":"bytes" }
+    ],
+    "id": "0x10"
+  },
+  {
+    "name": "getDecimals",
+    "inputs": [
+    ],
+    "outputs": [
+    { "name":"value0", "type":"uint8" }
+    ],
+    "id": "0x11"
+  },
+  {
+    "name": "getBalance",
+    "inputs": [
+    ],
+    "outputs": [
+    { "name":"value0", "type":"uint128" }
+    ],
+    "id": "0x12"
+  },
+  {
+    "name": "getWalletKey",
+    "inputs": [
+    ],
+    "outputs": [
+    { "name":"value0", "type":"uint256" }
+    ],
+    "id": "0x13"
+  },
+  {
+    "name": "getRootAddress",
+    "inputs": [
+    ],
+    "outputs": [
+    { "name":"value0", "type":"address" }
+    ],
+    "id": "0x14"
+  }
+  ],
+  "events": [
+  ]
+}
