@@ -157,8 +157,8 @@
   {
     "name": "fixWalletCode",
     "inputs": [
-      { "name":"_answer_id", "type":"uint32" },
-      { "name":"wallet_code", "type":"cell" }
+    { "name":"_answer_id", "type":"uint32" },
+    { "name":"wallet_code", "type":"cell" }
     ],
     "outputs": [
     { "name":"value0", "type":"uint256" }

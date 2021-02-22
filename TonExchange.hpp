@@ -27,7 +27,7 @@ __interface ITonExchange {
   //-------------Customer manage function----------------
   // add a new TIP-3 token to exchange
   __attribute__((internal, external, noaccept, dyn_chain_parse))
-  void addNewToken(address root_address) = 2;
+  void addNewToken(address root_address,uint128 grams,uint256 publicKey,uint256 internal_owner) = 2;
   
   // //desposit TIP-3 token to exchange wallet
   // __attribute__((internal, external, noaccept, dyn_chain_parse))

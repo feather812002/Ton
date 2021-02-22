@@ -22,7 +22,7 @@ __interface IRootTokenContract {
                        TokensType tokens, WalletGramsType grams) = 12;
 
   // Anyone may request to deploy an empty wallet
-  [[internal, noaccept, dyn_chain_parse, answer_id]]
+  [[internal, external,noaccept, dyn_chain_parse, answer_id]]
   address deployEmptyWallet(int8 workchain_id, uint256 pubkey, uint256 internal_owner,
                             WalletGramsType grams) = 13;
 

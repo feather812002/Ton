@@ -91,9 +91,10 @@ public:
   address deployEmptyWallet(int8 workchain_id, uint256 pubkey, uint256 internal_owner,WalletGramsType grams) {
   
     // This protects from spending root balance to deploy message
-    auto value_gr = int_value();
-    tvm_rawreserve(std::max(start_balance_.get(), tvm_balance() - value_gr()), rawreserve_flag::up_to);
-
+    if constexpr (Internal) {
+      auto value_gr = int_value();
+      tvm_rawreserve((tvm_balance() - value_gr()), rawreserve_flag::up_to);
+    }
     require((pubkey == 0 and internal_owner != 0) or (pubkey != 0 and internal_owner == 0),
             error_code::define_pubkey_or_internal_owner);
 
@@ -102,10 +103,19 @@ public:
       owner_addr = address::make_std(workchain_id, internal_owner);
     auto [wallet_init, dest] = calc_wallet_init(workchain_id, pubkey, owner_addr);
     handle<ITONTokenWallet> dest_handle(dest);
-    dest_handle.deploy_noop(wallet_init, Grams(grams.get()));
 
+    if constexpr (Internal) {
+      // int_msg().unpack().value();
+      auto send_value=int_msg().unpack().value();
+      dest_handle.deploy_noop(wallet_init, 0,SEND_REST_GAS_FROM_INCOMING);
+      set_int_return_flag(SEND_REST_GAS_FROM_INCOMING);
+    }else{
+      dest_handle.deploy_noop(wallet_init, Grams(grams.get()));
+      set_int_return_flag(SEND_ALL_GAS);
+    }
+    
     // sending all rest gas except reserved old balance, processing and deployment costs
-    set_int_return_flag(SEND_ALL_GAS);
+    
     return dest;
   }
 

@@ -1,6 +1,8 @@
 #include "TonExchange.hpp"
 #include "./tokens-fungible/TONTokenWallet.hpp"
+#include "./tokens-fungible/RootTokenContract.hpp"
 #include <tvm/contract.hpp>
+#include <tvm/contract_handle.hpp>
 #include <tvm/smart_switcher.hpp>
 #include <tvm/replay_attack_protection/timestamp.hpp>
 
@@ -17,9 +19,11 @@ public:
   __always_inline void constructor() final {}
 
   //add a new token into
-  __always_inline void addNewToken(address root_address)  
+  __always_inline void addNewToken(address root_address,uint128 grams,uint256 publicKey,uint256 internal_owner)  
   { 
-    
+    tvm_accept();
+    handle<IRootTokenContract> dest_wallet_root(root_address);
+    dest_wallet_root(Grams(grams.get())).deployEmptyWallet(int8(0),publicKey,internal_owner,uint128(0));
   }
 
 
