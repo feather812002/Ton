@@ -7,6 +7,15 @@ namespace tvm { namespace schema {
 static constexpr unsigned EXCHANGE_TIMESTAMP_DELAY = 1800;
 using root_replay_protection_t = replay_attack_protection::timestamp<EXCHANGE_TIMESTAMP_DELAY>;
 
+//-----------Token balance Object-----------
+struct customer_token {
+  //uint256 token_root_aadr_hex;
+  bytes token_name;
+  bytes token_symbol;
+  uint128 token_balance;
+};
+
+
 // ===== Root Token Contract ===== //
 __interface ITonExchange {
 
@@ -19,22 +28,28 @@ __interface ITonExchange {
   [[internal, external, noaccept, dyn_chain_parse]]
   void regNewToken(uint256 token_wallet_hex) = 12;
 
-  
   [[getter]]
   uint256 getRootAddress() = 13;
 
   [[getter]]
   uint256 getSupportTokenByRoot(uint256 root_addr_hex) = 14;
 
-  
+  //---------------Customer Funds Manager---------------
+  [[internal, external, noaccept, dyn_chain_parse]]
+  void deposit() = 15;
+
+  [[internal, external, noaccept, dyn_chain_parse]]
+  void withdrawal () = 16;    
 
   
 };
 
 struct DTonExchange {
-
   uint256 root_address_hex;
+  //support token list : token root addr hex--->token wallet addr hex
   dict_map<uint256,uint256> support_token_list;
+  //customer balance list: customer addr hex---> [token root addr hex -->token hold details] 
+  dict_map<uint256,dict_map<uint256,customer_token>> customer_balance_list;
  
 };
 

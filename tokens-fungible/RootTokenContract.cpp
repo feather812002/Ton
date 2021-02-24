@@ -241,10 +241,10 @@ public:
     if constexpr (Internal) {
       dest_exchange(Grams(0), SEND_REST_GAS_FROM_INCOMING).regNewToken(token_wallet_address_hex_);
     }else{
+      //if it is external call , simple setting a fixed gas value for call this .
       dest_exchange(Grams(200000000)).regNewToken(token_wallet_address_hex_);
     }
     
-    //=exchange_address;
   }
 
 

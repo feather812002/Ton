@@ -31,7 +31,7 @@ public:
   }
   
 
-
+  //------------------New Token Support-------------------------
   __always_inline
   void regNewToken(uint256 token_wallet) {
     //require(token_wallet!=0,error_code::add_new_token_no_address);
@@ -42,9 +42,6 @@ public:
       support_token_list.set_at(root_address_hex.get(), token_wallet);
     }
   }
-
-  
-
   // getters
   __always_inline uint256 getRootAddress() {
     return root_address_hex;
@@ -58,18 +55,21 @@ public:
     return token_wallet;
   }
 
-
-  // received bounced message back
-  __always_inline static int _on_bounced(cell msg, slice msg_body) {
-    tvm_accept();
-
-    
-    return 0;
-  }
-
+  //------------------------Customer Funds Manager---------------------------------
   
 
 
+  //------------------------System function handle----------------------------------
+  // received bounced message back
+  __always_inline static int _on_bounced(cell msg, slice msg_body) {
+    tvm_accept();
+    return 0;
+  }
+
+ // default processing of unknown messages
+  __always_inline static int _fallback(cell msg, slice msg_body) {
+    return 0;
+  }
   // =============== Support functions ==================
   DEFAULT_SUPPORT_FUNCTIONS(ITonExchange, root_replay_protection_t)
 
