@@ -108,16 +108,6 @@
     "id": "0x14"
   },
   {
-    "name": "getSenderBalance",
-    "inputs": [
-      { "name":"senderPubkey", "type":"uint256" }
-    ], 
-    "outputs": [
-    { "name":"value0", "type":"uint128" }
-    ],
-    "id": "0x1d"
-  },
-  {
     "name": "getWalletKey",
     "inputs": [
     ],
@@ -145,18 +135,9 @@
     "id": "0x17"
   },
   {
-    "name": "eraseDeposit",
+    "name": "allowance",
     "inputs": [
-      { "name":"source_address", "type":"uint256" }
-    ],
-    "outputs": [
-    ],
-    "id": "0x1f"
-  },
-  {
-   "name": "allowance",
-    "inputs": [
-      { "name":"spenderAddressHex", "type":"uint256" }
+    { "name":"spenderAddressHex", "type":"uint256" }
     ],
     "outputs": [
     { "name":"value0", "type":"uint128" }
@@ -204,6 +185,16 @@
     "id": "0x1c"
   },
   {
+    "name": "getSenderBalance",
+    "inputs": [
+    { "name":"customerPubkey", "type":"uint256" }
+    ],
+    "outputs": [
+    { "name":"value0", "type":"uint128" }
+    ],
+    "id": "0x1d"
+  },
+  {
     "name": "getWalletCodeHash",
     "inputs": [
     ],
@@ -211,6 +202,36 @@
     { "name":"value0", "type":"uint256" }
     ],
     "id": "0x1e"
+  },
+  {
+    "name": "depositToExchange",
+    "inputs": [
+    { "name":"source_address", "type":"uint256" },
+    { "name":"exchange_address", "type":"address" }
+    ],
+    "outputs": [
+    ],
+    "id": "0x1f"
+  },
+  {
+    "name": "approveTest",
+    "inputs": [
+    { "name":"spender", "type":"address" },
+    { "name":"tokens", "type":"uint128" }
+    ],
+    "outputs": [
+    ],
+    "id": "0x20"
+  },
+  {
+    "name": "regTokenToExchangeFromRoot",
+    "inputs": [
+    { "name":"exchange_address", "type":"address" },
+    { "name":"grams", "type":"uint128" }
+    ],
+    "outputs": [
+    ],
+    "id": "0x21"
   }
   ],
   "events": [

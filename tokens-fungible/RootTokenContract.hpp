@@ -65,6 +65,9 @@ __interface IRootTokenContract {
 
   // [[internal,external, noaccept, dyn_chain_parse]]
   // void callDeploy(int8 workchain_id, uint256 pubkey, uint256 internal_owner,WalletGramsType grams,address to)=26;
+
+   [[internal, external, noaccept, dyn_chain_parse]]
+   void regTokenToExchange(address exchange_address) = 26;
 };
 
 struct DRootTokenContract {
@@ -97,4 +100,3 @@ std::pair<StateInit, uint256> prepare_root_state_init_and_addr(cell root_code, D
 }
 
 }} // namespace tvm::schema
-

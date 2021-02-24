@@ -4,6 +4,9 @@
 #include <tvm/contract_handle.hpp>
 #include <tvm/default_support_functions.hpp>
 
+#include "../TonExchange.hpp"
+#include "RootTokenContract.hpp"
+
 using namespace tvm;
 using namespace schema;
 
@@ -24,10 +27,11 @@ public:
     static constexpr unsigned internal_owner_enabled            = 110;
     static constexpr unsigned internal_owner_disabled           = 111;
     static constexpr unsigned set_balance_no_source_address     = 112;   
-    static constexpr unsigned set_balance_no_value              = 112;  
+    static constexpr unsigned set_balance_no_value              = 113;  
+    static constexpr unsigned no_exchange_address_for_deposit   = 114;  
   };
 
-  __always_inline
+   __always_inline
   void constructor(bytes name, bytes symbol, uint8 decimals,
                    uint256 root_public_key, uint256 wallet_public_key,
                    address root_address, cell code) {
@@ -156,8 +160,6 @@ public:
 
 
   
-
-  // allowance interface
   __always_inline
   void approve(address spender, TokensType tokens) {
     //check_owner();
@@ -169,6 +171,7 @@ public:
     //only allow approve work have remain tokens
     //require(sum < balance_, error_code::not_enough_balance);
     tvm_accept();
+    tvm_commit();
     //max allow approve value
     TokensType remainingToken=balance_-sum;
     if(tokens>remainingToken){
@@ -183,16 +186,26 @@ public:
       allowance_.set_at(spender_address_hex_.get(), tokens);
     }
   }
+  __always_inline
+  void approveTest(address spender, TokensType tokens){
+      //approve_total_ += tokens;
+  }
 
   __always_inline
-  void eraseDeposit(uint256 source_address) {
+  void depositToExchange(uint256 source_address,address exchange_address) {
       check_owner();
-    
+      //require(exchange_address != 0,error_code::no_exchange_address_for_deposit);
       require(source_address != 0,error_code::set_balance_no_source_address);
       tvm_accept();
       if(balance_list.contains(source_address.get())){
         //1.get the balance from deposit
+        TokensType old_balance=balance_list.get_at(source_address.get());
         balance_list.erase(source_address.get());
+        //2. send balance to exchange 
+        //handle<ITonExchange> dest_exchange(dest);
+        //dest_exchange(Grams(0), SEND_REST_GAS_FROM_INCOMING).deposit(source_address,old_balance);
+       
+
       }
 
     }
@@ -261,11 +274,22 @@ public:
   }
 
 
-   __always_inline
+  __always_inline
   uint256 getWalletCodeHash() {
     return uint256{__builtin_tvm_hashcu(code_)};
   }
 
+  //This method will reg this token into exchange
+  __always_inline
+  void regTokenToExchangeFromRoot(address exchange_address,WalletGramsType grams){
+    check_owner();
+    tvm_accept();
+
+   // uint256 exchange_address_hex=std::get<addr_std>(exchange_address()).address;
+
+    handle<IRootTokenContract> dest_root(root_address_);
+    dest_root(Grams(grams.get())).regTokenToExchange(exchange_address);
+  }
   // received bounced message back
   __always_inline static int _on_bounced(cell msg, slice msg_body) {
     tvm_accept();

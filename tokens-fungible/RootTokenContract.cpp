@@ -6,6 +6,8 @@
 #include <tvm/contract_handle.hpp>
 #include <tvm/default_support_functions.hpp>
 
+#include "../TonExchange.hpp"
+
 using namespace tvm;
 using namespace schema;
 
@@ -97,7 +99,7 @@ public:
     }
     require((pubkey == 0 and internal_owner != 0) or (pubkey != 0 and internal_owner == 0),
             error_code::define_pubkey_or_internal_owner);
-
+    tvm_accept();
     std::optional<address> owner_addr;
     if (internal_owner)
       owner_addr = address::make_std(workchain_id, internal_owner);
@@ -118,6 +120,7 @@ public:
     
     return dest;
   }
+
 
   // __always_inline
   // void callDeploy(int8 workchain_id, uint256 pubkey, uint256 internal_owner,WalletGramsType grams,address to) {
@@ -218,6 +221,33 @@ public:
     return 0;
   }
 
+  __always_inline
+  void regTokenToExchange(address exchange_address) {
+    tvm_accept();
+    //1.get stander TON address from adress hex
+    auto workchain_id = std::get<addr_std>(address{tvm_myaddr()}.val()).workchain_id;
+    // std::optional<address> exchange_addr;
+    // if (exchange_address)
+    //address exchange_addr = address::make_std(workchain_id, exchange_address);
+
+    //2.get target wallet address from the exchange_address,all exchange's wallet should work in internal transfer.
+    address token_wallet_address=calc_wallet_init(workchain_id, uint256(0), exchange_address).second;
+    uint256 token_wallet_address_hex_=std::get<addr_std>(token_wallet_address()).address;
+    
+    //3.call exchange function update the token into exchange.
+    //exchange_addr_=token_wallet_address_hex_;
+    handle<ITonExchange> dest_exchange(exchange_address);
+   
+    if constexpr (Internal) {
+      dest_exchange(Grams(0), SEND_REST_GAS_FROM_INCOMING).regNewToken(token_wallet_address_hex_);
+    }else{
+      dest_exchange(Grams(200000000)).regNewToken(token_wallet_address_hex_);
+    }
+    
+    //=exchange_address;
+  }
+
+
   // =============== Support functions ==================
   DEFAULT_SUPPORT_FUNCTIONS(IRootTokenContract, root_replay_protection_t)
 private:
@@ -262,4 +292,3 @@ DEFINE_JSON_ABI(IRootTokenContract, DRootTokenContract, ERootTokenContract);
 
 // ----------------------------- Main entry functions ---------------------- //
 DEFAULT_MAIN_ENTRY_FUNCTIONS_TMPL(RootTokenContract, IRootTokenContract, DRootTokenContract, ROOT_TIMESTAMP_DELAY)
-

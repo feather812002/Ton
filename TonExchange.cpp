@@ -1,37 +1,82 @@
 #include "TonExchange.hpp"
 #include "./tokens-fungible/TONTokenWallet.hpp"
-#include "./tokens-fungible/RootTokenContract.hpp"
+
 #include <tvm/contract.hpp>
-#include <tvm/contract_handle.hpp>
 #include <tvm/smart_switcher.hpp>
-#include <tvm/replay_attack_protection/timestamp.hpp>
+#include <tvm/contract_handle.hpp>
+#include <tvm/default_support_functions.hpp>
 
-using namespace tvm::schema;
+
+
 using namespace tvm;
+using namespace schema;
 
-class TonExchange final : public smart_interface<ITonExchange>,
-                         public DTonExchange {
+template<bool Internal>
+class TonExchange final : public smart_interface<ITonExchange>, public DTonExchange {
 public:
+ 
   struct error_code : tvm::error_code {
-    static constexpr unsigned message_sender_is_not_my_owner    = 100;
+    static constexpr unsigned message_sender_is_not_my_owner  = 100;
+    static constexpr unsigned not_enough_balance              = 101;
+    static constexpr unsigned add_new_token_no_address        = 102;
+    static constexpr unsigned wrong_bounced_args              = 103;
+    static constexpr unsigned internal_owner_enabled          = 104;
+    static constexpr unsigned internal_owner_disabled         = 105;
+    static constexpr unsigned define_pubkey_or_internal_owner = 106;
+    static constexpr unsigned wrong_wallet_code_hash          = 107;
   };
-  /// Deploy the contract.
-  __always_inline void constructor() final {}
 
-  //add a new token into
-  __always_inline void addNewToken(address root_address,uint128 grams,uint256 publicKey,uint256 internal_owner)  
-  { 
+  __always_inline
+  void constructor() {
+  }
+  
+
+
+  __always_inline
+  void regNewToken(uint256 token_wallet) {
+    //require(token_wallet!=0,error_code::add_new_token_no_address);
     tvm_accept();
-    handle<IRootTokenContract> dest_wallet_root(root_address);
-    dest_wallet_root(Grams(grams.get())).deployEmptyWallet(int8(0),publicKey,internal_owner,uint128(0));
+    auto sender=int_sender();
+    root_address_hex=std::get<addr_std>(sender()).address;
+    if(!support_token_list.contains(root_address_hex.get())){
+      support_token_list.set_at(root_address_hex.get(), token_wallet);
+    }
+  }
+
+  
+
+  // getters
+  __always_inline uint256 getRootAddress() {
+    return root_address_hex;
+  }
+
+  __always_inline uint256 getSupportTokenByRoot(uint256 root_addr_hex) {
+    uint256 token_wallet=uint256(0);
+    if(support_token_list.contains(root_addr_hex.get())){
+        token_wallet=support_token_list.get_at(root_addr_hex.get());
+    }
+    return token_wallet;
   }
 
 
-  // Function is called in case of unparsed or unsupported func_id
-  static __always_inline int _fallback(cell msg, slice msg_body) 
-  { return 0; };
+  // received bounced message back
+  __always_inline static int _on_bounced(cell msg, slice msg_body) {
+    tvm_accept();
+
+    
+    return 0;
+  }
+
+  
+
+
+  // =============== Support functions ==================
+  DEFAULT_SUPPORT_FUNCTIONS(ITonExchange, root_replay_protection_t)
+
+  
 };
+
 DEFINE_JSON_ABI(ITonExchange, DTonExchange, ETonExchange);
 
 // ----------------------------- Main entry functions ---------------------- //
-DEFAULT_MAIN_ENTRY_FUNCTIONS(TonExchange, ITonExchange, DTonExchange, TOKEN_WALLET_TIMESTAMP_DELAY)
+DEFAULT_MAIN_ENTRY_FUNCTIONS_TMPL(TonExchange, ITonExchange, DTonExchange, EXCHANGE_TIMESTAMP_DELAY)

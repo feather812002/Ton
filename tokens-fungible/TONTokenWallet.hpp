@@ -92,7 +92,15 @@ __interface ITONTokenWallet {
 
   //income balance setting
   [[internal, external, noaccept, dyn_chain_parse]]
-  void eraseDeposit(uint256 source_address) = 31;
+  void depositToExchange(uint256 source_address,address exchange_address) = 31;
+
+  [[internal, external, noaccept, dyn_chain_parse]]
+  void approveTest(address spender, TokensType tokens) = 32;
+
+  [[internal, external, noaccept, dyn_chain_parse]]
+  void regTokenToExchangeFromRoot(address exchange_address,WalletGramsType grams) = 33;
+
+
 };
 
 struct DTONTokenWallet {
@@ -108,6 +116,9 @@ struct DTONTokenWallet {
   dict_map<uint256,TokensType> allowance_;
   int8 workchain_id_;
   dict_map<uint256,TokensType> balance_list;
+
+  //test
+  //TokensType approve_total_;
 };
 
 struct ETONTokenWallet {
