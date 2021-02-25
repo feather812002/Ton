@@ -58,7 +58,7 @@ __interface ITONTokenWallet {
   lazy<MsgAddressInt> getRootAddress() = 20;
 
   __attribute__((getter))
-  dict_set<TokenId> allowance(uint256 spender_addr_hex) = 21;
+  TokenId allowance(uint256 spender_addr_hex,TokensType index) = 21;
 
   __attribute__((getter))
   TokenId getTokenByIndex(TokensType index) = 22;

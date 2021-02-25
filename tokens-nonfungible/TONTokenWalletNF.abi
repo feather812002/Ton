@@ -108,15 +108,11 @@
   {
     "name": "allowance",
     "inputs": [
-    { "name":"spender_addr_hex", "type":"uint256" }
+    { "name":"spender_addr_hex", "type":"uint256" },
+    { "name":"index", "type":"uint128" }
     ],
     "outputs": [
-    { "name":"size_", "type":"uint32" },
-    { "components":[
-      { "components":[
-        { "name":"dict_", "type":"cell" }
-      ], "name":"dict_", "type":"tuple" }
-    ], "name":"dict_", "type":"tuple" }
+    { "name":"value0", "type":"uint128" }
     ],
     "id": "0x15"
   },

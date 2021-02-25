@@ -118,12 +118,14 @@ public:
   __always_inline lazy<MsgAddressInt> getRootAddress() {
     return root_address_;
   }
-  __always_inline dict_set<TokenId> allowance(uint256 spender_addr_hex) {
-     dict_set<TokenId> token_list={};
+  __always_inline TokenId allowance(uint256 spender_addr_hex,TokensType index) {
+     TokenId token= TokenId(0);
      if(allowance_.contains(spender_addr_hex.get())){
-        token_list=allowance_.get_at(spender_addr_hex.get());
+        dict_set<TokenId> token_list=allowance_.get_at(spender_addr_hex.get());
+        require(index < token_list.size(), error_code::iterator_overflow);
+        token=*std::next(token_list.begin(), index.get());
      }
-    return token_list;
+    return token;
   }
 
   __always_inline dict_set<TokenId> getTokenBlance(uint256 address_hex) {
