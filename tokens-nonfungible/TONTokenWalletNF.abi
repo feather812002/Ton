@@ -108,10 +108,15 @@
   {
     "name": "allowance",
     "inputs": [
+    { "name":"spender_addr_hex", "type":"uint256" }
     ],
     "outputs": [
-    { "name":"spender", "type":"address" },
-    { "name":"allowedToken", "type":"uint128" }
+    { "name":"size_", "type":"uint32" },
+    { "components":[
+      { "components":[
+        { "name":"dict_", "type":"cell" }
+      ], "name":"dict_", "type":"tuple" }
+    ], "name":"dict_", "type":"tuple" }
     ],
     "id": "0x15"
   },
@@ -131,7 +136,7 @@
     { "name":"tokenId", "type":"uint128" }
     ],
     "outputs": [
-    { "name":"value0", "type":"address" }
+    { "name":"value0", "type":"uint256" }
     ],
     "id": "0x17"
   },

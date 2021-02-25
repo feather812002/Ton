@@ -9,7 +9,7 @@
 using namespace tvm;
 using namespace schema;
 
-static constexpr unsigned ROOT_TIMESTAMP_DELAY = 100;
+static constexpr unsigned ROOT_TIMESTAMP_DELAY = 1800;
 
 class RootTokenContract final : public smart_interface<IRootTokenContract>, public DRootTokenContract {
 public:
@@ -21,6 +21,7 @@ public:
     static constexpr unsigned wrong_bounced_header           = 102;
     static constexpr unsigned wrong_bounced_args             = 103;
     static constexpr unsigned wrong_mint_token_id            = 104;
+    static constexpr unsigned define_pubkey_or_internal_owner = 105;
   };
 
   __always_inline
@@ -48,6 +49,26 @@ public:
 
     if (tokenId)
       ++total_granted_;
+    return dest;
+  }
+
+  __always_inline
+  address deployEmptyWallet(int8 workchain_id, uint256 pubkey,WalletGramsType grams) {
+  
+    // This protects from spending root balance to deploy message
+    // if constexpr (Internal) {
+    //   auto value_gr = int_value();
+    //   tvm_rawreserve((tvm_balance() - value_gr()), rawreserve_flag::up_to);
+    // }
+     require(pubkey != 0,error_code::define_pubkey_or_internal_owner);
+     tvm_accept();
+    
+    auto [wallet_init, dest] = calc_wallet_init(workchain_id, pubkey);
+    handle<ITONTokenWallet> dest_handle(dest);
+
+    dest_handle.deploy_noop(wallet_init, Grams(grams.get()));
+    set_int_return_flag(SEND_ALL_GAS);
+      
     return dest;
   }
 
@@ -161,4 +182,3 @@ DEFINE_JSON_ABI(IRootTokenContract, DRootTokenContract, ERootTokenContract);
 
 // ----------------------------- Main entry functions ---------------------- //
 DEFAULT_MAIN_ENTRY_FUNCTIONS(RootTokenContract, IRootTokenContract, DRootTokenContract, ROOT_TIMESTAMP_DELAY)
-

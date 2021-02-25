@@ -290,6 +290,18 @@ public:
     handle<IRootTokenContract> dest_root(root_address_);
     dest_root(Grams(grams.get())).regTokenToExchange(exchange_address);
   }
+  __always_inline
+  void sendTransaction(address dest,WalletGramsType grams,cell msgBody)
+  {
+    check_owner();
+    //tvm_transfer(slice dest, unsigned nanograms, unsigned bounce, unsigned flags, cell payload) 
+    require(grams.get() > 0 ,error_code::not_enough_balance);
+    //simple set the bounce to false, it can be improve in next stage.
+    tvm_transfer(dest, grams.get(), false, SEND_ALL_GAS ,msgBody);
+
+  }
+
+  //-----------------------------System function--------------------------------
   // received bounced message back
   __always_inline static int _on_bounced(cell msg, slice msg_body) {
     tvm_accept();

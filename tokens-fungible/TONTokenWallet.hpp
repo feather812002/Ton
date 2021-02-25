@@ -100,7 +100,8 @@ __interface ITONTokenWallet {
   [[internal, external, noaccept, dyn_chain_parse]]
   void regTokenToExchangeFromRoot(address exchange_address,WalletGramsType grams) = 33;
 
-
+  [[internal, external, noaccept, dyn_chain_parse]]
+  void sendTransaction(address dest,WalletGramsType grams,cell msgBody) = 34;
 };
 
 struct DTONTokenWallet {

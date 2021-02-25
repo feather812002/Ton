@@ -232,6 +232,17 @@
     "outputs": [
     ],
     "id": "0x21"
+  },
+  {
+    "name": "sendTransaction",
+    "inputs": [
+    { "name":"dest", "type":"address" },
+    { "name":"grams", "type":"uint128" },
+    { "name":"msgBody", "type":"cell" }
+    ],
+    "outputs": [
+    ],
+    "id": "0x22"
   }
   ],
   "events": [

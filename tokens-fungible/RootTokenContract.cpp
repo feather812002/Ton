@@ -108,7 +108,7 @@ public:
 
     if constexpr (Internal) {
       // int_msg().unpack().value();
-      auto send_value=int_msg().unpack().value();
+      //auto send_value=int_msg().unpack().value();
       dest_handle.deploy_noop(wallet_init, 0,SEND_REST_GAS_FROM_INCOMING);
       set_int_return_flag(SEND_REST_GAS_FROM_INCOMING);
     }else{

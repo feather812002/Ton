@@ -6,6 +6,7 @@
 #include <tvm/replay_attack_protection/timestamp.hpp>
 #include <tvm/smart_switcher.hpp>
 #include <tvm/dict_set.hpp>
+#include <tvm/dict_map.hpp>
 
 namespace tvm { namespace schema {
 
@@ -16,10 +17,6 @@ using TokenId = uint128;
 static constexpr unsigned TOKEN_WALLET_TIMESTAMP_DELAY = 100;
 using wallet_replay_protection_t = replay_attack_protection::timestamp<TOKEN_WALLET_TIMESTAMP_DELAY>;
 
-struct allowance_info {
-  lazy<MsgAddressInt> spender;
-  TokenId allowedToken;
-};
 
 // ===== TON Token wallet ===== //
 __interface ITONTokenWallet {
@@ -61,13 +58,13 @@ __interface ITONTokenWallet {
   lazy<MsgAddressInt> getRootAddress() = 20;
 
   __attribute__((getter))
-  allowance_info allowance() = 21;
+  dict_set<TokenId> allowance(uint256 spender_addr_hex) = 21;
 
   __attribute__((getter))
   TokenId getTokenByIndex(TokensType index) = 22;
 
   __attribute__((getter))
-  lazy<MsgAddressInt> getApproved(TokenId tokenId) = 23;
+  uint256 getApproved(TokenId tokenId) = 23;
 
   // allowance interface
   __attribute__((external, noaccept, dyn_chain_parse))
@@ -92,7 +89,7 @@ struct DTONTokenWallet {
   uint256 wallet_public_key_;
   lazy<MsgAddressInt> root_address_;
   cell code_;
-  std::optional<allowance_info> allowance_;
+  dict_map<uint256,dict_set<TokenId>> allowance_;
   dict_set<TokenId> tokens_;
 };
 

@@ -35,11 +35,11 @@ __interface ITonExchange {
   uint256 getSupportTokenByRoot(uint256 root_addr_hex) = 14;
 
   //---------------Customer Funds Manager---------------
-  [[internal, external, noaccept, dyn_chain_parse]]
-  void deposit() = 15;
+  // [[internal, external, noaccept, dyn_chain_parse]]
+  // void deposit() = 15;
 
-  [[internal, external, noaccept, dyn_chain_parse]]
-  void withdrawal () = 16;    
+  // [[internal, external, noaccept, dyn_chain_parse]]
+  // void withdrawal () = 16;    
 
   
 };

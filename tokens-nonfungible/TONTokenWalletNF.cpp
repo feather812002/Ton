@@ -105,17 +105,25 @@ public:
   __always_inline lazy<MsgAddressInt> getRootAddress() {
     return root_address_;
   }
-  __always_inline allowance_info allowance() {
-    return allowance_ ? *allowance_ :
-      allowance_info{lazy<MsgAddressInt>{addr_std{ {}, {}, int8(0), uint256(0) }}, TokenId(0)};
+  __always_inline dict_set<TokenId> allowance(uint256 spender_addr_hex) {
+     dict_set<TokenId> token_list={};
+     if(allowance_.contains(spender_addr_hex.get())){
+        token_list=allowance_.get_at(spender_addr_hex.get());
+     }
+    return token_list;
   }
   __always_inline TokenId getTokenByIndex(TokensType index) {
     require(index < tokens_.size(), error_code::iterator_overflow);
     return *std::next(tokens_.begin(), index.get());
   }
-  __always_inline lazy<MsgAddressInt> getApproved(TokenId tokenId) {
-    return (allowance_ && allowance_->allowedToken == tokenId) ? allowance_->spender :
-      lazy<MsgAddressInt>{addr_std{ {}, {}, int8(0), uint256(0) }};
+  __always_inline uint256 getApproved(TokenId tokenId) {
+    uint256 spender_hex=uint256(0);
+    for (auto tokenid_list : allowance_) {
+      if(tokenid_list.second.contains(tokenId)){
+        spender_hex=tokenid_list.first.get();
+      };
+    };
+    return spender_hex;
   }
 
   // allowance interface
@@ -126,8 +134,21 @@ public:
     tvm_accept();
     tvm_commit();
     require(tokens_.contains(tokenId), error_code::not_enough_balance);
-
-    allowance_ = { spender, tokenId };
+    dict_set<TokenId> own_tokenid_list;
+    uint256 spender_address_hex=std::get<addr_std>(spender()).address;
+    if(allowance_.contains(spender_address_hex.get())){
+      own_tokenid_list=allowance_.get_at(spender_address_hex.get());
+      if(!own_tokenid_list.contains(tokenId)){
+        own_tokenid_list.insert(tokenId);
+        allowance_.set_at(spender_address_hex.get(),own_tokenid_list);
+      }
+    
+    }else{
+      own_tokenid_list.insert(tokenId);
+      allowance_.set_at(spender_address_hex.get(),own_tokenid_list);
+     
+    }
+   
   }
 
   __always_inline
@@ -144,17 +165,24 @@ public:
 
   __always_inline
   void internalTransferFrom(lazy<MsgAddressInt> to, TokenId tokenId) {
-    require(!!allowance_, error_code::no_allowance_set);
-    require(int_sender().sl() == allowance_->spender.sl(), error_code::wrong_spender);
+    uint256 spender= getApproved(tokenId);
+    require(spender!=0, error_code::no_allowance_set);
+    auto sender = int_sender();
+    uint256 sender_address_hex=std::get<addr_std>(sender()).address;
+    //sender must same with spender
+    require(sender_address_hex == spender, error_code::wrong_spender);
     require(tokenId > 0, error_code::zero_token_id);
-    require(tokenId == allowance_->allowedToken, error_code::not_enough_allowance);
+    //allowance_ containt the token for the spender
+    dict_set<TokenId> own_tokenid_list=allowance_.get_at(sender_address_hex.get());
+    require(own_tokenid_list.contains(tokenId), error_code::not_enough_allowance);
+    
     require(tokens_.contains(tokenId), error_code::not_enough_balance);
 
     contract_handle<ITONTokenWallet> dest_wallet(to);
     dest_wallet(Grams(0), SEND_REST_GAS_FROM_INCOMING).
       call<&ITONTokenWallet::internalTransfer>(tokenId, wallet_public_key_);
 
-    allowance_.reset();
+    //allowance_.reset();
     tokens_.erase(tokenId);
   }
 
@@ -162,7 +190,7 @@ public:
   void disapprove() {
     require(tvm_pubkey() == wallet_public_key_, error_code::message_sender_is_not_my_owner);
     tvm_accept();
-    allowance_.reset();
+    allowance_.clear();
   }
 
   // received bounced message back

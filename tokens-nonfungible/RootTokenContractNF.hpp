@@ -47,6 +47,12 @@ __interface IRootTokenContract {
 
   __attribute__((getter))
   lazy<MsgAddressInt> getWalletAddress(int8 workchain_id, uint256 pubkey) = 23;
+
+    // Anyone may request to deploy an empty wallet
+  [[internal, external,noaccept, dyn_chain_parse, answer_id]]
+  address deployEmptyWallet(int8 workchain_id, uint256 pubkey, WalletGramsType grams) = 24;
+  // address deployEmptyWallet(int8 workchain_id, uint256 pubkey, uint256 internal_owner,
+  //                           WalletGramsType grams) = 13;
 };
 
 struct DRootTokenContract {
@@ -64,4 +70,3 @@ struct ERootTokenContract {
 };
 
 }} // namespace tvm::schema
-
