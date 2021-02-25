@@ -148,6 +148,16 @@
     { "name":"value0", "type":"address" }
     ],
     "id": "0x18"
+  },
+  {
+    "name": "regTokenToExchange",
+    "inputs": [
+    { "name":"exchange_publickey", "type":"uint256" },
+    { "name":"exchange_address", "type":"address" }
+    ],
+    "outputs": [
+    ],
+    "id": "0x19"
   }
   ],
   "events": [

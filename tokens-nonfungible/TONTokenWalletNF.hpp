@@ -79,6 +79,12 @@ __interface ITONTokenWallet {
 
   __attribute__((external, noaccept))
   void disapprove() = 27;
+
+  [[internal, external, noaccept, dyn_chain_parse]]
+  void regTokenToExchangeFromRoot(address exchange_address,WalletGramsType grams,uint256 exchange_pubkey) = 28;
+
+  __attribute__((getter))
+  dict_set<TokenId> getTokenBlance(uint256 address_hex) = 29;
 };
 
 struct DTONTokenWallet {
@@ -91,6 +97,7 @@ struct DTONTokenWallet {
   cell code_;
   dict_map<uint256,dict_set<TokenId>> allowance_;
   dict_set<TokenId> tokens_;
+  dict_map<uint256,dict_set<TokenId>> token_balance;
 };
 
 struct ETONTokenWallet {

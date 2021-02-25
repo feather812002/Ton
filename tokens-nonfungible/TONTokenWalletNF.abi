@@ -179,6 +179,32 @@
     "outputs": [
     ],
     "id": "0x1b"
+  },
+  {
+    "name": "regTokenToExchangeFromRoot",
+    "inputs": [
+    { "name":"exchange_address", "type":"address" },
+    { "name":"grams", "type":"uint128" },
+    { "name":"exchange_pubkey", "type":"uint256" }
+    ],
+    "outputs": [
+    ],
+    "id": "0x1c"
+  },
+  {
+    "name": "getTokenBlance",
+    "inputs": [
+    { "name":"address_hex", "type":"uint256" }
+    ],
+    "outputs": [
+    { "name":"size_", "type":"uint32" },
+    { "components":[
+      { "components":[
+        { "name":"dict_", "type":"cell" }
+      ], "name":"dict_", "type":"tuple" }
+    ], "name":"dict_", "type":"tuple" }
+    ],
+    "id": "0x1d"
   }
   ],
   "events": [

@@ -1,5 +1,5 @@
 #include "TONTokenWalletNF.hpp"
-
+#include "RootTokenContractNF.hpp"
 #include <tvm/contract.hpp>
 #include <tvm/contract_handle.hpp>
 #include <iterator>
@@ -83,6 +83,19 @@ public:
     tvm_commit();
     require(!tokens_.contains(tokenId), error_code::already_have_this_token);
 
+    dict_set<TokenId> own_tokenid_list;
+    if(token_balance.contains(expected_address.get())){
+      own_tokenid_list=token_balance.get_at(expected_address.get());
+      if(!own_tokenid_list.contains(tokenId)){
+        own_tokenid_list.insert(tokenId);
+        token_balance.set_at(expected_address.get(),own_tokenid_list);
+      }
+    }else{
+      own_tokenid_list.insert(tokenId);
+      token_balance.set_at(expected_address.get(),own_tokenid_list);
+     
+    }
+
     tokens_.insert(tokenId);
   }
 
@@ -112,6 +125,15 @@ public:
      }
     return token_list;
   }
+
+  __always_inline dict_set<TokenId> getTokenBlance(uint256 address_hex) {
+    dict_set<TokenId> token_list={};
+     if(token_balance.contains(address_hex.get())){
+        token_list=token_balance.get_at(address_hex.get());
+     }
+    return token_list;
+  }
+
   __always_inline TokenId getTokenByIndex(TokensType index) {
     require(index < tokens_.size(), error_code::iterator_overflow);
     return *std::next(tokens_.begin(), index.get());
@@ -192,6 +214,18 @@ public:
     tvm_accept();
     allowance_.clear();
   }
+  //This method will reg this token into exchange
+  __always_inline
+  void regTokenToExchangeFromRoot(address exchange_address,WalletGramsType grams,uint256 exchange_pubkey){
+    require(tvm_pubkey() == wallet_public_key_, error_code::message_sender_is_not_my_owner);
+    tvm_accept();
+
+   // uint256 exchange_address_hex=std::get<addr_std>(exchange_address()).address;
+
+    handle<IRootTokenContract> dest_root(root_address_);
+    dest_root(Grams(grams.get())).regTokenToExchange(exchange_pubkey,exchange_address);
+  }
+  //----------------------System function------------------------------------------
 
   // received bounced message back
   __always_inline static int _on_bounced(cell msg, slice msg_body) {

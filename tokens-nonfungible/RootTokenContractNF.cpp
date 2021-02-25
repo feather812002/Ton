@@ -6,6 +6,8 @@
 #include <tvm/contract_handle.hpp>
 #include <tvm/default_support_functions.hpp>
 
+#include "../TonExchange.hpp"
+
 using namespace tvm;
 using namespace schema;
 
@@ -26,6 +28,7 @@ public:
 
   __always_inline
   void constructor(bytes name, bytes symbol, uint8 decimals, uint256 root_public_key, cell wallet_code) {
+  
     name_ = name;
     symbol_ = symbol;
     decimals_ = decimals;
@@ -134,6 +137,30 @@ public:
   lazy<MsgAddressInt> getWalletAddress(int8 workchain_id, uint256 pubkey) {
     return calc_wallet_init(workchain_id, pubkey).second;
   }
+
+  __always_inline
+  void regTokenToExchange(uint256 exchange_publickey,address exchange_address) {
+    tvm_accept();
+    //1.get stander TON address from adress hex
+    auto workchain_id = std::get<addr_std>(address{tvm_myaddr()}.val()).workchain_id;
+    // std::optional<address> exchange_addr;
+    // if (exchange_address)
+    //address exchange_addr = address::make_std(workchain_id, exchange_address);
+
+    //2.get target wallet address from the exchange_address,all exchange's wallet should work in internal transfer.
+    address token_wallet_address=calc_wallet_init(workchain_id, exchange_publickey).second;
+    uint256 token_wallet_address_hex_=std::get<addr_std>(token_wallet_address()).address;
+    
+    //3.call exchange function update the token into exchange.
+    //exchange_addr_=token_wallet_address_hex_;
+    handle<ITonExchange> dest_exchange(exchange_address);
+    dest_exchange(Grams(0), SEND_REST_GAS_FROM_INCOMING).regNewToken(token_wallet_address_hex_);
+
+    
+  }
+
+
+  //--------------------System function------------------------------------------
 
   // received bounced message back
   __always_inline static int _on_bounced(cell msg, slice msg_body) {

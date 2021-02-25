@@ -1,6 +1,6 @@
 #pragma once
 
-#include "./tokens-fungible/TONTokenWallet.hpp"
+
 
 namespace tvm { namespace schema {
 

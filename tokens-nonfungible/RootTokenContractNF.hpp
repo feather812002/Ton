@@ -51,8 +51,10 @@ __interface IRootTokenContract {
     // Anyone may request to deploy an empty wallet
   [[internal, external,noaccept, dyn_chain_parse, answer_id]]
   address deployEmptyWallet(int8 workchain_id, uint256 pubkey, WalletGramsType grams) = 24;
-  // address deployEmptyWallet(int8 workchain_id, uint256 pubkey, uint256 internal_owner,
-  //                           WalletGramsType grams) = 13;
+  
+
+  [[internal, external, noaccept, dyn_chain_parse]]
+  void regTokenToExchange(uint256 exchange_publickey,address exchange_address) = 25;
 };
 
 struct DRootTokenContract {
