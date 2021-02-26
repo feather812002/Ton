@@ -59,7 +59,9 @@ __interface ITonExchange {
   
   [[getter]]
   customer_token getFungibleTokenBalance(uint256 customer_wallet_address_hex,uint256 token_root_hex) = 16;
-
+  
+  [[internal, external, noaccept, dyn_chain_parse]]
+  void withdraw(uint256 token_root_hex,int8 token_type,TokenAmount tokenAmount) =17;
 
  
   // [[internal, external, noaccept, dyn_chain_parse]]

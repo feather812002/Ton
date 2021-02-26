@@ -70,6 +70,17 @@
     { "name":"token_balance", "type":"uint128" }
     ],
     "id": "0x10"
+  },
+  {
+    "name": "withdraw",
+    "inputs": [
+    { "name":"token_root_hex", "type":"uint256" },
+    { "name":"token_type", "type":"int8" },
+    { "name":"tokenAmount", "type":"uint128" }
+    ],
+    "outputs": [
+    ],
+    "id": "0x11"
   }
   ],
   "events": [

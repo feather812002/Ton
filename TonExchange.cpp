@@ -28,6 +28,9 @@ public:
     static constexpr unsigned deposit_sender_wrong            = 109;
     static constexpr unsigned deposit_not_support_token       = 110;
     static constexpr unsigned deposit_no_customer_address     = 111;
+    static constexpr unsigned withdraw_no_token_address       = 112;
+    static constexpr unsigned withdraw_token_amount_error     = 113;
+    static constexpr unsigned withdraw_token_no_support       = 114;
   };
 
   __always_inline
@@ -110,14 +113,51 @@ public:
 
   __always_inline 
   customer_token getFungibleTokenBalance(uint256 customer_wallet_address_hex,uint256 token_root_hex){
-    customer_token customerBalance={{0x30},{0x30},uint8(0),TokenAmount(0)};
-    dict_map<uint256,customer_token>  customer_balance={};
-    if(token_balance_list.contains(token_root_hex.get())){
-      customer_balance=token_balance_list.get_at(token_root_hex.get());
-      customerBalance=customer_balance.get_at(customer_wallet_address_hex.get());
-    }
-    return customerBalance;
+      customer_token customerBalance={{0x30},{0x30},uint8(0),TokenAmount(0)};
+      dict_map<uint256,customer_token>  customer_balance={};
+      if(token_balance_list.contains(token_root_hex.get())){
+        customer_balance=token_balance_list.get_at(token_root_hex.get());
+        customerBalance=customer_balance.get_at(customer_wallet_address_hex.get());
+      }
+      return customerBalance;
   }
+
+  __always_inline 
+  void withdraw(uint256 token_root_hex,int8 token_type,TokenAmount tokenAmount){
+      require(token_root_hex!=0, error_code::withdraw_no_token_address);
+      require(tokenAmount>0, error_code::withdraw_token_amount_error);
+      uint256 exchange_wallet_addr_hex=uint256(0);
+      //1.get exchange wallet address from token_root_hex
+      if(support_token_list.contains(token_root_hex.get())){
+        exchange_wallet_addr_hex=support_token_list.get_at(token_root_hex.get());
+      }
+      require(exchange_wallet_addr_hex>0, error_code::withdraw_token_no_support);
+      tvm_accept();
+      auto sender = int_sender();
+      auto value_gr = int_value();
+      auto workchain_id = std::get<addr_std>(address{tvm_myaddr()}.val()).workchain_id;
+     
+      if(token_type==1){
+        //2. check balance from exchange map
+        uint256 sender_hex=std::get<addr_std>(sender()).address;
+        customer_token customerBalance=getFungibleTokenBalance(sender_hex,token_root_hex);
+        TokenAmount old_tokenAmount=customerBalance.token_balance;
+        require(old_tokenAmount>0, error_code::not_enough_balance);
+        require(old_tokenAmount>=tokenAmount, error_code::not_enough_balance);
+        //3. check pass, customer have enough balance for withdraw
+        //--3.1 get stander exchange address from exchange hex
+        address exchange_wallet_addr = address::make_std(workchain_id, exchange_wallet_addr_hex);
+        //--3.2 send token to customer.
+        handle<ITONTokenWallet> dest_exchange_wallet(exchange_wallet_addr);
+        //dest_exchange_wallet.transfer(sender(),tokenAmount.get(), value_gr.get());
+        dest_exchange_wallet(Grams(value_gr.get())).transfer(sender(),tokenAmount, uint128(value_gr.get()));
+      }
+      
+
+       
+      
+  }
+
 
 
 
