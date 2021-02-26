@@ -60,6 +60,8 @@ __interface ITonExchange {
   [[getter]]
   customer_token getFungibleTokenBalance(uint256 customer_wallet_address_hex,uint256 token_root_hex) = 16;
 
+
+ 
   // [[internal, external, noaccept, dyn_chain_parse]]
   // void withdrawal () = 16;    
 
@@ -74,6 +76,8 @@ struct DTonExchange {
   dict_map<uint256,dict_map<uint256,customer_token>> token_balance_list;
   //TIP3 NFFungible token  balance list:
   dict_map<uint256,dict_map<uint256,customer_nftoken>> nftoken_balance_list;
+
+
  
 };
 

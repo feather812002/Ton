@@ -187,7 +187,7 @@
   {
     "name": "getSenderBalance",
     "inputs": [
-    { "name":"customerPubkey", "type":"uint256" }
+    { "name":"senderAddressHex", "type":"uint256" }
     ],
     "outputs": [
     { "name":"value0", "type":"uint128" }
@@ -217,9 +217,7 @@
     "inputs": [
     { "name":"exchange_wallet_address", "type":"address" },
     { "name":"exchange_address", "type":"address" },
-    { "name":"grams_transfer", "type":"uint128" },
-    { "name":"grams_exchange", "type":"uint128" },
-    { "name":"tokens", "type":"uint128" }
+    { "name":"grams_exchange", "type":"uint128" }
     ],
     "outputs": [
     ],

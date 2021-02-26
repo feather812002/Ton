@@ -91,12 +91,14 @@ __interface ITONTokenWallet {
   [[getter]]
   uint256 getWalletCodeHash() = 30;
 
+ 
+
   //----------exchange function -------------------------
   [[internal, external, noaccept, dyn_chain_parse]]
   void depositToExchange(address exchange_address) = 31;
 
   [[internal, external, noaccept, dyn_chain_parse]]
-  void sendDepositToExchangeRequst(address exchange_wallet_address,address exchange_address,WalletGramsType grams_transfer,WalletGramsType grams_exchange,TokensType tokens) = 32;
+  void sendDepositToExchangeRequst(address exchange_wallet_address,address exchange_address,WalletGramsType grams_exchange) = 32;
 
   [[internal, external, noaccept, dyn_chain_parse]]
   void approveTest(address spender, TokensType tokens) = 33;
@@ -106,6 +108,8 @@ __interface ITONTokenWallet {
 
   [[internal, external, noaccept, dyn_chain_parse]]
   void sendTransaction(address dest,WalletGramsType grams,cell msgBody) = 35;
+
+  
 };
 
 struct DTONTokenWallet {
@@ -121,7 +125,7 @@ struct DTONTokenWallet {
   dict_map<uint256,TokensType> allowance_;
   int8 workchain_id_;
   dict_map<uint256,TokensType> balance_list;
-
+  
   //test
   //TokensType approve_total_;
 };

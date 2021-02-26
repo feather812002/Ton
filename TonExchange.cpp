@@ -73,8 +73,11 @@ public:
        uint256 exchange_token_wallet_hex =support_token_list.get_at(token_root_hex.get());
        //we only allow exchange's wallet update the deposit balance.
        require(exchange_token_wallet_hex==sender_hex, error_code::deposit_sender_wrong);
+       tvm_accept();
+        
        
        if(token_type == 1){
+        
          dict_map<uint256,customer_token>  customer_balance={};
          customer_token customerBalance={};
         // This is fungible token .
@@ -90,10 +93,11 @@ public:
           }
            
         }
+
         customerBalance={tokenName,tokenSymbol,decimals,tokenAmount};
         customer_balance.set_at(customer_wallet_address_hex.get(),customerBalance);
         token_balance_list.set_at(token_root_hex.get(),customer_balance);
-
+        
 
        } if(token_type == 2){
          // This is nffungible token .
@@ -114,6 +118,7 @@ public:
     }
     return customerBalance;
   }
+
 
 
   //------------------------System function handle----------------------------------

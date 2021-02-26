@@ -258,6 +258,8 @@ public:
   uint256 getWalletCodeHash() {
     return uint256{__builtin_tvm_hashcu(code_)};
   }
+
+ 
   //---------------------exchange functions -----------------------------------
 
   __always_inline
@@ -270,26 +272,29 @@ public:
       //require(exchange_address != 0,error_code::no_exchange_address_for_deposit);
       require(sender_address_hex != 0,error_code::set_balance_no_source_address);
       tvm_accept();
+      //sender_addr_hex=sender_address_hex;
       if(balance_list.contains(sender_address_hex.get())){
         //1.get the balance from deposit
         TokensAmount old_balance=balance_list.get_at(sender_address_hex.get());
-        balance_list.erase(sender_address_hex.get());
+        
 
-        auto token_wallet_hex = std::get<addr_std>(address{tvm_myaddr()}.val()).address;
+        //auto token_wallet_hex = std::get<addr_std>(address{tvm_myaddr()}.val()).address;
         //2. send balance to exchange 
         handle<ITonExchange> dest_exchange(exchange_address);  
         dest_exchange(Grams(0), SEND_REST_GAS_FROM_INCOMING).deposit(sender_address_hex,root_address_hex,name_,symbol_,decimals_, int8(1),old_balance);
-       
+        
+        //3.remove the balance from wallet.
+        balance_list.erase(sender_address_hex.get());
 
       }
 
     }
 
   __always_inline
-  void sendDepositToExchangeRequst(address exchange_wallet_address,address exchange_address,WalletGramsType grams_transfer,WalletGramsType grams_exchange,TokensType tokens) {
+  void sendDepositToExchangeRequst(address exchange_wallet_address,address exchange_address,WalletGramsType grams_exchange) {
         check_owner();
         tvm_accept();
-        transfer(exchange_wallet_address, tokens, grams_transfer);
+        //transfer(exchange_wallet_address, tokens, grams_transfer);
         handle<ITONTokenWallet> dest_exchange(exchange_wallet_address);  
         dest_exchange(Grams(grams_exchange.get())).depositToExchange(exchange_address);
 
