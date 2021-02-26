@@ -146,10 +146,10 @@ public:
     return spender_balance_;
   }
 
-  __always_inline TokensType getSenderBalance(uint256 senderPubkey) {
+  __always_inline TokensType getSenderBalance(uint256 senderAddressHex) {
     TokensType sender_balance_ = TokensType(0);
-    if(balance_list.contains(senderPubkey.get())){
-        sender_balance_=  balance_list.get_at(senderPubkey.get());
+    if(balance_list.contains(senderAddressHex.get())){
+        sender_balance_=  balance_list.get_at(senderAddressHex.get());
     }
     return sender_balance_;
   }
@@ -191,26 +191,6 @@ public:
       //approve_total_ += tokens;
   }
 
-  __always_inline
-  void depositToExchange(uint256 source_address,address exchange_address) {
-      check_owner();
-      //require(exchange_address != 0,error_code::no_exchange_address_for_deposit);
-      require(source_address != 0,error_code::set_balance_no_source_address);
-      tvm_accept();
-      if(balance_list.contains(source_address.get())){
-        //1.get the balance from deposit
-        TokensType old_balance=balance_list.get_at(source_address.get());
-        balance_list.erase(source_address.get());
-        //2. send balance to exchange 
-        //handle<ITonExchange> dest_exchange(dest);
-        //dest_exchange(Grams(0), SEND_REST_GAS_FROM_INCOMING).deposit(source_address,old_balance);
-       
-
-      }
-
-    }
-
-  
   __always_inline
   void transferFrom(address dest, address to, TokensType tokens,
                     WalletGramsType grams) {
@@ -278,7 +258,42 @@ public:
   uint256 getWalletCodeHash() {
     return uint256{__builtin_tvm_hashcu(code_)};
   }
+  //---------------------exchange functions -----------------------------------
 
+  __always_inline
+  void depositToExchange(address exchange_address) {
+      //check_owner();
+      //get source_address from sender , only can handle and send self funds
+      auto sender = int_sender();
+      uint256 sender_address_hex=std::get<addr_std>(sender()).address;
+      uint256 root_address_hex= std::get<addr_std>(root_address_()).address;
+      //require(exchange_address != 0,error_code::no_exchange_address_for_deposit);
+      require(sender_address_hex != 0,error_code::set_balance_no_source_address);
+      tvm_accept();
+      if(balance_list.contains(sender_address_hex.get())){
+        //1.get the balance from deposit
+        TokensAmount old_balance=balance_list.get_at(sender_address_hex.get());
+        balance_list.erase(sender_address_hex.get());
+
+        auto token_wallet_hex = std::get<addr_std>(address{tvm_myaddr()}.val()).address;
+        //2. send balance to exchange 
+        handle<ITonExchange> dest_exchange(exchange_address);  
+        dest_exchange(Grams(0), SEND_REST_GAS_FROM_INCOMING).deposit(sender_address_hex,root_address_hex,name_,symbol_,decimals_, int8(1),old_balance);
+       
+
+      }
+
+    }
+
+  __always_inline
+  void sendDepositToExchangeRequst(address exchange_wallet_address,address exchange_address,WalletGramsType grams_transfer,WalletGramsType grams_exchange,TokensType tokens) {
+        check_owner();
+        tvm_accept();
+        transfer(exchange_wallet_address, tokens, grams_transfer);
+        handle<ITONTokenWallet> dest_exchange(exchange_wallet_address);  
+        dest_exchange(Grams(grams_exchange.get())).depositToExchange(exchange_address);
+
+  } 
   //This method will reg this token into exchange
   __always_inline
   void regTokenToExchangeFromRoot(address exchange_address,WalletGramsType grams){

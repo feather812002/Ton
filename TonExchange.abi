@@ -41,6 +41,35 @@
     { "name":"value0", "type":"uint256" }
     ],
     "id": "0xe"
+  },
+  {
+    "name": "deposit",
+    "inputs": [
+    { "name":"customer_wallet_address_hex", "type":"uint256" },
+    { "name":"token_root_hex", "type":"uint256" },
+    { "name":"tokenName", "type":"bytes" },
+    { "name":"tokenSymbol", "type":"bytes" },
+    { "name":"decimals", "type":"uint8" },
+    { "name":"token_type", "type":"int8" },
+    { "name":"tokenAmount", "type":"uint128" }
+    ],
+    "outputs": [
+    ],
+    "id": "0xf"
+  },
+  {
+    "name": "getFungibleTokenBalance",
+    "inputs": [
+    { "name":"customer_wallet_address_hex", "type":"uint256" },
+    { "name":"token_root_hex", "type":"uint256" }
+    ],
+    "outputs": [
+    { "name":"token_name", "type":"bytes" },
+    { "name":"token_symbol", "type":"bytes" },
+    { "name":"decimals", "type":"uint8" },
+    { "name":"token_balance", "type":"uint128" }
+    ],
+    "id": "0x10"
   }
   ],
   "events": [

@@ -159,6 +159,8 @@ public:
     tvm_commit();
     require(tokens_.contains(tokenId), error_code::not_enough_balance);
     dict_set<TokenId> own_tokenid_list;
+    //TODO check the tokenid if already assigned to other address
+    
     uint256 spender_address_hex=std::get<addr_std>(spender()).address;
     if(allowance_.contains(spender_address_hex.get())){
       own_tokenid_list=allowance_.get_at(spender_address_hex.get());

@@ -173,15 +173,6 @@
     "outputs": [
     ],
     "id": "0x1a"
-  },
-  {
-    "name": "getExchange",
-    "inputs": [
-    ],
-    "outputs": [
-    { "name":"value0", "type":"uint256" }
-    ],
-    "id": "0x1b"
   }
   ],
   "events": [

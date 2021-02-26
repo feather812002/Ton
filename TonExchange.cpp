@@ -24,6 +24,10 @@ public:
     static constexpr unsigned internal_owner_disabled         = 105;
     static constexpr unsigned define_pubkey_or_internal_owner = 106;
     static constexpr unsigned wrong_wallet_code_hash          = 107;
+    static constexpr unsigned deposit_no_token_type           = 108;
+    static constexpr unsigned deposit_sender_wrong            = 109;
+    static constexpr unsigned deposit_not_support_token       = 110;
+    static constexpr unsigned deposit_no_customer_address     = 111;
   };
 
   __always_inline
@@ -34,7 +38,8 @@ public:
   //------------------New Token Support-------------------------
   __always_inline
   void regNewToken(uint256 token_wallet) {
-    //require(token_wallet!=0,error_code::add_new_token_no_address);
+    //until now , I still not found a good way can detect a online smart contract is good or bad.
+    //so , this is maybe improve in later ,if we can identification a smart contract is good or bad.
     tvm_accept();
     auto sender=int_sender();
     root_address_hex=std::get<addr_std>(sender()).address;
@@ -56,7 +61,59 @@ public:
   }
 
   //------------------------Customer Funds Manager---------------------------------
-  
+  __always_inline
+  void deposit(uint256 customer_wallet_address_hex,uint256 token_root_hex,bytes tokenName,bytes tokenSymbol,uint8 decimals, int8 token_type,TokenAmount tokenAmount) {
+       require(token_type!=0, error_code::deposit_no_token_type);
+       require(customer_wallet_address_hex!=0, error_code::deposit_no_customer_address);
+       //get sender address
+       auto sender = int_sender();
+       uint256 sender_hex=std::get<addr_std>(sender()).address;
+       //check if the token already support by exchange
+       require(support_token_list.contains(token_root_hex.get()),error_code::deposit_not_support_token);
+       uint256 exchange_token_wallet_hex =support_token_list.get_at(token_root_hex.get());
+       //we only allow exchange's wallet update the deposit balance.
+       require(exchange_token_wallet_hex==sender_hex, error_code::deposit_sender_wrong);
+       
+       if(token_type == 1){
+         dict_map<uint256,customer_token>  customer_balance={};
+         customer_token customerBalance={};
+        // This is fungible token .
+        if(token_balance_list.contains(token_root_hex.get())){
+          //[customer wallet addr hex -->token hold details]
+          //find the token all holder customers list.
+          customer_balance=token_balance_list.get_at(token_root_hex.get());
+          //find the customer balance from map
+          if(customer_balance.contains(customer_wallet_address_hex.get())){
+            customerBalance=customer_balance.get_at(customer_wallet_address_hex.get());
+            TokenAmount old_tokenAmount=customerBalance.token_balance;
+            tokenAmount+=old_tokenAmount;
+          }
+           
+        }
+        customerBalance={tokenName,tokenSymbol,decimals,tokenAmount};
+        customer_balance.set_at(customer_wallet_address_hex.get(),customerBalance);
+        token_balance_list.set_at(token_root_hex.get(),customer_balance);
+
+
+       } if(token_type == 2){
+         // This is nffungible token .
+
+       }else{
+         //no identification token type ,nothing to do.
+       }
+      
+  }
+
+  __always_inline 
+  customer_token getFungibleTokenBalance(uint256 customer_wallet_address_hex,uint256 token_root_hex){
+    customer_token customerBalance={{0x30},{0x30},uint8(0),TokenAmount(0)};
+    dict_map<uint256,customer_token>  customer_balance={};
+    if(token_balance_list.contains(token_root_hex.get())){
+      customer_balance=token_balance_list.get_at(token_root_hex.get());
+      customerBalance=customer_balance.get_at(customer_wallet_address_hex.get());
+    }
+    return customerBalance;
+  }
 
 
   //------------------------System function handle----------------------------------

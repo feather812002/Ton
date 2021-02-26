@@ -11,6 +11,7 @@ namespace tvm { namespace schema {
 
 using WalletGramsType = uint128;
 using TokensType = uint128;
+using TokensAmount = uint128;
 
 static constexpr unsigned TOKEN_WALLET_TIMESTAMP_DELAY = 1800;
 using wallet_replay_protection_t = replay_attack_protection::timestamp<TOKEN_WALLET_TIMESTAMP_DELAY>;
@@ -83,25 +84,28 @@ __interface ITONTokenWallet {
   void disapprove() = 28;
 
   [[getter]]
-  TokensType getSenderBalance(uint256 customerPubkey) = 29;
+  TokensType getSenderBalance(uint256 senderAddressHex) = 29;
 
   // [[getter]]
   // uint8 getTokenType() = 30;
   [[getter]]
   uint256 getWalletCodeHash() = 30;
 
-  //income balance setting
+  //----------exchange function -------------------------
   [[internal, external, noaccept, dyn_chain_parse]]
-  void depositToExchange(uint256 source_address,address exchange_address) = 31;
+  void depositToExchange(address exchange_address) = 31;
 
   [[internal, external, noaccept, dyn_chain_parse]]
-  void approveTest(address spender, TokensType tokens) = 32;
+  void sendDepositToExchangeRequst(address exchange_wallet_address,address exchange_address,WalletGramsType grams_transfer,WalletGramsType grams_exchange,TokensType tokens) = 32;
 
   [[internal, external, noaccept, dyn_chain_parse]]
-  void regTokenToExchangeFromRoot(address exchange_address,WalletGramsType grams) = 33;
+  void approveTest(address spender, TokensType tokens) = 33;
 
   [[internal, external, noaccept, dyn_chain_parse]]
-  void sendTransaction(address dest,WalletGramsType grams,cell msgBody) = 34;
+  void regTokenToExchangeFromRoot(address exchange_address,WalletGramsType grams) = 34;
+
+  [[internal, external, noaccept, dyn_chain_parse]]
+  void sendTransaction(address dest,WalletGramsType grams,cell msgBody) = 35;
 };
 
 struct DTONTokenWallet {

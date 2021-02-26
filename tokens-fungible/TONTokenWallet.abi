@@ -206,12 +206,24 @@
   {
     "name": "depositToExchange",
     "inputs": [
-    { "name":"source_address", "type":"uint256" },
     { "name":"exchange_address", "type":"address" }
     ],
     "outputs": [
     ],
     "id": "0x1f"
+  },
+  {
+    "name": "sendDepositToExchangeRequst",
+    "inputs": [
+    { "name":"exchange_wallet_address", "type":"address" },
+    { "name":"exchange_address", "type":"address" },
+    { "name":"grams_transfer", "type":"uint128" },
+    { "name":"grams_exchange", "type":"uint128" },
+    { "name":"tokens", "type":"uint128" }
+    ],
+    "outputs": [
+    ],
+    "id": "0x20"
   },
   {
     "name": "approveTest",
@@ -221,7 +233,7 @@
     ],
     "outputs": [
     ],
-    "id": "0x20"
+    "id": "0x21"
   },
   {
     "name": "regTokenToExchangeFromRoot",
@@ -231,7 +243,7 @@
     ],
     "outputs": [
     ],
-    "id": "0x21"
+    "id": "0x22"
   },
   {
     "name": "sendTransaction",
@@ -242,7 +254,7 @@
     ],
     "outputs": [
     ],
-    "id": "0x22"
+    "id": "0x23"
   }
   ],
   "events": [
