@@ -122,7 +122,7 @@ public:
         nftoken_balance_list.set_at(token_root_hex.get(),customer_nf_balance);
 
        }else{
-         //no identification token type ,nothing to do.
+         //Unrecognized token type ,nothing to do.
        }
       
   }
@@ -177,18 +177,18 @@ public:
       auto sender = int_sender();
       auto value_gr = int_value();
       auto workchain_id = std::get<addr_std>(address{tvm_myaddr()}.val()).workchain_id;
-     
+      uint256 sender_hex=std::get<addr_std>(sender()).address;
+
+      address exchange_wallet_addr = address::make_std(workchain_id, exchange_wallet_addr_hex);
+      
       if(token_type==1){
         //2. check balance from exchange map
-        uint256 sender_hex=std::get<addr_std>(sender()).address;
         customer_token customerBalance=getFungibleTokenBalance(sender_hex,token_root_hex);
         TokenAmount old_tokenAmount=customerBalance.token_balance;
         require(old_tokenAmount>0, error_code::not_enough_balance);
         require(old_tokenAmount>=tokenAmount, error_code::not_enough_balance);
         //3. check pass, customer have enough balance for withdraw
-        //--3.1 get stander exchange address from exchange hex
-        address exchange_wallet_addr = address::make_std(workchain_id, exchange_wallet_addr_hex);
-        //--3.2 send token to customer.
+        //-- send token to customer.
         handle<ITONTokenWallet> dest_exchange_wallet(exchange_wallet_addr);
         //dest_exchange_wallet.transfer(sender(),tokenAmount.get(), value_gr.get());
         dest_exchange_wallet(Grams(value_gr.get())).transfer(sender(),tokenAmount, uint128(value_gr.get()));
@@ -201,6 +201,26 @@ public:
         customer_balance.set_at(sender_hex.get(),customerBalance);
         token_balance_list.set_at(token_root_hex.get(),customer_balance);
 
+      }else if(token_type==2){
+        require(nftoken_balance_list.contains(token_root_hex.get()), error_code::withdraw_token_no_support);
+        dict_map<uint256,customer_nftoken> customerNFBalanceList=nftoken_balance_list.get_at(token_root_hex.get());
+        require(customerNFBalanceList.contains(sender_hex.get()), error_code::not_enough_balance);
+        customer_nftoken customerNFBalance=customerNFBalanceList.get_at(sender_hex.get());
+        //this is nonfungible token
+        //1. check the balance if is enough.
+        dict_set<TokenId> tokenIds_=customerNFBalance.tokenid_list;
+        require(tokenIds_.size()>0, error_code::not_enough_balance);
+        require(tokenIds_.contains(tokenAmount), error_code::not_enough_balance);
+        //2. start withdraw to dest wallet
+        handle<ITONTokenWallet> dest_exchange_wallet(exchange_wallet_addr);
+        dest_exchange_wallet(Grams(value_gr.get())).transfer(sender(),tokenAmount, uint128(value_gr.get()));
+        //3.remove from balance of exchange.
+        tokenIds_.erase(tokenAmount);
+        customerNFBalance={customerNFBalance.token_name,customerNFBalance.token_symbol,tokenIds_};
+        customerNFBalanceList.set_at(sender_hex.get(),customerNFBalance);
+        nftoken_balance_list.set_at(token_root_hex.get(),customerNFBalanceList);
+      }else{
+        //Unrecognized token nothing to do 
       }
       
   }
