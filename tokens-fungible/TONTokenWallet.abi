@@ -253,6 +253,17 @@
     "outputs": [
     ],
     "id": "0x23"
+  },
+  {
+    "name": "withdrawFromExchange",
+    "inputs": [
+    { "name":"exchange_address", "type":"address" },
+    { "name":"tokenAmount", "type":"uint128" },
+    { "name":"grams", "type":"uint128" }
+    ],
+    "outputs": [
+    ],
+    "id": "0x24"
   }
   ],
   "events": [

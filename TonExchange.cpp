@@ -151,11 +151,26 @@ public:
         handle<ITONTokenWallet> dest_exchange_wallet(exchange_wallet_addr);
         //dest_exchange_wallet.transfer(sender(),tokenAmount.get(), value_gr.get());
         dest_exchange_wallet(Grams(value_gr.get())).transfer(sender(),tokenAmount, uint128(value_gr.get()));
+        //4. clear already withdraw balance
+        old_tokenAmount -=tokenAmount;
+        customerBalance={customerBalance.token_name,customerBalance.token_symbol,customerBalance.decimals,old_tokenAmount};
+        dict_map<uint256,customer_token> customer_balance=token_balance_list.get_at(token_root_hex.get());
+        //customerBalance=customer_balance.get_at(sender_hex.get());
+        
+        customer_balance.set_at(sender_hex.get(),customerBalance);
+        token_balance_list.set_at(token_root_hex.get(),customer_balance);
+
       }
       
+  }
 
-       
-      
+   __always_inline 
+  void withdrawTest(address exchange_wallet_address,address to_wallet_address,TokenAmount tokenAmount){
+    tvm_accept();
+    auto value_gr = int_value();
+    handle<ITONTokenWallet> dest_exchange_wallet(exchange_wallet_address);
+    //dest_exchange_wallet.transfer(sender(),tokenAmount.get(), value_gr.get());
+    dest_exchange_wallet(Grams(value_gr.get())).transfer(to_wallet_address,tokenAmount, uint128(value_gr.get()));
   }
 
 

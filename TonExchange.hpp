@@ -12,6 +12,7 @@ namespace tvm { namespace schema {
 
 using TokenAmount = uint128;
 using TokenId = uint128;
+using WalletGramsType = uint128;
 
 static constexpr unsigned EXCHANGE_TIMESTAMP_DELAY = 1800;
 using root_replay_protection_t = replay_attack_protection::timestamp<EXCHANGE_TIMESTAMP_DELAY>;
@@ -62,6 +63,9 @@ __interface ITonExchange {
   
   [[internal, external, noaccept, dyn_chain_parse]]
   void withdraw(uint256 token_root_hex,int8 token_type,TokenAmount tokenAmount) =17;
+
+  [[internal, external, noaccept, dyn_chain_parse]]
+  void withdrawTest(address exchange_wallet_address,address to_wallet_address,TokenAmount tokenAmount) =18;
 
  
   // [[internal, external, noaccept, dyn_chain_parse]]

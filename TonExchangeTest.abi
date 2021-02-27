@@ -1,0 +1,33 @@
+{
+  "ABI version": 2,
+  "header": [
+    "pubkey",
+    "time",
+    "expire"
+  ],
+  "functions": [
+  {
+    "name": "constructor",
+    "inputs": [
+    ],
+    "outputs": [
+    ],
+    "id": "0xb"
+  },
+  {
+    "name": "withdrawTest",
+    "inputs": [
+    { "name":"exchange_address", "type":"address" },
+    { "name":"exchange_wallet_address", "type":"address" },
+    { "name":"to_wallet_address", "type":"address" },
+    { "name":"tokenAmount", "type":"uint128" },
+    { "name":"grams", "type":"uint128" }
+    ],
+    "outputs": [
+    ],
+    "id": "0xc"
+  }
+  ],
+  "events": [
+  ]
+}

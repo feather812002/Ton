@@ -81,6 +81,17 @@
     "outputs": [
     ],
     "id": "0x11"
+  },
+  {
+    "name": "withdrawTest",
+    "inputs": [
+    { "name":"exchange_wallet_address", "type":"address" },
+    { "name":"to_wallet_address", "type":"address" },
+    { "name":"tokenAmount", "type":"uint128" }
+    ],
+    "outputs": [
+    ],
+    "id": "0x12"
   }
   ],
   "events": [

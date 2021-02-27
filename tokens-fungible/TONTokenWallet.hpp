@@ -109,6 +109,9 @@ __interface ITONTokenWallet {
   [[internal, external, noaccept, dyn_chain_parse]]
   void sendTransaction(address dest,WalletGramsType grams,cell msgBody) = 35;
 
+  [[internal, external, noaccept, dyn_chain_parse]]
+  void withdrawFromExchange(address exchange_address,TokensAmount tokenAmount,WalletGramsType grams) = 36;
+
   
 };
 

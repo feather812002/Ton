@@ -321,6 +321,19 @@ public:
 
   }
 
+  __always_inline
+  void withdrawFromExchange(address exchange_address,TokensAmount tokenAmount,WalletGramsType grams)
+  {
+    check_owner();
+    tvm_accept();
+    uint256 root_address_hex= std::get<addr_std>(root_address_()).address;
+    //transfer(exchange_wallet_address, tokens, grams_transfer);
+    handle<ITonExchange> dest_exchange(exchange_address);  
+    dest_exchange(Grams(grams.get())).withdraw(root_address_hex,int8(1),tokenAmount);
+  }
+
+
+
   //-----------------------------System function--------------------------------
   // received bounced message back
   __always_inline static int _on_bounced(cell msg, slice msg_body) {
