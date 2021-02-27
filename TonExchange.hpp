@@ -6,6 +6,7 @@
 #include <tvm/default_support_functions.hpp>
 #include <tvm/dict_map.hpp>
 #include <tvm/dict_set.hpp>
+#include <tvm/dict_array.hpp>
 #include <tvm/replay_attack_protection/timestamp.hpp>
 
 namespace tvm { namespace schema {
@@ -32,6 +33,8 @@ struct customer_nftoken {
   bytes token_symbol;
   dict_set<TokenId>  tokenid_list;
 };
+
+
 
 
 // ===== Root Token Contract ===== //
@@ -67,7 +70,8 @@ __interface ITonExchange {
   [[internal, external, noaccept, dyn_chain_parse]]
   void withdrawTest(address exchange_wallet_address,address to_wallet_address,TokenAmount tokenAmount) =18;
 
- 
+  [[getter]]
+  dict_array<TokenId> getNFFungibleTokenBalance(uint256 customer_wallet_address_hex,uint256 token_root_hex) = 19;
   // [[internal, external, noaccept, dyn_chain_parse]]
   // void withdrawal () = 16;    
 

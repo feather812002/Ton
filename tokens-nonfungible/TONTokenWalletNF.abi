@@ -193,14 +193,29 @@
     { "name":"address_hex", "type":"uint256" }
     ],
     "outputs": [
-    { "name":"size_", "type":"uint32" },
-    { "components":[
-      { "components":[
-        { "name":"dict_", "type":"cell" }
-      ], "name":"dict_", "type":"tuple" }
-    ], "name":"dict_", "type":"tuple" }
+    { "name":"value0", "type":"uint128[]" }
     ],
     "id": "0x1d"
+  },
+  {
+    "name": "depositToExchange",
+    "inputs": [
+    { "name":"exchange_address", "type":"address" }
+    ],
+    "outputs": [
+    ],
+    "id": "0x1e"
+  },
+  {
+    "name": "sendDepositToExchangeRequst",
+    "inputs": [
+    { "name":"exchange_wallet_address", "type":"address" },
+    { "name":"exchange_address", "type":"address" },
+    { "name":"grams_exchange", "type":"uint128" }
+    ],
+    "outputs": [
+    ],
+    "id": "0x1f"
   }
   ],
   "events": [

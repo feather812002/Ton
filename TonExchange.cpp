@@ -101,9 +101,25 @@ public:
         customer_balance.set_at(customer_wallet_address_hex.get(),customerBalance);
         token_balance_list.set_at(token_root_hex.get(),customer_balance);
         
-
        } if(token_type == 2){
          // This is nffungible token .
+         dict_map<uint256,customer_nftoken>  customer_nf_balance={};
+         customer_nftoken customerNfBalance={};
+         dict_set<TokenId>  tokens_={};
+
+        if(nftoken_balance_list.contains(token_root_hex.get())){
+          customer_nf_balance=nftoken_balance_list.get_at(token_root_hex.get());
+          if(customer_nf_balance.contains(customer_wallet_address_hex.get())){
+            customerNfBalance=customer_nf_balance.get_at(customer_wallet_address_hex.get());
+            tokens_=customerNfBalance.tokenid_list;
+          }
+        }
+        if(!tokens_.contains(tokenAmount)){
+          tokens_.insert(tokenAmount);
+        }
+        customerNfBalance={tokenName,tokenSymbol,tokens_};
+        customer_nf_balance.set_at(customer_wallet_address_hex.get(),customerNfBalance);
+        nftoken_balance_list.set_at(token_root_hex.get(),customer_nf_balance);
 
        }else{
          //no identification token type ,nothing to do.
@@ -120,6 +136,31 @@ public:
         customerBalance=customer_balance.get_at(customer_wallet_address_hex.get());
       }
       return customerBalance;
+  }
+
+  __always_inline 
+  dict_array<TokenId> getNFFungibleTokenBalance(uint256 customer_wallet_address_hex,uint256 token_root_hex){
+      dict_array<TokenId> tokenIds_={};
+     
+      customer_nftoken customerBalance={{0x30},{0x30},{}};
+      dict_map<uint256,customer_nftoken>  customer_balance={};
+      if(nftoken_balance_list.contains(token_root_hex.get())){
+        customer_balance=nftoken_balance_list.get_at(token_root_hex.get());
+        if(customer_balance.contains(customer_wallet_address_hex.get())){
+          customerBalance=customer_balance.get_at(customer_wallet_address_hex.get());
+          dict_set<TokenId>  tokens_=customerBalance.tokenid_list;
+          if(tokens_.size()>0){
+            for(auto tokenid:tokens_){
+              tokenIds_.push_back(tokenid);
+            }
+          }
+
+        }
+        
+      }
+
+       return dict_array<TokenId>(tokenIds_.begin(), tokenIds_.end());
+     
   }
 
   __always_inline 

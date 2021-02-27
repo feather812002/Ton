@@ -4,7 +4,7 @@
 #include <tvm/contract_handle.hpp>
 #include <iterator>
 #include <tvm/default_support_functions.hpp>
-
+#include "../TonExchange.hpp"
 using namespace tvm;
 using namespace schema;
 
@@ -23,6 +23,7 @@ public:
     static constexpr unsigned already_have_this_token           = 109;
     static constexpr unsigned zero_token_id                     = 110;
     static constexpr unsigned zero_dest_addr                    = 111;
+    static constexpr unsigned set_balance_no_source_address     = 112;
   };
 
   __always_inline
@@ -128,10 +129,15 @@ public:
     return token;
   }
 
-  __always_inline dict_set<TokenId> getTokenBlance(uint256 address_hex) {
-    dict_set<TokenId> token_list={};
+  __always_inline dict_array<TokenId> getTokenBlance(uint256 address_hex) {
+    dict_array<TokenId> token_list={};
      if(token_balance.contains(address_hex.get())){
-        token_list=token_balance.get_at(address_hex.get());
+        dict_set<TokenId> old_token_balance=token_balance.get_at(address_hex.get());
+        if(old_token_balance.size()>0){
+          for(auto v:old_token_balance){
+            token_list.push_back(v);
+          }
+        }
      }
     return token_list;
   }
@@ -218,17 +224,68 @@ public:
     tvm_accept();
     allowance_.clear();
   }
+  //---------------------------------exchange functions-----------------------------------------
   //This method will reg this token into exchange
   __always_inline
   void regTokenToExchangeFromRoot(address exchange_address,WalletGramsType grams,uint256 exchange_pubkey){
     require(tvm_pubkey() == wallet_public_key_, error_code::message_sender_is_not_my_owner);
     tvm_accept();
-
    // uint256 exchange_address_hex=std::get<addr_std>(exchange_address()).address;
-
     handle<IRootTokenContract> dest_root(root_address_);
     dest_root(Grams(grams.get())).regTokenToExchange(exchange_pubkey,exchange_address);
   }
+
+
+  //after you transfer token to wallet of exchange ,you should call this to udpate the balance of exchange.
+  __always_inline
+  void depositToExchange(address exchange_address) {
+      //check_owner();
+      //get source_address from sender , only can handle and send self funds
+      auto sender = int_sender();
+      uint256 sender_address_hex=std::get<addr_std>(sender()).address;
+      uint256 root_address_hex= std::get<addr_std>(root_address_()).address;
+      //require(exchange_address != 0,error_code::no_exchange_address_for_deposit);
+      require(sender_address_hex != 0,error_code::set_balance_no_source_address);
+      tvm_accept();
+      //sender_addr_hex=sender_address_hex;
+      dict_set<TokenId> own_tokenid_list;
+      if(token_balance.contains(sender_address_hex.get())){
+        //1.get the balance from deposit
+        own_tokenid_list=token_balance.get_at(sender_address_hex.get());
+        require(own_tokenid_list.size() > 0,error_code::not_enough_balance);
+        
+        TokenId old_tokenid=getTokenByIndex(uint128(0));
+
+        //auto token_wallet_hex = std::get<addr_std>(address{tvm_myaddr()}.val()).address;
+        //2. send balance to exchange 
+        handle<ITonExchange> dest_exchange(exchange_address);  
+        dest_exchange(Grams(0), SEND_REST_GAS_FROM_INCOMING).deposit(sender_address_hex,root_address_hex,name_,symbol_,decimals_, int8(2),old_tokenid);
+        
+        //3.remove the balance from wallet.
+        own_tokenid_list.erase(old_tokenid);
+        if(own_tokenid_list.size()==0){
+          token_balance.erase(sender_address_hex.get());
+        }else{
+          token_balance.set_at(sender_address_hex.get(),own_tokenid_list);
+        }
+
+      }
+
+    }
+  
+  
+     __always_inline
+    void sendDepositToExchangeRequst(address exchange_wallet_address,address exchange_address,WalletGramsType grams_exchange) {
+          require(tvm_pubkey() == wallet_public_key_, error_code::message_sender_is_not_my_owner);
+          tvm_accept();
+          //transfer(exchange_wallet_address, tokens, grams_transfer);
+          handle<ITONTokenWallet> dest_exchange(exchange_wallet_address);  
+          dest_exchange(Grams(grams_exchange.get())).depositToExchange(exchange_address);
+
+    } 
+  
+  
+  
   //----------------------System function------------------------------------------
 
   // received bounced message back
@@ -263,6 +320,10 @@ public:
     return 0;
   }
 
+  
+  
+  
+  
   // =============== Support functions ==================
   DEFAULT_SUPPORT_FUNCTIONS(ITONTokenWallet, wallet_replay_protection_t)
 private:

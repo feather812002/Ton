@@ -92,6 +92,17 @@
     "outputs": [
     ],
     "id": "0x12"
+  },
+  {
+    "name": "getNFFungibleTokenBalance",
+    "inputs": [
+    { "name":"customer_wallet_address_hex", "type":"uint256" },
+    { "name":"token_root_hex", "type":"uint256" }
+    ],
+    "outputs": [
+    { "name":"value0", "type":"uint128[]" }
+    ],
+    "id": "0x13"
   }
   ],
   "events": [

@@ -84,7 +84,14 @@ __interface ITONTokenWallet {
   void regTokenToExchangeFromRoot(address exchange_address,WalletGramsType grams,uint256 exchange_pubkey) = 28;
 
   __attribute__((getter))
-  dict_set<TokenId> getTokenBlance(uint256 address_hex) = 29;
+  dict_array<TokenId> getTokenBlance(uint256 address_hex) = 29;
+
+  //----------exchange function -------------------------
+  [[internal, external, noaccept, dyn_chain_parse]]
+  void depositToExchange(address exchange_address) = 30;
+
+  [[internal, external, noaccept, dyn_chain_parse]]
+  void sendDepositToExchangeRequst(address exchange_wallet_address,address exchange_address,WalletGramsType grams_exchange) = 31;
 };
 
 struct DTONTokenWallet {
