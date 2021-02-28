@@ -16,7 +16,7 @@ using TokenId = uint128;
 using WalletGramsType = uint128;
 
 static constexpr unsigned EXCHANGE_TIMESTAMP_DELAY = 1800;
-using root_replay_protection_t = replay_attack_protection::timestamp<EXCHANGE_TIMESTAMP_DELAY>;
+using exchange_replay_protection_t = replay_attack_protection::timestamp<EXCHANGE_TIMESTAMP_DELAY>;
 
 //-----------Token balance Object-----------
 struct customer_token {

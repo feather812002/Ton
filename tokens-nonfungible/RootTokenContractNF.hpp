@@ -46,15 +46,15 @@ __interface IRootTokenContract {
   TokenId getLastMintedToken() = 22;
 
   __attribute__((getter))
-  lazy<MsgAddressInt> getWalletAddress(int8 workchain_id, uint256 pubkey) = 23;
+  lazy<MsgAddressInt> getWalletAddress(int8 workchain_id, uint256 pubkey,uint256 own_addr) = 23;
 
     // Anyone may request to deploy an empty wallet
   [[internal, external,noaccept, dyn_chain_parse, answer_id]]
-  address deployEmptyWallet(int8 workchain_id, uint256 pubkey, WalletGramsType grams) = 24;
+  address deployEmptyWallet(int8 workchain_id, uint256 pubkey, WalletGramsType grams,uint256 owner_addr) = 24;
   
 
   [[internal, external, noaccept, dyn_chain_parse]]
-  void regTokenToExchange(uint256 exchange_publickey,address exchange_address) = 25;
+  void regTokenToExchange(uint256 exchange_publickey,address exchange_address,uint256 own_addr) = 25;
 };
 
 struct DRootTokenContract {

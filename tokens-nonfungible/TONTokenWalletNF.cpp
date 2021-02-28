@@ -29,7 +29,7 @@ public:
   __always_inline
   void constructor(bytes name, bytes symbol, uint8 decimals,
                    uint256 root_public_key, uint256 wallet_public_key,
-                   lazy<MsgAddressInt> root_address, cell code) {
+                   lazy<MsgAddressInt> root_address, cell code,uint256 owner_addr) {
     name_ = name;
     symbol_ = symbol;
     decimals_ = decimals;
@@ -37,11 +37,15 @@ public:
     wallet_public_key_ = wallet_public_key;
     root_address_ = root_address;
     code_ = code;
+    owner_addr_=owner_addr;
   }
 
   __always_inline
   void transfer(lazy<MsgAddressInt> dest, TokenId tokenId, WalletGramsType grams) {
-    require(tvm_pubkey() == wallet_public_key_, error_code::message_sender_is_not_my_owner);
+    auto sender = int_sender();
+    uint256 sender_hex=std::get<addr_std>(sender()).address;
+    require(sender_hex>0, error_code::message_sender_is_not_my_owner);
+    require(tvm_pubkey() == wallet_public_key_ || sender_hex==owner_addr_, error_code::message_sender_is_not_my_owner);
 
     // Transfer to zero address is not allowed.
     require(std::get<addr_std>(dest()).address != 0, error_code::zero_dest_addr);
@@ -227,12 +231,12 @@ public:
   //---------------------------------exchange functions-----------------------------------------
   //This method will reg this token into exchange
   __always_inline
-  void regTokenToExchangeFromRoot(address exchange_address,WalletGramsType grams,uint256 exchange_pubkey){
+  void regTokenToExchangeFromRoot(address exchange_address,WalletGramsType grams,uint256 exchange_pubkey,uint256 owner_addr){
     require(tvm_pubkey() == wallet_public_key_, error_code::message_sender_is_not_my_owner);
     tvm_accept();
    // uint256 exchange_address_hex=std::get<addr_std>(exchange_address()).address;
     handle<IRootTokenContract> dest_root(root_address_);
-    dest_root(Grams(grams.get())).regTokenToExchange(exchange_pubkey,exchange_address);
+    dest_root(Grams(grams.get())).regTokenToExchange(exchange_pubkey,exchange_address,owner_addr);
   }
 
 
@@ -282,7 +286,18 @@ public:
           handle<ITONTokenWallet> dest_exchange(exchange_wallet_address);  
           dest_exchange(Grams(grams_exchange.get())).depositToExchange(exchange_address);
 
-    } 
+    }
+
+    __always_inline
+  void withdrawFromExchange(address exchange_address,TokenId tokenAmount,WalletGramsType grams)
+  {
+    require(tvm_pubkey() == wallet_public_key_, error_code::message_sender_is_not_my_owner);
+    tvm_accept();
+    uint256 root_address_hex= std::get<addr_std>(root_address_()).address;
+    //transfer(exchange_wallet_address, tokens, grams_transfer);
+    handle<ITonExchange> dest_exchange(exchange_address);  
+    dest_exchange(Grams(grams.get())).withdraw(root_address_hex,int8(2),tokenAmount);
+  } 
   
   
   
@@ -300,6 +315,21 @@ public:
     if (opt_hdr->function_id == id_v<&ITONTokenWallet::internalTransferFrom>)
       return 0;
 
+    auto [hdr, persist] = load_persistent_data<ITONTokenWallet, wallet_replay_protection_t, DTONTokenWallet>();
+    
+    if (opt_hdr->function_id == id_v<&ITonExchange::deposit>){
+      using Args = args_struct_t<&ITonExchange::deposit>;
+      static_assert(std::is_same_v<decltype(Args{}.tokenAmount), TokenAmount>);
+      auto bounced_deposit_tokenId = parse<TokenAmount>(p, error_code::wrong_bounced_args);
+      auto sender = int_msg().unpack().int_sender(); 
+      uint256 sender_hex=std::get<addr_std>(sender()).address;
+      dict_set<TokenId> own_tokenid_list=persist.token_balance.get_at(sender_hex.get());
+      own_tokenid_list.insert(bounced_deposit_tokenId);
+      persist.token_balance.set_at(sender_hex.get(),own_tokenid_list);
+      save_persistent_data<ITONTokenWallet, wallet_replay_protection_t>(hdr, persist);
+      return 0;
+    }
+
     // Otherwise, it should be bounced internalTransfer
     require(opt_hdr->function_id == id_v<&ITONTokenWallet::internalTransfer>,
             error_code::wrong_bounced_header);
@@ -310,7 +340,6 @@ public:
     auto bounced_id = parse<TokenId>(p, error_code::wrong_bounced_args);
     require(bounced_id > 0, error_code::wrong_bounced_args);
 
-    auto [hdr, persist] = load_persistent_data<ITONTokenWallet, wallet_replay_protection_t, DTONTokenWallet>();
     persist.tokens_.insert(bounced_id);
     save_persistent_data<ITONTokenWallet, wallet_replay_protection_t>(hdr, persist);
     return 0;

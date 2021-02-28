@@ -129,7 +129,8 @@
     "name": "getWalletAddress",
     "inputs": [
     { "name":"workchain_id", "type":"int8" },
-    { "name":"pubkey", "type":"uint256" }
+    { "name":"pubkey", "type":"uint256" },
+    { "name":"own_addr", "type":"uint256" }
     ],
     "outputs": [
     { "name":"value0", "type":"address" }
@@ -142,7 +143,8 @@
     { "name":"_answer_id", "type":"uint32" },
     { "name":"workchain_id", "type":"int8" },
     { "name":"pubkey", "type":"uint256" },
-    { "name":"grams", "type":"uint128" }
+    { "name":"grams", "type":"uint128" },
+    { "name":"owner_addr", "type":"uint256" }
     ],
     "outputs": [
     { "name":"value0", "type":"address" }
@@ -153,7 +155,8 @@
     "name": "regTokenToExchange",
     "inputs": [
     { "name":"exchange_publickey", "type":"uint256" },
-    { "name":"exchange_address", "type":"address" }
+    { "name":"exchange_address", "type":"address" },
+    { "name":"own_addr", "type":"uint256" }
     ],
     "outputs": [
     ],

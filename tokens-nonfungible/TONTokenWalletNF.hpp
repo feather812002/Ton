@@ -25,7 +25,7 @@ __interface ITONTokenWallet {
   __attribute__((internal, external, dyn_chain_parse))
   void constructor(bytes name, bytes symbol, uint8 decimals,
                    uint256 root_public_key, uint256 wallet_public_key,
-                   lazy<MsgAddressInt> root_address, cell code) = 11;
+                   lazy<MsgAddressInt> root_address, cell code,uint256 owner_addr) = 11;
 
   __attribute__((external, noaccept, dyn_chain_parse))
   void transfer(lazy<MsgAddressInt> dest, TokenId tokenId, WalletGramsType grams) = 12;
@@ -81,7 +81,7 @@ __interface ITONTokenWallet {
   void disapprove() = 27;
 
   [[internal, external, noaccept, dyn_chain_parse]]
-  void regTokenToExchangeFromRoot(address exchange_address,WalletGramsType grams,uint256 exchange_pubkey) = 28;
+  void regTokenToExchangeFromRoot(address exchange_address,WalletGramsType grams,uint256 exchange_pubkey,uint256 owner_addr) = 28;
 
   __attribute__((getter))
   dict_array<TokenId> getTokenBlance(uint256 address_hex) = 29;
@@ -92,6 +92,9 @@ __interface ITONTokenWallet {
 
   [[internal, external, noaccept, dyn_chain_parse]]
   void sendDepositToExchangeRequst(address exchange_wallet_address,address exchange_address,WalletGramsType grams_exchange) = 31;
+
+  [[internal, external, noaccept, dyn_chain_parse]]
+  void withdrawFromExchange(address exchange_address,TokenId tokenAmount,WalletGramsType grams) = 36;
 };
 
 struct DTONTokenWallet {
@@ -105,6 +108,7 @@ struct DTONTokenWallet {
   dict_map<uint256,dict_set<TokenId>> allowance_;
   dict_set<TokenId> tokens_;
   dict_map<uint256,dict_set<TokenId>> token_balance;
+  uint256 owner_addr_;
 };
 
 struct ETONTokenWallet {

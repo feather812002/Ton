@@ -347,6 +347,21 @@ public:
     if (opt_hdr->function_id == id_v<&ITONTokenWallet::internalTransferFrom>)
       return 0;
 
+    auto [hdr, persist] = load_persistent_data<ITONTokenWallet, wallet_replay_protection_t, DTONTokenWallet>();
+     
+
+    //if it is bounced from ITonExchange.deposit
+     if (opt_hdr->function_id == id_v<&ITonExchange::deposit>){
+        using Args = args_struct_t<&ITonExchange::deposit>;
+        static_assert(std::is_same_v<decltype(Args{}.tokenAmount), TokenAmount>);
+        auto bounced_deposit_val = parse<TokenAmount>(p, error_code::wrong_bounced_args);
+        auto sender = int_msg().unpack().int_sender(); 
+        uint256 sender_hex=std::get<addr_std>(sender()).address;
+        persist.balance_list.set_at(sender_hex.get(),bounced_deposit_val);
+        save_persistent_data<ITONTokenWallet, wallet_replay_protection_t>(hdr, persist);
+        return 0;
+     }  
+
     // Otherwise, it should be bounced internalTransfer
     require(opt_hdr->function_id == id_v<&ITONTokenWallet::internalTransfer>,
             error_code::wrong_bounced_header);
@@ -356,8 +371,7 @@ public:
     // Parsing only first tokens variable internalTransfer pubkey argument won't fit into bounced response
     auto bounced_val = parse<TokensType>(p, error_code::wrong_bounced_args);
 
-    auto [hdr, persist] = load_persistent_data<ITONTokenWallet, wallet_replay_protection_t, DTONTokenWallet>();
-    persist.balance_ += bounced_val;
+   persist.balance_ += bounced_val;
     save_persistent_data<ITONTokenWallet, wallet_replay_protection_t>(hdr, persist);
     return 0;
   }

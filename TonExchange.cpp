@@ -31,6 +31,7 @@ public:
     static constexpr unsigned withdraw_no_token_address       = 112;
     static constexpr unsigned withdraw_token_amount_error     = 113;
     static constexpr unsigned withdraw_token_no_support       = 114;
+    static constexpr unsigned wrong_bounced_header            = 115;
   };
 
   __always_inline
@@ -214,7 +215,7 @@ public:
         //2. start withdraw to dest wallet
         handle<ITONTokenWallet> dest_exchange_wallet(exchange_wallet_addr);
         dest_exchange_wallet(Grams(value_gr.get())).transfer(sender(),tokenAmount, uint128(value_gr.get()));
-        //3.remove from balance of exchange.
+        //3.remove  balance from exchange.
         tokenIds_.erase(tokenAmount);
         customerNFBalance={customerNFBalance.token_name,customerNFBalance.token_symbol,tokenIds_};
         customerNFBalanceList.set_at(sender_hex.get(),customerNFBalance);
@@ -241,6 +242,50 @@ public:
   // received bounced message back
   __always_inline static int _on_bounced(cell msg, slice msg_body) {
     tvm_accept();
+    parser p(msg_body);
+    require(p.ldi(32) == -1, error_code::wrong_bounced_header);
+    auto [opt_hdr, =p] = parse_continue<abiv1::internal_msg_header>(p);
+    require(!!opt_hdr, error_code::wrong_bounced_header);
+
+
+    //  it should be bounced transfer
+    require(opt_hdr->function_id == id_v<&ITONTokenWallet::transfer>,
+            error_code::wrong_bounced_header);
+    using Args = args_struct_t<&ITONTokenWallet::transfer>;
+    static_assert(std::is_same_v<decltype(Args{}.tokens), TokensType>);
+
+    // restore withdraw from bounced message to exchange.
+    auto tokenAmount = parse<TokenAmount>(p, error_code::wrong_bounced_args);
+    require(tokenAmount > 0, error_code::wrong_bounced_args);
+    auto token_type=parse<int8>(p, error_code::wrong_bounced_args);
+    require(token_type > 0, error_code::wrong_bounced_args);
+    auto token_root_hex=parse<uint256>(p, error_code::wrong_bounced_args);
+    require(token_root_hex > 0, error_code::wrong_bounced_args);
+    
+    auto sender = int_msg().unpack().int_sender(); 
+
+       
+    uint256 sender_hex=std::get<addr_std>(sender()).address;
+
+    auto [hdr, persist] = load_persistent_data<ITonExchange, exchange_replay_protection_t, DTonExchange>();
+    if(token_type==1){
+      dict_map<uint256,customer_token> customer_balance=persist.token_balance_list.get_at(token_root_hex.get());
+      customer_token customerBalance=customer_balance.get_at(sender_hex.get());
+      TokenAmount old_tokenAmount=customerBalance.token_balance;
+      old_tokenAmount +=tokenAmount;
+      customerBalance={customerBalance.token_name,customerBalance.token_symbol,customerBalance.decimals,old_tokenAmount};
+      customer_balance.set_at(sender_hex.get(),customerBalance);
+      persist.token_balance_list.set_at(token_root_hex.get(),customer_balance);
+    }else if(token_type==2){
+      dict_map<uint256,customer_nftoken> customerNFBalanceList=persist.nftoken_balance_list.get_at(token_root_hex.get());
+      customer_nftoken customerNFBalance=customerNFBalanceList.get_at(sender_hex.get());
+      dict_set<TokenId> tokenIds_=customerNFBalance.tokenid_list;
+      tokenIds_.insert(tokenAmount);
+      customerNFBalance={customerNFBalance.token_name,customerNFBalance.token_symbol,tokenIds_};
+      customerNFBalanceList.set_at(sender_hex.get(),customerNFBalance);
+      persist.nftoken_balance_list.set_at(token_root_hex.get(),customerNFBalanceList);
+    }
+    save_persistent_data<ITonExchange, exchange_replay_protection_t>(hdr, persist);
     return 0;
   }
 
@@ -249,7 +294,7 @@ public:
     return 0;
   }
   // =============== Support functions ==================
-  DEFAULT_SUPPORT_FUNCTIONS(ITonExchange, root_replay_protection_t)
+  DEFAULT_SUPPORT_FUNCTIONS(ITonExchange, exchange_replay_protection_t)
 
   
 };

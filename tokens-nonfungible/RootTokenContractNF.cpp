@@ -45,7 +45,7 @@ public:
 
     tvm_accept();
 
-    auto [wallet_init, dest] = calc_wallet_init(workchain_id, pubkey);
+    auto [wallet_init, dest] = calc_wallet_init(workchain_id, pubkey,uint256(0));
     contract_handle<ITONTokenWallet> dest_handle(dest);
     dest_handle.deploy(wallet_init, Grams(grams.get())).
       call<&ITONTokenWallet::accept>(tokenId);
@@ -56,7 +56,7 @@ public:
   }
 
   __always_inline
-  address deployEmptyWallet(int8 workchain_id, uint256 pubkey,WalletGramsType grams) {
+  address deployEmptyWallet(int8 workchain_id, uint256 pubkey,WalletGramsType grams,uint256 owner_addr) {
   
     // This protects from spending root balance to deploy message
     // if constexpr (Internal) {
@@ -66,7 +66,7 @@ public:
      require(pubkey != 0,error_code::define_pubkey_or_internal_owner);
      tvm_accept();
     
-    auto [wallet_init, dest] = calc_wallet_init(workchain_id, pubkey);
+    auto [wallet_init, dest] = calc_wallet_init(workchain_id, pubkey,owner_addr);
     handle<ITONTokenWallet> dest_handle(dest);
 
     dest_handle.deploy_noop(wallet_init, Grams(grams.get()));
@@ -134,12 +134,12 @@ public:
   }
 
   __always_inline
-  lazy<MsgAddressInt> getWalletAddress(int8 workchain_id, uint256 pubkey) {
-    return calc_wallet_init(workchain_id, pubkey).second;
+  lazy<MsgAddressInt> getWalletAddress(int8 workchain_id, uint256 pubkey,uint256 own_addr) {
+    return calc_wallet_init(workchain_id, pubkey,own_addr).second;
   }
 
   __always_inline
-  void regTokenToExchange(uint256 exchange_publickey,address exchange_address) {
+  void regTokenToExchange(uint256 exchange_publickey,address exchange_address,uint256 own_addr) {
     tvm_accept();
     //1.get stander TON address from adress hex
     auto workchain_id = std::get<addr_std>(address{tvm_myaddr()}.val()).workchain_id;
@@ -148,7 +148,7 @@ public:
     //address exchange_addr = address::make_std(workchain_id, exchange_address);
 
     //2.get target wallet address from the exchange_address,all exchange's wallet should work in internal transfer.
-    address token_wallet_address=calc_wallet_init(workchain_id, exchange_publickey).second;
+    address token_wallet_address=calc_wallet_init(workchain_id, exchange_publickey,own_addr).second;
     uint256 token_wallet_address_hex_=std::get<addr_std>(token_wallet_address()).address;
     
     //3.call exchange function update the token into exchange.
@@ -193,11 +193,11 @@ public:
   DEFAULT_SUPPORT_FUNCTIONS(IRootTokenContract, root_replay_protection_t)
 private:
   __always_inline
-  std::pair<StateInit, lazy<MsgAddressInt>> calc_wallet_init(int8 workchain_id, uint256 pubkey) {
+  std::pair<StateInit, lazy<MsgAddressInt>> calc_wallet_init(int8 workchain_id, uint256 pubkey,uint256 owner_addr) {
     DTONTokenWallet wallet_data {
       name_, symbol_, decimals_,
       root_public_key_, pubkey,
-      lazy<MsgAddressInt>{tvm_myaddr()}, wallet_code_, {}, {}
+      lazy<MsgAddressInt>{tvm_myaddr()}, wallet_code_, {}, {},{},owner_addr
     };
     auto [wallet_init, dest_addr] = prepare_wallet_state_init_and_addr(wallet_data);
     lazy<MsgAddressInt> dest{ MsgAddressInt{ addr_std { {}, {}, workchain_id, dest_addr } } };
