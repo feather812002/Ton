@@ -32,6 +32,7 @@ public:
     static constexpr unsigned withdraw_token_amount_error     = 113;
     static constexpr unsigned withdraw_token_no_support       = 114;
     static constexpr unsigned wrong_bounced_header            = 115;
+    static constexpr unsigned put_order_not_support_token     = 116;
   };
 
   __always_inline
@@ -235,6 +236,23 @@ public:
     dest_exchange_wallet(Grams(value_gr.get())).transfer(to_wallet_address,tokenAmount, uint128(value_gr.get()));
   }
 
+  //----------------execute exchange function--------------------------
+  __always_inline 
+  void putOrder(uint256 sell_token_addr_hex,uint128 sell_amount,uint256 seller_send_address,uint256 seller_resive_address,
+  uint256 buy_token_addr_hex,uint128 buy_amount,uint256 buyer_send_address,uint256 buyer_resive_address){
+    //1. check if the sell and buy tokens all already support by exchange.
+    require(token_balance_list.contains(sell_token_addr_hex.get())||nftoken_balance_list.contains(sell_token_addr_hex.get()), error_code::put_order_not_support_token);
+    require(token_balance_list.contains(buy_token_addr_hex.get())||nftoken_balance_list.contains(buy_token_addr_hex.get()), error_code::put_order_not_support_token);
+    auto sender = int_sender();
+    uint256 sender_hex=std::get<addr_std>(sender()).address;
+    uint8 sell_token_type=uint8(0);
+    if(token_balance_list.contains(sell_token_addr_hex.get())){
+      sell_token_type=uint8(1);
+    }
+    if(nftoken_balance_list.contains(sell_token_addr_hex.get())){
+      sell_token_type=uint8(2);
+    }
+  }
 
 
 

@@ -34,10 +34,27 @@ struct customer_nftoken {
   dict_set<TokenId>  tokenid_list;
 };
 
+//--------Order------------
+struct order {
+  uint256 sell_token_root_address_hex;
+  uint128 sell_token_amount;
+  uint256 seller_send_token_address_hex;
+  uint256 seller_resive_token_address_hex;
+  //0-inital ,1-fungible token,2-nonfungible
+  uint8   sell_token_type;
+  uint256 buy_token_root_address_hex;
+  uint128 buy_token_amount;
+  uint256 buyer_send_token_address_hex;
+  uint256 buyer_resive_token_address_hex;
+  uint8   buy_token_type;
+  //1:expired,2:put, 3:filled,4:part filled,5:cancle. 
+  uint8 order_status;
+  //perf_get_timestamp();
+  //uint64  expired;  
+};
 
 
-
-// ===== Root Token Contract ===== //
+// ===== Exchange Contract ===== //
 __interface ITonExchange {
 
   // expected offchain constructor execution
@@ -75,6 +92,11 @@ __interface ITonExchange {
   // [[internal, external, noaccept, dyn_chain_parse]]
   // void withdrawal () = 16;    
 
+  //----------------execute exchange function--------------------------
+  [[internal, external, noaccept, dyn_chain_parse]]
+  void putOrder(uint256 sell_token_addr_hex,uint128 sell_amount,uint256 seller_send_address,uint256 seller_resive_address,
+  uint256 buy_token_addr_hex,uint128 buy_amount,uint256 buyer_send_address,uint256 buyer_resive_address)=20;
+
   
 };
 
@@ -86,6 +108,11 @@ struct DTonExchange {
   dict_map<uint256,dict_map<uint256,customer_token>> token_balance_list;
   //TIP3 NFFungible token  balance list:
   dict_map<uint256,dict_map<uint256,customer_nftoken>> nftoken_balance_list;
+
+  //wait filled ordre list
+  dict_map<uint256,order> order_list;
+  // //already done filled order list
+  // dict_set<order> filled_order_list;
 
 
  
