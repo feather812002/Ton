@@ -55,7 +55,7 @@ struct order {
   uint256 buyer_resive_token_address_hex;
   bytes   buy_token_symbol;
   uint8   buy_token_type;
-  //0:expired,1:put, 2:filled,3:part filled,4:cancle. 
+  //0:expired,1:put, 2:full filled,3:part filled,4:cancle. 
   uint8 order_status;
   //perf_get_timestamp();
   //uint64  expired;  
@@ -102,9 +102,26 @@ __interface ITonExchange {
 
   //----------------execute exchange function--------------------------
   [[internal, external, noaccept, dyn_chain_parse]]
-  void putOrder(uint256 sell_token_addr_hex,uint128 sell_amount,uint256 seller_send_address,uint256 seller_resive_address,
+  void putOrder(uint256 sell_token_addr_hex,uint128 sell_amount,uint256 seller_resive_address,
   uint256 buy_token_addr_hex,uint128 buy_amount,uint256 buyer_send_address,uint256 buyer_resive_address)=20;
+  
+  [[internal, external, noaccept, dyn_chain_parse]]
+  void cancelOrder(uint256 order_no)=21;
 
+  [[getter]]
+  dict_array<order> getAllOrder() = 22;
+
+  [[getter]]
+  dict_array<order> getMyMakerOrders(uint256 maker_address) = 23;
+
+  [[getter]]
+  dict_array<order> getMyTakerOrders(uint256 taker_address) = 23;
+
+  [[getter]]
+  dict_array<order> getMyCancelOrders(uint256 maker_address) = 24;
+
+  [[getter]]
+  dict_array<order> getMyFilledOrders(uint256 maker_address) = 25;
   
 };
 

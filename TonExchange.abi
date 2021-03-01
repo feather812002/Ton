@@ -111,7 +111,6 @@
     "inputs": [
     { "name":"sell_token_addr_hex", "type":"uint256" },
     { "name":"sell_amount", "type":"uint128" },
-    { "name":"seller_send_address", "type":"uint256" },
     { "name":"seller_resive_address", "type":"uint256" },
     { "name":"buy_token_addr_hex", "type":"uint256" },
     { "name":"buy_amount", "type":"uint128" },
@@ -121,6 +120,139 @@
     "outputs": [
     ],
     "id": "0x14"
+  },
+  {
+    "name": "cancelOrder",
+    "inputs": [
+    { "name":"order_no", "type":"uint256" }
+    ],
+    "outputs": [
+    ],
+    "id": "0x15"
+  },
+  {
+    "name": "getAllOrder",
+    "inputs": [
+    ],
+    "outputs": [
+    { "components":[
+      { "name":"orlder_no", "type":"uint256" },
+      { "name":"sell_token_root_address_hex", "type":"uint256" },
+      { "name":"sell_token_amount", "type":"uint128" },
+      { "name":"seller_send_token_address_hex", "type":"uint256" },
+      { "name":"seller_resive_token_address_hex", "type":"uint256" },
+      { "name":"sell_token_symbol", "type":"bytes" },
+      { "name":"sell_token_type", "type":"uint8" },
+      { "name":"buy_token_root_address_hex", "type":"uint256" },
+      { "name":"buy_token_amount", "type":"uint128" },
+      { "name":"buyer_send_token_address_hex", "type":"uint256" },
+      { "name":"buyer_resive_token_address_hex", "type":"uint256" },
+      { "name":"buy_token_symbol", "type":"bytes" },
+      { "name":"buy_token_type", "type":"uint8" },
+      { "name":"order_status", "type":"uint8" }
+    ], "name":"value0", "type":"tuple[]" }
+    ],
+    "id": "0x16"
+  },
+  {
+    "name": "getMyMakerOrders",
+    "inputs": [
+    { "name":"maker_address", "type":"uint256" }
+    ],
+    "outputs": [
+    { "components":[
+      { "name":"orlder_no", "type":"uint256" },
+      { "name":"sell_token_root_address_hex", "type":"uint256" },
+      { "name":"sell_token_amount", "type":"uint128" },
+      { "name":"seller_send_token_address_hex", "type":"uint256" },
+      { "name":"seller_resive_token_address_hex", "type":"uint256" },
+      { "name":"sell_token_symbol", "type":"bytes" },
+      { "name":"sell_token_type", "type":"uint8" },
+      { "name":"buy_token_root_address_hex", "type":"uint256" },
+      { "name":"buy_token_amount", "type":"uint128" },
+      { "name":"buyer_send_token_address_hex", "type":"uint256" },
+      { "name":"buyer_resive_token_address_hex", "type":"uint256" },
+      { "name":"buy_token_symbol", "type":"bytes" },
+      { "name":"buy_token_type", "type":"uint8" },
+      { "name":"order_status", "type":"uint8" }
+    ], "name":"value0", "type":"tuple[]" }
+    ],
+    "id": "0x17"
+  },
+  {
+    "name": "getMyTakerOrders",
+    "inputs": [
+    { "name":"taker_address", "type":"uint256" }
+    ],
+    "outputs": [
+    { "components":[
+      { "name":"orlder_no", "type":"uint256" },
+      { "name":"sell_token_root_address_hex", "type":"uint256" },
+      { "name":"sell_token_amount", "type":"uint128" },
+      { "name":"seller_send_token_address_hex", "type":"uint256" },
+      { "name":"seller_resive_token_address_hex", "type":"uint256" },
+      { "name":"sell_token_symbol", "type":"bytes" },
+      { "name":"sell_token_type", "type":"uint8" },
+      { "name":"buy_token_root_address_hex", "type":"uint256" },
+      { "name":"buy_token_amount", "type":"uint128" },
+      { "name":"buyer_send_token_address_hex", "type":"uint256" },
+      { "name":"buyer_resive_token_address_hex", "type":"uint256" },
+      { "name":"buy_token_symbol", "type":"bytes" },
+      { "name":"buy_token_type", "type":"uint8" },
+      { "name":"order_status", "type":"uint8" }
+    ], "name":"value0", "type":"tuple[]" }
+    ],
+    "id": "0x17"
+  },
+  {
+    "name": "getMyCancelOrders",
+    "inputs": [
+    { "name":"maker_address", "type":"uint256" }
+    ],
+    "outputs": [
+    { "components":[
+      { "name":"orlder_no", "type":"uint256" },
+      { "name":"sell_token_root_address_hex", "type":"uint256" },
+      { "name":"sell_token_amount", "type":"uint128" },
+      { "name":"seller_send_token_address_hex", "type":"uint256" },
+      { "name":"seller_resive_token_address_hex", "type":"uint256" },
+      { "name":"sell_token_symbol", "type":"bytes" },
+      { "name":"sell_token_type", "type":"uint8" },
+      { "name":"buy_token_root_address_hex", "type":"uint256" },
+      { "name":"buy_token_amount", "type":"uint128" },
+      { "name":"buyer_send_token_address_hex", "type":"uint256" },
+      { "name":"buyer_resive_token_address_hex", "type":"uint256" },
+      { "name":"buy_token_symbol", "type":"bytes" },
+      { "name":"buy_token_type", "type":"uint8" },
+      { "name":"order_status", "type":"uint8" }
+    ], "name":"value0", "type":"tuple[]" }
+    ],
+    "id": "0x18"
+  },
+  {
+    "name": "getMyFilledOrders",
+    "inputs": [
+    { "name":"maker_address", "type":"uint256" }
+    ],
+    "outputs": [
+    { "components":[
+      { "name":"orlder_no", "type":"uint256" },
+      { "name":"sell_token_root_address_hex", "type":"uint256" },
+      { "name":"sell_token_amount", "type":"uint128" },
+      { "name":"seller_send_token_address_hex", "type":"uint256" },
+      { "name":"seller_resive_token_address_hex", "type":"uint256" },
+      { "name":"sell_token_symbol", "type":"bytes" },
+      { "name":"sell_token_type", "type":"uint8" },
+      { "name":"buy_token_root_address_hex", "type":"uint256" },
+      { "name":"buy_token_amount", "type":"uint128" },
+      { "name":"buyer_send_token_address_hex", "type":"uint256" },
+      { "name":"buyer_resive_token_address_hex", "type":"uint256" },
+      { "name":"buy_token_symbol", "type":"bytes" },
+      { "name":"buy_token_type", "type":"uint8" },
+      { "name":"order_status", "type":"uint8" }
+    ], "name":"value0", "type":"tuple[]" }
+    ],
+    "id": "0x19"
   }
   ],
   "events": [

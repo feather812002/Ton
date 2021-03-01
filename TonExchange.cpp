@@ -36,6 +36,7 @@ public:
     static constexpr unsigned put_order_type_error            = 117;
     static constexpr unsigned put_order_input_error           = 118;
     static constexpr unsigned put_order_no_enough_balance     = 119;
+    static constexpr unsigned cancel_order_no_error           = 120;  
   };
 
   __always_inline
@@ -242,12 +243,12 @@ public:
 
   //----------------execute exchange function--------------------------
   __always_inline 
-  void putOrder(uint256 sell_token_addr_hex,uint128 sell_amount,uint256 seller_send_address,uint256 seller_resive_address,
+  void putOrder(uint256 sell_token_addr_hex,uint128 sell_amount ,uint256 seller_resive_address,
   uint256 buy_token_addr_hex,uint128 buy_amount,uint256 buyer_send_address,uint256 buyer_resive_address){
     //0.input check .
     require(sell_token_addr_hex>0,error_code::put_order_input_error);
     require(sell_amount>0,error_code::put_order_input_error);
-    require(seller_send_address>0,error_code::put_order_input_error);
+    //require(seller_send_address>0,error_code::put_order_input_error);
     require(seller_resive_address>0,error_code::put_order_input_error);
     require(buy_token_addr_hex>0,error_code::put_order_input_error);
     require(buy_amount>0,error_code::put_order_input_error);
@@ -259,6 +260,8 @@ public:
     
     auto sender = int_sender();
     uint256 sender_hex=std::get<addr_std>(sender()).address;
+    
+    
     uint8 sell_token_type=getTokenType(sell_token_addr_hex);
     uint8 buy_token_type=getTokenType(buy_token_addr_hex);
     bytes sell_token_symbol=getTokenSymbol(sell_token_addr_hex);
@@ -280,7 +283,101 @@ public:
    updateBalance(sell_token_addr_hex,sender_hex,sell_token_type,sell_amount,uint8(1));
      
   }
+  
+  __always_inline 
+  void cancelOrder(uint256 order_no){
+    require(order_no>0,error_code::cancel_order_no_error);
+    require(order_list.contains(order_no.get()),error_code::cancel_order_no_error);
+    tvm_accept();
+    auto sender = int_sender();
+    uint256 sender_hex=std::get<addr_std>(sender()).address;
+    //only maker can cancle order for itself.
+    order get_order=order_list.get_at(order_no.get());
+    require(get_order.seller_send_token_address_hex==sender_hex,error_code::cancel_order_no_error);
+    get_order.order_status=uint8(4);
+    order_list.set_at(order_no.get(),get_order);
+    //update back to balance of exchange;
+    updateBalance(get_order.seller_send_token_address_hex,sender_hex,get_order.sell_token_type,get_order.sell_token_amount,uint8(2));
+  }
 
+
+  __always_inline 
+  dict_array<order> getAllOrder() {
+    //set default value to 0
+    dict_array<order> all_orders={{uint256(0),uint256(0),uint128(0),uint256(0),uint256(0),{0x0},uint8(0),uint256(0),uint128(0),uint256(0),uint256(0),{0x0},uint8(0),uint8(0)}};
+    for (auto order_map:order_list){
+      //only show vaild order
+      order new_order=order_map.second;
+      if(new_order.order_status==1||new_order.order_status==3){
+         all_orders.push_back(new_order);
+      }
+     
+    }
+    return all_orders;
+  }
+
+  __always_inline 
+  dict_array<order> getMyMakerOrders(uint256 maker_address) {
+    //set default value to 0
+    dict_array<order> all_orders={{uint256(0),uint256(0),uint128(0),uint256(0),uint256(0),{0x0},uint8(0),uint256(0),uint128(0),uint256(0),uint256(0),{0x0},uint8(0),uint8(0)}};
+    for (auto order_map:order_list){
+      order new_order=order_map.second;
+      if(new_order.seller_send_token_address_hex==maker_address){
+         all_orders.push_back(new_order);
+      }
+    }
+    return all_orders;
+  }
+
+  __always_inline 
+  dict_array<order> getMyTakerOrders(uint256 taker_address) {
+    //set default value to 0
+    dict_array<order> all_orders={{uint256(0),uint256(0),uint128(0),uint256(0),uint256(0),{0x0},uint8(0),uint256(0),uint128(0),uint256(0),uint256(0),{0x0},uint8(0),uint8(0)}};
+    for (auto order_map:order_list){
+      order new_order=order_map.second;
+      if(new_order.buyer_send_token_address_hex==taker_address){
+         all_orders.push_back(new_order);
+      }
+    }
+    return all_orders;
+  }
+
+  __always_inline 
+  dict_array<order> getMyCancelOrders(uint256 maker_address) {
+    //set default value to 0
+    dict_array<order> all_orders={{uint256(0),uint256(0),uint128(0),uint256(0),uint256(0),{0x0},uint8(0),uint256(0),uint128(0),uint256(0),uint256(0),{0x0},uint8(0),uint8(0)}};
+    for (auto order_map:order_list){
+       order new_order=order_map.second;
+      if(new_order.buyer_send_token_address_hex==maker_address){
+         if(new_order.order_status==4){
+          all_orders.push_back(new_order);
+         }
+      }
+    }
+    return all_orders;
+  }
+
+  __always_inline 
+  dict_array<order> getMyFilledOrders(uint256 maker_address) {
+    //set default value to 0
+    dict_array<order> all_orders={{uint256(0),uint256(0),uint128(0),uint256(0),uint256(0),{0x0},uint8(0),uint256(0),uint128(0),uint256(0),uint256(0),{0x0},uint8(0),uint8(0)}};
+    for (auto order_map:order_list){
+      order new_order=order_map.second;
+      if(new_order.buyer_send_token_address_hex==maker_address){
+         if(new_order.order_status==2){
+          all_orders.push_back(new_order);
+         }
+      }
+    }
+    return all_orders;
+  }
+
+  //getMyAllOrder
+  //getMyFilledOrder 
+  //getMyCancleOrder
+  //getMyCurrentVaildOrder
+  //getAllOrder 
+  
   //------------------------System function handle----------------------------------
   // received bounced message back
   __always_inline static int _on_bounced(cell msg, slice msg_body) {
