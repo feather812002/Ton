@@ -40,8 +40,18 @@ struct customer_nftoken {
 };
 
 //--------Order------------
-struct order {
+struct sellorder {
   uint256 orlder_no;
+  uint256 sell_token_root_address_hex;
+  uint128 sell_token_amount;
+  uint256 seller_send_token_address_hex;
+  uint256 seller_resive_token_address_hex;
+  bytes   sell_token_symbol;
+  //0-inital ,1-fungible token,2-nonfungible
+  uint8   sell_token_type;
+};
+struct order {
+  uint32  order_no;
   uint256 sell_token_root_address_hex;
   uint128 sell_token_amount;
   uint256 seller_send_token_address_hex;
@@ -103,7 +113,7 @@ __interface ITonExchange {
   //----------------execute exchange function--------------------------
   [[internal, external, noaccept, dyn_chain_parse]]
   void putOrder(uint256 sell_token_addr_hex,uint128 sell_amount,uint256 seller_resive_address,
-  uint256 buy_token_addr_hex,uint128 buy_amount,uint256 buyer_send_address,uint256 buyer_resive_address)=20;
+  uint256 buy_token_addr_hex,uint128 buy_amount)=20;
   
   [[internal, external, noaccept, dyn_chain_parse]]
   void cancelOrder(uint256 order_no)=21;
@@ -120,7 +130,7 @@ __interface ITonExchange {
   [[getter]]
   dict_array<order> getMyCancelOrders(uint256 maker_address) = 24;
 
-  [[getter]]
+   [[getter]]
   dict_array<order> getMyFilledOrders(uint256 maker_address) = 25;
   
 };
@@ -134,11 +144,14 @@ struct DTonExchange {
   //TIP3 NFFungible token  balance list:
   dict_map<uint256,dict_map<uint256,customer_nftoken>> nftoken_balance_list;
 
-  uint256 order_no_count;
+  uint32 order_no_count;
   //wait filled ordre list: maker  address->order
   dict_map<uint256,order> order_list;
+  dict_map<uint256,sellorder> sell_order_list;
   // //already done filled order list: taker address->maker order
   dict_map<uint256,uint256> filled_order_list;
+
+  dict_array<order> order_array;
 
 
  

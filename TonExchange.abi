@@ -113,9 +113,7 @@
     { "name":"sell_amount", "type":"uint128" },
     { "name":"seller_resive_address", "type":"uint256" },
     { "name":"buy_token_addr_hex", "type":"uint256" },
-    { "name":"buy_amount", "type":"uint128" },
-    { "name":"buyer_send_address", "type":"uint256" },
-    { "name":"buyer_resive_address", "type":"uint256" }
+    { "name":"buy_amount", "type":"uint128" }
     ],
     "outputs": [
     ],
@@ -136,7 +134,7 @@
     ],
     "outputs": [
     { "components":[
-      { "name":"orlder_no", "type":"uint256" },
+      { "name":"order_no", "type":"uint32" },
       { "name":"sell_token_root_address_hex", "type":"uint256" },
       { "name":"sell_token_amount", "type":"uint128" },
       { "name":"seller_send_token_address_hex", "type":"uint256" },
@@ -161,7 +159,7 @@
     ],
     "outputs": [
     { "components":[
-      { "name":"orlder_no", "type":"uint256" },
+      { "name":"order_no", "type":"uint32" },
       { "name":"sell_token_root_address_hex", "type":"uint256" },
       { "name":"sell_token_amount", "type":"uint128" },
       { "name":"seller_send_token_address_hex", "type":"uint256" },
@@ -186,7 +184,7 @@
     ],
     "outputs": [
     { "components":[
-      { "name":"orlder_no", "type":"uint256" },
+      { "name":"order_no", "type":"uint32" },
       { "name":"sell_token_root_address_hex", "type":"uint256" },
       { "name":"sell_token_amount", "type":"uint128" },
       { "name":"seller_send_token_address_hex", "type":"uint256" },
@@ -211,7 +209,7 @@
     ],
     "outputs": [
     { "components":[
-      { "name":"orlder_no", "type":"uint256" },
+      { "name":"order_no", "type":"uint32" },
       { "name":"sell_token_root_address_hex", "type":"uint256" },
       { "name":"sell_token_amount", "type":"uint128" },
       { "name":"seller_send_token_address_hex", "type":"uint256" },
@@ -236,7 +234,7 @@
     ],
     "outputs": [
     { "components":[
-      { "name":"orlder_no", "type":"uint256" },
+      { "name":"order_no", "type":"uint32" },
       { "name":"sell_token_root_address_hex", "type":"uint256" },
       { "name":"sell_token_amount", "type":"uint128" },
       { "name":"seller_send_token_address_hex", "type":"uint256" },

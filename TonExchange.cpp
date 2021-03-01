@@ -243,59 +243,68 @@ public:
 
   //----------------execute exchange function--------------------------
   __always_inline 
-  void putOrder(uint256 sell_token_addr_hex,uint128 sell_amount ,uint256 seller_resive_address,
-  uint256 buy_token_addr_hex,uint128 buy_amount,uint256 buyer_send_address,uint256 buyer_resive_address){
+  void putOrder(uint256 sell_token_addr_hex,TokenAmount sell_amount ,uint256 seller_resive_address,
+  uint256 buy_token_addr_hex,TokenAmount buy_amount){
+    uint256 buyer_send_address=uint256(0);
+    uint256 buyer_resive_address=uint256(0);
     //0.input check .
-    require(sell_token_addr_hex>0,error_code::put_order_input_error);
-    require(sell_amount>0,error_code::put_order_input_error);
-    //require(seller_send_address>0,error_code::put_order_input_error);
-    require(seller_resive_address>0,error_code::put_order_input_error);
-    require(buy_token_addr_hex>0,error_code::put_order_input_error);
-    require(buy_amount>0,error_code::put_order_input_error);
-    require(buyer_send_address>0,error_code::put_order_input_error);
-    require(buyer_resive_address>0,error_code::put_order_input_error);
-    //1. check if the sell and buy tokens all already support by exchange.
-    require(support_token_list.contains(sell_token_addr_hex.get()) && support_token_list.contains(buy_token_addr_hex.get()), error_code::put_order_not_support_token);
+    // require(sell_token_addr_hex>0,error_code::put_order_input_error);
+    // require(sell_amount>0,error_code::put_order_input_error);
+    // //require(seller_send_address>0,error_code::put_order_input_error);
+    // require(seller_resive_address>0,error_code::put_order_input_error);
+    // require(buy_token_addr_hex>0,error_code::put_order_input_error);
+    // require(buy_amount>0,error_code::put_order_input_error);
+    // require(buyer_send_address>0,error_code::put_order_input_error);
+    // require(buyer_resive_address>0,error_code::put_order_input_error);
+    // //1. check if the sell and buy tokens all already support by exchange.
+    // require(support_token_list.contains(sell_token_addr_hex.get()) && support_token_list.contains(buy_token_addr_hex.get()), error_code::put_order_not_support_token);
     tvm_accept();
     
-    auto sender = int_sender();
-    uint256 sender_hex=std::get<addr_std>(sender()).address;
-    
+    //auto sender = int_sender();
+    //uint256 sender_hex=std::get<addr_std>(sender()).address;
+    uint256 sender_hex=uint256(0);
     
     uint8 sell_token_type=getTokenType(sell_token_addr_hex);
     uint8 buy_token_type=getTokenType(buy_token_addr_hex);
     bytes sell_token_symbol=getTokenSymbol(sell_token_addr_hex);
     bytes buy_token_symbol=getTokenSymbol(buy_token_addr_hex);
    
-    //2.check if the balance is enough for order maker.
-    require(sell_token_type>0, error_code::put_order_type_error);
-    require(buy_token_type>0, error_code::put_order_type_error);
-    require(putOrderCheckBalance(sell_token_addr_hex,sender_hex,sell_token_type,sell_amount)>0,error_code::put_order_no_enough_balance);
+    // //2.check if the balance is enough for order maker.
+    // require(sell_token_type>0, error_code::put_order_type_error);
+    // require(buy_token_type>0, error_code::put_order_type_error);
+    // require(putOrderCheckBalance(sell_token_addr_hex,sender_hex,sell_token_type,sell_amount)>0,error_code::put_order_no_enough_balance);
 
     //3. put order
     order_no_count++;
+
     //order status:0:expired,1:puted, 2:filled,3:part filled,4:cancle. 
+    uint8 order_status=uint8(1);
     order new_order={order_no_count,sell_token_addr_hex,sell_amount,sender_hex,seller_resive_address,sell_token_symbol,
-    sell_token_type,buy_token_addr_hex,buy_amount,buyer_send_address,buyer_resive_address,buy_token_symbol,buy_token_type,uint8(1)};
-    order_list.set_at(order_no_count.get(),new_order);
+    sell_token_type,buy_token_addr_hex,buy_amount,buyer_send_address,buyer_resive_address,buy_token_symbol,buy_token_type,order_status};
+   
+    order_array.push_back(new_order);
 
     //4. update balance of exchange .remove already amount for put order.
-   updateBalance(sell_token_addr_hex,sender_hex,sell_token_type,sell_amount,uint8(1));
+    updateBalance(sell_token_addr_hex,sender_hex,sell_token_type,sell_amount,uint8(1));
      
   }
   
   __always_inline 
-  void cancelOrder(uint256 order_no){
+  void cancelOrder(uint32 order_no){
     require(order_no>0,error_code::cancel_order_no_error);
-    require(order_list.contains(order_no.get()),error_code::cancel_order_no_error);
+    //require(order_list.contains(order_no.get()),error_code::cancel_order_no_error);
     tvm_accept();
     auto sender = int_sender();
     uint256 sender_hex=std::get<addr_std>(sender()).address;
     //only maker can cancle order for itself.
-    order get_order=order_list.get_at(order_no.get());
+    auto [oder_idx,get_order]=getOrderByNo(order_no);
+
     require(get_order.seller_send_token_address_hex==sender_hex,error_code::cancel_order_no_error);
     get_order.order_status=uint8(4);
-    order_list.set_at(order_no.get(),get_order);
+
+    //update the order array;
+    order_array.set_at(int(oder_idx),get_order);
+
     //update back to balance of exchange;
     updateBalance(get_order.seller_send_token_address_hex,sender_hex,get_order.sell_token_type,get_order.sell_token_amount,uint8(2));
   }
@@ -304,26 +313,16 @@ public:
   __always_inline 
   dict_array<order> getAllOrder() {
     //set default value to 0
-    dict_array<order> all_orders={{uint256(0),uint256(0),uint128(0),uint256(0),uint256(0),{0x0},uint8(0),uint256(0),uint128(0),uint256(0),uint256(0),{0x0},uint8(0),uint8(0)}};
-    for (auto order_map:order_list){
-      //only show vaild order
-      order new_order=order_map.second;
-      if(new_order.order_status==1||new_order.order_status==3){
-         all_orders.push_back(new_order);
-      }
-     
-    }
-    return all_orders;
+    return order_array;
   }
 
   __always_inline 
   dict_array<order> getMyMakerOrders(uint256 maker_address) {
     //set default value to 0
-    dict_array<order> all_orders={{uint256(0),uint256(0),uint128(0),uint256(0),uint256(0),{0x0},uint8(0),uint256(0),uint128(0),uint256(0),uint256(0),{0x0},uint8(0),uint8(0)}};
-    for (auto order_map:order_list){
-      order new_order=order_map.second;
-      if(new_order.seller_send_token_address_hex==maker_address){
-         all_orders.push_back(new_order);
+    dict_array<order> all_orders={{uint32(0),uint256(0),uint128(0),uint256(0),uint256(0),{0x0},uint8(0),uint256(0),uint128(0),uint256(0),uint256(0),{0x0},uint8(0),uint8(0)}};
+    for (order order_:order_array){
+      if(order_.seller_send_token_address_hex==maker_address){
+         all_orders.push_back(order_);
       }
     }
     return all_orders;
@@ -332,11 +331,10 @@ public:
   __always_inline 
   dict_array<order> getMyTakerOrders(uint256 taker_address) {
     //set default value to 0
-    dict_array<order> all_orders={{uint256(0),uint256(0),uint128(0),uint256(0),uint256(0),{0x0},uint8(0),uint256(0),uint128(0),uint256(0),uint256(0),{0x0},uint8(0),uint8(0)}};
-    for (auto order_map:order_list){
-      order new_order=order_map.second;
-      if(new_order.buyer_send_token_address_hex==taker_address){
-         all_orders.push_back(new_order);
+    dict_array<order> all_orders={{uint32(0),uint256(0),uint128(0),uint256(0),uint256(0),{0x0},uint8(0),uint256(0),uint128(0),uint256(0),uint256(0),{0x0},uint8(0),uint8(0)}};
+    for (order order_:order_array){
+      if(order_.buyer_send_token_address_hex==taker_address){
+         all_orders.push_back(order_);
       }
     }
     return all_orders;
@@ -345,12 +343,12 @@ public:
   __always_inline 
   dict_array<order> getMyCancelOrders(uint256 maker_address) {
     //set default value to 0
-    dict_array<order> all_orders={{uint256(0),uint256(0),uint128(0),uint256(0),uint256(0),{0x0},uint8(0),uint256(0),uint128(0),uint256(0),uint256(0),{0x0},uint8(0),uint8(0)}};
-    for (auto order_map:order_list){
-       order new_order=order_map.second;
-      if(new_order.buyer_send_token_address_hex==maker_address){
-         if(new_order.order_status==4){
-          all_orders.push_back(new_order);
+    dict_array<order> all_orders={{uint32(0),uint256(0),uint128(0),uint256(0),uint256(0),{0x0},uint8(0),uint256(0),uint128(0),uint256(0),uint256(0),{0x0},uint8(0),uint8(0)}};
+    for (order order_:order_array){
+    
+      if(order_.buyer_send_token_address_hex==maker_address){
+         if(order_.order_status==4){
+          all_orders.push_back(order_);
          }
       }
     }
@@ -360,12 +358,11 @@ public:
   __always_inline 
   dict_array<order> getMyFilledOrders(uint256 maker_address) {
     //set default value to 0
-    dict_array<order> all_orders={{uint256(0),uint256(0),uint128(0),uint256(0),uint256(0),{0x0},uint8(0),uint256(0),uint128(0),uint256(0),uint256(0),{0x0},uint8(0),uint8(0)}};
-    for (auto order_map:order_list){
-      order new_order=order_map.second;
-      if(new_order.buyer_send_token_address_hex==maker_address){
-         if(new_order.order_status==2){
-          all_orders.push_back(new_order);
+    dict_array<order> all_orders={{uint32(0),uint256(0),uint128(0),uint256(0),uint256(0),{0x0},uint8(0),uint256(0),uint128(0),uint256(0),uint256(0),{0x0},uint8(0),uint8(0)}};
+    for (order order_:order_array){
+      if(order_.buyer_send_token_address_hex==maker_address){
+         if(order_.order_status==2){
+          all_orders.push_back(order_);
          }
       }
     }
@@ -436,9 +433,7 @@ public:
   // =============== Support functions ==================
   DEFAULT_SUPPORT_FUNCTIONS(ITonExchange, exchange_replay_protection_t)
 private:
-  __always_inline bytes getTokenSymbol(uint256 token_root_hex,uint256 customer_addr_hex,uint8 token_type){
-    bytes token_symbol={};
-  };
+
   __always_inline uint8 getTokenType(uint256 token_root_addr){
     uint8 token_type=uint8(0); 
     if(token_balance_list.contains(token_root_addr.get())){
@@ -483,43 +478,56 @@ private:
   }
 
   //action :1-remove token_amount from blance ,2-add the token_amount from balance.
-  __always_inline void updateBalance(uint256 token_root_addr_hex,uint256 customer_wallet_addr_hex,uint8 token_type,uint128 token_amount,uint8 action) {
- 
-  if(token_type==1){
-    require(token_balance_list.contains(token_root_addr_hex.get()), error_code::not_enough_balance);
-    dict_map<uint256,customer_token> fungible_token_list=token_balance_list.get_at(token_root_addr_hex.get());
-    require(fungible_token_list.contains(customer_wallet_addr_hex.get()), error_code::not_enough_balance);
-    customer_token customer_balance=fungible_token_list.get_at(customer_wallet_addr_hex.get());
-    TokenAmount old_balance=customer_balance.token_balance;
-    if(action==1){
-      old_balance-=token_amount;
+  __always_inline void updateBalance(uint256 token_root_addr_hex,uint256 customer_wallet_addr_hex,uint8 token_type,uint128 token_amount,uint8 action) 
+  {
+    if(token_type==1){
+      require(token_balance_list.contains(token_root_addr_hex.get()), error_code::not_enough_balance);
+      dict_map<uint256,customer_token> fungible_token_list=token_balance_list.get_at(token_root_addr_hex.get());
+      require(fungible_token_list.contains(customer_wallet_addr_hex.get()), error_code::not_enough_balance);
+      customer_token customer_balance=fungible_token_list.get_at(customer_wallet_addr_hex.get());
+      TokenAmount old_balance=customer_balance.token_balance;
+      if(action==1){
+        old_balance-=token_amount;
+      }
+      if(action==2){
+        old_balance+=token_amount;
+      }
+      customer_balance={customer_balance.token_name,customer_balance.token_symbol,customer_balance.decimals,old_balance};
+      fungible_token_list.set_at(customer_wallet_addr_hex.get(),customer_balance);
+      token_balance_list.set_at(token_root_addr_hex.get(),fungible_token_list);
     }
-    if(action==2){
-      old_balance+=token_amount;
+    if(token_type==2){
+      require(nftoken_balance_list.contains(token_root_addr_hex.get()), error_code::not_enough_balance);
+      dict_map<uint256,customer_nftoken> nonfungible_token_list=nftoken_balance_list.get_at(token_root_addr_hex.get());
+      require(nonfungible_token_list.contains(customer_wallet_addr_hex.get()), error_code::not_enough_balance);
+      customer_nftoken customer_nfbalance=nonfungible_token_list.get_at(customer_wallet_addr_hex.get());
+      dict_set<TokenId> old_nfbalance=customer_nfbalance.tokenid_list;
+      if(action==1){
+        old_nfbalance.erase(token_amount);
+      }
+      if(action==2){
+        old_nfbalance.insert(token_amount);
+      }
+      customer_nfbalance={customer_nfbalance.token_name,customer_nfbalance.token_symbol,old_nfbalance};
+      nonfungible_token_list.set_at(customer_wallet_addr_hex.get(),customer_nfbalance);
+      nftoken_balance_list.set_at(token_root_addr_hex.get(),nonfungible_token_list);
+      
     }
-    customer_balance={customer_balance.token_name,customer_balance.token_symbol,customer_balance.decimals,old_balance};
-    fungible_token_list.set_at(customer_wallet_addr_hex.get(),customer_balance);
-    token_balance_list.set_at(token_root_addr_hex.get(),fungible_token_list);
   }
-  if(token_type==2){
-    require(nftoken_balance_list.contains(token_root_addr_hex.get()), error_code::not_enough_balance);
-    dict_map<uint256,customer_nftoken> nonfungible_token_list=nftoken_balance_list.get_at(token_root_addr_hex.get());
-    require(nonfungible_token_list.contains(customer_wallet_addr_hex.get()), error_code::not_enough_balance);
-    customer_nftoken customer_nfbalance=nonfungible_token_list.get_at(customer_wallet_addr_hex.get());
-    dict_set<TokenId> old_nfbalance=customer_nfbalance.tokenid_list;
-    if(action==1){
-      old_nfbalance.erase(token_amount);
-    }
-    if(action==2){
-      old_nfbalance.insert(token_amount);
-    }
-    customer_nfbalance={customer_nfbalance.token_name,customer_nfbalance.token_symbol,old_nfbalance};
-    nonfungible_token_list.set_at(customer_wallet_addr_hex.get(),customer_nfbalance);
-    nftoken_balance_list.set_at(token_root_addr_hex.get(),nonfungible_token_list);
 
-  }
- 
-}
+   __always_inline std::pair<int32, order> getOrderByNo(uint32 order_no)
+   {
+      order find_order={};
+      int32 idx(0);
+      for (order order_:order_array){
+        if(order_.order_no == order_no){
+          find_order=order_;
+        }
+         idx++;
+      }
+      return { idx, find_order };
+     
+   }
 };
 
 DEFINE_JSON_ABI(ITonExchange, DTonExchange, ETonExchange);
