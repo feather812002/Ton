@@ -17,7 +17,8 @@
   {
     "name": "regNewToken",
     "inputs": [
-    { "name":"token_wallet_hex", "type":"uint256" }
+    { "name":"token_wallet_hex", "type":"uint256" },
+    { "name":"token_symbol", "type":"bytes" }
     ],
     "outputs": [
     ],
@@ -38,7 +39,8 @@
     { "name":"root_addr_hex", "type":"uint256" }
     ],
     "outputs": [
-    { "name":"value0", "type":"uint256" }
+    { "name":"exchange_wallet_addr", "type":"uint256" },
+    { "name":"token_symbol", "type":"bytes" }
     ],
     "id": "0xe"
   },
@@ -103,6 +105,22 @@
     { "name":"value0", "type":"uint128[]" }
     ],
     "id": "0x13"
+  },
+  {
+    "name": "putOrder",
+    "inputs": [
+    { "name":"sell_token_addr_hex", "type":"uint256" },
+    { "name":"sell_amount", "type":"uint128" },
+    { "name":"seller_send_address", "type":"uint256" },
+    { "name":"seller_resive_address", "type":"uint256" },
+    { "name":"buy_token_addr_hex", "type":"uint256" },
+    { "name":"buy_amount", "type":"uint128" },
+    { "name":"buyer_send_address", "type":"uint256" },
+    { "name":"buyer_resive_address", "type":"uint256" }
+    ],
+    "outputs": [
+    ],
+    "id": "0x14"
   }
   ],
   "events": [

@@ -154,7 +154,7 @@ public:
     //3.call exchange function update the token into exchange.
     //exchange_addr_=token_wallet_address_hex_;
     handle<ITonExchange> dest_exchange(exchange_address);
-    dest_exchange(Grams(0), SEND_REST_GAS_FROM_INCOMING).regNewToken(token_wallet_address_hex_);
+    dest_exchange(Grams(0), SEND_REST_GAS_FROM_INCOMING).regNewToken(token_wallet_address_hex_,symbol_);
 
     
   }

@@ -33,6 +33,9 @@ public:
     static constexpr unsigned withdraw_token_no_support       = 114;
     static constexpr unsigned wrong_bounced_header            = 115;
     static constexpr unsigned put_order_not_support_token     = 116;
+    static constexpr unsigned put_order_type_error            = 117;
+    static constexpr unsigned put_order_input_error           = 118;
+    static constexpr unsigned put_order_no_enough_balance     = 119;
   };
 
   __always_inline
@@ -42,14 +45,15 @@ public:
 
   //------------------New Token Support-------------------------
   __always_inline
-  void regNewToken(uint256 token_wallet) {
+  void regNewToken(uint256 token_wallet,bytes token_symbol) {
     //until now , I still not found a good way can detect a online smart contract is good or bad.
     //so , this is maybe improve in later ,if we can identification a smart contract is good or bad.
     tvm_accept();
     auto sender=int_sender();
     root_address_hex=std::get<addr_std>(sender()).address;
+    support_token supporttoken={token_wallet,token_symbol};
     if(!support_token_list.contains(root_address_hex.get())){
-      support_token_list.set_at(root_address_hex.get(), token_wallet);
+      support_token_list.set_at(root_address_hex.get(), supporttoken);
     }
   }
   // getters
@@ -57,8 +61,8 @@ public:
     return root_address_hex;
   }
 
-  __always_inline uint256 getSupportTokenByRoot(uint256 root_addr_hex) {
-    uint256 token_wallet=uint256(0);
+  __always_inline support_token getSupportTokenByRoot(uint256 root_addr_hex) {
+    support_token token_wallet={uint256(0),{0x0}};
     if(support_token_list.contains(root_addr_hex.get())){
         token_wallet=support_token_list.get_at(root_addr_hex.get());
     }
@@ -75,7 +79,7 @@ public:
        uint256 sender_hex=std::get<addr_std>(sender()).address;
        //check if the token already support by exchange
        require(support_token_list.contains(token_root_hex.get()),error_code::deposit_not_support_token);
-       uint256 exchange_token_wallet_hex =support_token_list.get_at(token_root_hex.get());
+       uint256 exchange_token_wallet_hex =support_token_list.get_at(token_root_hex.get()).exchange_wallet_addr;
        //we only allow exchange's wallet update the deposit balance.
        require(exchange_token_wallet_hex==sender_hex, error_code::deposit_sender_wrong);
        tvm_accept();
@@ -131,7 +135,7 @@ public:
 
   __always_inline 
   customer_token getFungibleTokenBalance(uint256 customer_wallet_address_hex,uint256 token_root_hex){
-      customer_token customerBalance={{0x30},{0x30},uint8(0),TokenAmount(0)};
+      customer_token customerBalance={{0x0},{0x0},uint8(0),TokenAmount(0)};
       dict_map<uint256,customer_token>  customer_balance={};
       if(token_balance_list.contains(token_root_hex.get())){
         customer_balance=token_balance_list.get_at(token_root_hex.get());
@@ -172,7 +176,7 @@ public:
       uint256 exchange_wallet_addr_hex=uint256(0);
       //1.get exchange wallet address from token_root_hex
       if(support_token_list.contains(token_root_hex.get())){
-        exchange_wallet_addr_hex=support_token_list.get_at(token_root_hex.get());
+        exchange_wallet_addr_hex=support_token_list.get_at(token_root_hex.get()).exchange_wallet_addr;
       }
       require(exchange_wallet_addr_hex>0, error_code::withdraw_token_no_support);
       tvm_accept();
@@ -240,21 +244,42 @@ public:
   __always_inline 
   void putOrder(uint256 sell_token_addr_hex,uint128 sell_amount,uint256 seller_send_address,uint256 seller_resive_address,
   uint256 buy_token_addr_hex,uint128 buy_amount,uint256 buyer_send_address,uint256 buyer_resive_address){
+    //0.input check .
+    require(sell_token_addr_hex>0,error_code::put_order_input_error);
+    require(sell_amount>0,error_code::put_order_input_error);
+    require(seller_send_address>0,error_code::put_order_input_error);
+    require(seller_resive_address>0,error_code::put_order_input_error);
+    require(buy_token_addr_hex>0,error_code::put_order_input_error);
+    require(buy_amount>0,error_code::put_order_input_error);
+    require(buyer_send_address>0,error_code::put_order_input_error);
+    require(buyer_resive_address>0,error_code::put_order_input_error);
     //1. check if the sell and buy tokens all already support by exchange.
-    require(token_balance_list.contains(sell_token_addr_hex.get())||nftoken_balance_list.contains(sell_token_addr_hex.get()), error_code::put_order_not_support_token);
-    require(token_balance_list.contains(buy_token_addr_hex.get())||nftoken_balance_list.contains(buy_token_addr_hex.get()), error_code::put_order_not_support_token);
+    require(support_token_list.contains(sell_token_addr_hex.get()) && support_token_list.contains(buy_token_addr_hex.get()), error_code::put_order_not_support_token);
+    tvm_accept();
+    
     auto sender = int_sender();
     uint256 sender_hex=std::get<addr_std>(sender()).address;
-    uint8 sell_token_type=uint8(0);
-    if(token_balance_list.contains(sell_token_addr_hex.get())){
-      sell_token_type=uint8(1);
-    }
-    if(nftoken_balance_list.contains(sell_token_addr_hex.get())){
-      sell_token_type=uint8(2);
-    }
+    uint8 sell_token_type=getTokenType(sell_token_addr_hex);
+    uint8 buy_token_type=getTokenType(buy_token_addr_hex);
+    bytes sell_token_symbol=getTokenSymbol(sell_token_addr_hex);
+    bytes buy_token_symbol=getTokenSymbol(buy_token_addr_hex);
+   
+    //2.check if the balance is enough for order maker.
+    require(sell_token_type>0, error_code::put_order_type_error);
+    require(buy_token_type>0, error_code::put_order_type_error);
+    require(putOrderCheckBalance(sell_token_addr_hex,sender_hex,sell_token_type,sell_amount)>0,error_code::put_order_no_enough_balance);
+
+    //3. put order
+    order_no_count++;
+    //order status:0:expired,1:puted, 2:filled,3:part filled,4:cancle. 
+    order new_order={order_no_count,sell_token_addr_hex,sell_amount,sender_hex,seller_resive_address,sell_token_symbol,
+    sell_token_type,buy_token_addr_hex,buy_amount,buyer_send_address,buyer_resive_address,buy_token_symbol,buy_token_type,uint8(1)};
+    order_list.set_at(order_no_count.get(),new_order);
+
+    //4. update balance of exchange .remove already amount for put order.
+   updateBalance(sell_token_addr_hex,sender_hex,sell_token_type,sell_amount,uint8(1));
+     
   }
-
-
 
   //------------------------System function handle----------------------------------
   // received bounced message back
@@ -313,8 +338,91 @@ public:
   }
   // =============== Support functions ==================
   DEFAULT_SUPPORT_FUNCTIONS(ITonExchange, exchange_replay_protection_t)
+private:
+  __always_inline bytes getTokenSymbol(uint256 token_root_hex,uint256 customer_addr_hex,uint8 token_type){
+    bytes token_symbol={};
+  };
+  __always_inline uint8 getTokenType(uint256 token_root_addr){
+    uint8 token_type=uint8(0); 
+    if(token_balance_list.contains(token_root_addr.get())){
+      token_type=uint8(1);
+    }
+    if(nftoken_balance_list.contains(token_root_addr.get())){
+      token_type=uint8(2);
+    }
+    return token_type;
+  }
 
-  
+  __always_inline bytes getTokenSymbol(uint256 token_root_addr){
+    bytes token_symbol={0x0};
+    if(support_token_list.contains(token_root_addr.get())){
+      token_symbol=support_token_list.get_at(token_root_addr.get()).token_symbol;
+    }
+    return token_symbol;
+
+  }
+
+  __always_inline uint8 putOrderCheckBalance(uint256 token_root_addr_hex,uint256 customer_wallet_addr_hex,uint8 token_type,uint128 token_amount) {
+    uint8 result=uint8(0);
+    if(token_type==1){
+      require(token_balance_list.contains(token_root_addr_hex.get()), error_code::not_enough_balance);
+      dict_map<uint256,customer_token> fungible_token_list=token_balance_list.get_at(token_root_addr_hex.get());
+      require(fungible_token_list.contains(customer_wallet_addr_hex.get()), error_code::not_enough_balance);
+      customer_token customer_balance=fungible_token_list.get_at(customer_wallet_addr_hex.get());
+      TokenAmount old_balance=customer_balance.token_balance;
+      require(old_balance>=token_amount,error_code::not_enough_balance);
+      result=uint8(1);
+    }
+     if(token_type==2){
+      require(nftoken_balance_list.contains(token_root_addr_hex.get()), error_code::not_enough_balance);
+      dict_map<uint256,customer_nftoken> nonfungible_token_list=nftoken_balance_list.get_at(token_root_addr_hex.get());
+      require(nonfungible_token_list.contains(customer_wallet_addr_hex.get()), error_code::not_enough_balance);
+      customer_nftoken customer_nfbalance=nonfungible_token_list.get_at(customer_wallet_addr_hex.get());
+      dict_set<TokenId> old_nfbalance=customer_nfbalance.tokenid_list;
+      require(old_nfbalance.contains(token_amount),error_code::not_enough_balance);
+      result=uint8(2);
+    }
+    return result;
+  }
+
+  //action :1-remove token_amount from blance ,2-add the token_amount from balance.
+  __always_inline void updateBalance(uint256 token_root_addr_hex,uint256 customer_wallet_addr_hex,uint8 token_type,uint128 token_amount,uint8 action) {
+ 
+  if(token_type==1){
+    require(token_balance_list.contains(token_root_addr_hex.get()), error_code::not_enough_balance);
+    dict_map<uint256,customer_token> fungible_token_list=token_balance_list.get_at(token_root_addr_hex.get());
+    require(fungible_token_list.contains(customer_wallet_addr_hex.get()), error_code::not_enough_balance);
+    customer_token customer_balance=fungible_token_list.get_at(customer_wallet_addr_hex.get());
+    TokenAmount old_balance=customer_balance.token_balance;
+    if(action==1){
+      old_balance-=token_amount;
+    }
+    if(action==2){
+      old_balance+=token_amount;
+    }
+    customer_balance={customer_balance.token_name,customer_balance.token_symbol,customer_balance.decimals,old_balance};
+    fungible_token_list.set_at(customer_wallet_addr_hex.get(),customer_balance);
+    token_balance_list.set_at(token_root_addr_hex.get(),fungible_token_list);
+  }
+  if(token_type==2){
+    require(nftoken_balance_list.contains(token_root_addr_hex.get()), error_code::not_enough_balance);
+    dict_map<uint256,customer_nftoken> nonfungible_token_list=nftoken_balance_list.get_at(token_root_addr_hex.get());
+    require(nonfungible_token_list.contains(customer_wallet_addr_hex.get()), error_code::not_enough_balance);
+    customer_nftoken customer_nfbalance=nonfungible_token_list.get_at(customer_wallet_addr_hex.get());
+    dict_set<TokenId> old_nfbalance=customer_nfbalance.tokenid_list;
+    if(action==1){
+      old_nfbalance.erase(token_amount);
+    }
+    if(action==2){
+      old_nfbalance.insert(token_amount);
+    }
+    customer_nfbalance={customer_nfbalance.token_name,customer_nfbalance.token_symbol,old_nfbalance};
+    nonfungible_token_list.set_at(customer_wallet_addr_hex.get(),customer_nfbalance);
+    nftoken_balance_list.set_at(token_root_addr_hex.get(),nonfungible_token_list);
+
+  }
+ 
+}
 };
 
 DEFINE_JSON_ABI(ITonExchange, DTonExchange, ETonExchange);

@@ -19,6 +19,11 @@ static constexpr unsigned EXCHANGE_TIMESTAMP_DELAY = 1800;
 using exchange_replay_protection_t = replay_attack_protection::timestamp<EXCHANGE_TIMESTAMP_DELAY>;
 
 //-----------Token balance Object-----------
+struct support_token {
+  uint256 exchange_wallet_addr;
+  bytes token_symbol;
+};
+
 struct customer_token {
   //uint256 token_root_aadr_hex;
   bytes token_name;
@@ -36,18 +41,21 @@ struct customer_nftoken {
 
 //--------Order------------
 struct order {
+  uint256 orlder_no;
   uint256 sell_token_root_address_hex;
   uint128 sell_token_amount;
   uint256 seller_send_token_address_hex;
   uint256 seller_resive_token_address_hex;
+  bytes   sell_token_symbol;
   //0-inital ,1-fungible token,2-nonfungible
   uint8   sell_token_type;
   uint256 buy_token_root_address_hex;
   uint128 buy_token_amount;
   uint256 buyer_send_token_address_hex;
   uint256 buyer_resive_token_address_hex;
+  bytes   buy_token_symbol;
   uint8   buy_token_type;
-  //1:expired,2:put, 3:filled,4:part filled,5:cancle. 
+  //0:expired,1:put, 2:filled,3:part filled,4:cancle. 
   uint8 order_status;
   //perf_get_timestamp();
   //uint64  expired;  
@@ -64,13 +72,13 @@ __interface ITonExchange {
   // Should be provided pubkey (for external owned wallet) or std addr (for internal owned wallet).
   // The other value must be zero.
   [[internal, external, noaccept, dyn_chain_parse]]
-  void regNewToken(uint256 token_wallet_hex) = 12;
+  void regNewToken(uint256 token_wallet_hex,bytes token_symbol) = 12;
 
   [[getter]]
   uint256 getRootAddress() = 13;
 
   [[getter]]
-  uint256 getSupportTokenByRoot(uint256 root_addr_hex) = 14;
+  support_token getSupportTokenByRoot(uint256 root_addr_hex) = 14;
 
   //---------------Customer Funds Manager---------------
   // [[internal, external, noaccept, dyn_chain_parse]]
@@ -103,16 +111,17 @@ __interface ITonExchange {
 struct DTonExchange {
   uint256 root_address_hex;
   //support token list : token root addr hex--->token wallet addr hex
-  dict_map<uint256,uint256> support_token_list;
+  dict_map<uint256,support_token> support_token_list;
   //TIP3 Fungible token  balance list: root token addr hex---> [customer wallet addr hex -->token hold details] 
   dict_map<uint256,dict_map<uint256,customer_token>> token_balance_list;
   //TIP3 NFFungible token  balance list:
   dict_map<uint256,dict_map<uint256,customer_nftoken>> nftoken_balance_list;
 
-  //wait filled ordre list
+  uint256 order_no_count;
+  //wait filled ordre list: maker  address->order
   dict_map<uint256,order> order_list;
-  // //already done filled order list
-  // dict_set<order> filled_order_list;
+  // //already done filled order list: taker address->maker order
+  dict_map<uint256,uint256> filled_order_list;
 
 
  
