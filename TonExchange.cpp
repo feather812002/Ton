@@ -37,6 +37,9 @@ public:
     static constexpr unsigned put_order_input_error           = 118;
     static constexpr unsigned put_order_no_enough_balance     = 119;
     static constexpr unsigned cancel_order_no_error           = 120;  
+    static constexpr unsigned fill_order_input_error          = 121;
+    static constexpr unsigned fill_order_status_error         = 122;
+    static constexpr unsigned fill_order_no_enough_balance     = 123;  
   };
 
   __always_inline
@@ -248,31 +251,29 @@ public:
     uint256 buyer_send_address=uint256(0);
     uint256 buyer_resive_address=uint256(0);
     //0.input check .
-    // require(sell_token_addr_hex>0,error_code::put_order_input_error);
-    // require(sell_amount>0,error_code::put_order_input_error);
-    // //require(seller_send_address>0,error_code::put_order_input_error);
-    // require(seller_resive_address>0,error_code::put_order_input_error);
-    // require(buy_token_addr_hex>0,error_code::put_order_input_error);
-    // require(buy_amount>0,error_code::put_order_input_error);
-    // require(buyer_send_address>0,error_code::put_order_input_error);
-    // require(buyer_resive_address>0,error_code::put_order_input_error);
-    // //1. check if the sell and buy tokens all already support by exchange.
-    // require(support_token_list.contains(sell_token_addr_hex.get()) && support_token_list.contains(buy_token_addr_hex.get()), error_code::put_order_not_support_token);
+    require(sell_token_addr_hex>0,error_code::put_order_input_error);
+    require(sell_amount>0,error_code::put_order_input_error);
+    require(seller_resive_address>0,error_code::put_order_input_error);
+    require(buy_token_addr_hex>0,error_code::put_order_input_error);
+    require(buy_amount>0,error_code::put_order_input_error);
+    
+    //1. check if the sell and buy tokens all already support by exchange.
+    require(support_token_list.contains(sell_token_addr_hex.get()) && support_token_list.contains(buy_token_addr_hex.get()), error_code::put_order_not_support_token);
     tvm_accept();
     
-    //auto sender = int_sender();
-    //uint256 sender_hex=std::get<addr_std>(sender()).address;
-    uint256 sender_hex=uint256(0);
+    auto sender = int_sender();
+    uint256 sender_hex=std::get<addr_std>(sender()).address;
+  
     
     uint8 sell_token_type=getTokenType(sell_token_addr_hex);
     uint8 buy_token_type=getTokenType(buy_token_addr_hex);
     bytes sell_token_symbol=getTokenSymbol(sell_token_addr_hex);
     bytes buy_token_symbol=getTokenSymbol(buy_token_addr_hex);
    
-    // //2.check if the balance is enough for order maker.
-    // require(sell_token_type>0, error_code::put_order_type_error);
-    // require(buy_token_type>0, error_code::put_order_type_error);
-    // require(putOrderCheckBalance(sell_token_addr_hex,sender_hex,sell_token_type,sell_amount)>0,error_code::put_order_no_enough_balance);
+    //2.check if the balance is enough for order maker.
+    require(sell_token_type>0, error_code::put_order_type_error);
+    require(buy_token_type>0, error_code::put_order_type_error);
+    require(putOrderCheckBalance(sell_token_addr_hex,sender_hex,sell_token_type,sell_amount)>0,error_code::put_order_no_enough_balance);
 
     //3. put order
     order_no_count++;
@@ -369,11 +370,41 @@ public:
     return all_orders;
   }
 
-  //getMyAllOrder
-  //getMyFilledOrder 
-  //getMyCancleOrder
-  //getMyCurrentVaildOrder
-  //getAllOrder 
+  __always_inline 
+  uint8 fillOrder(uint32 order_no,uint256 buyer_resive_token_address_hex){
+    uint8 result=uint8(0);
+    require(buyer_resive_token_address_hex>0,error_code::fill_order_input_error);
+    require(order_no>0,error_code::fill_order_input_error);
+
+    tvm_accept();
+    auto sender = int_sender();
+    uint256 sender_hex=std::get<addr_std>(sender()).address;
+    //1.get order by order_no 
+    auto [oder_idx,get_order]=getOrderByNo(order_no);
+    //make sure the order sell amount and buy amount >0
+    require(get_order.sell_token_amount>0&&get_order.buy_token_amount>0 ,error_code::fill_order_status_error);
+    //make sure the order is put or part filled status.
+    require(get_order.order_status==1||get_order.order_status==3 ,error_code::fill_order_status_error);
+    //check have enough balance fill the order.
+    //TODO if this is fungible tarde to fungible ,allow part filled.
+    require(putOrderCheckBalance(get_order.buy_token_root_address_hex,sender_hex,get_order.buy_token_type,get_order.buy_token_amount)>0,error_code::fill_order_no_enough_balance);
+    //uint256 sender_hex=uint256(0);
+    //start fill order........
+    //2.1 sell token (only add to buyer) 
+    updateBalance(get_order.seller_send_token_address_hex,buyer_resive_token_address_hex,get_order.sell_token_type,get_order.sell_token_amount,uint8(2));
+    //2.2 buyer send token to seller.
+    updateBalance(get_order.buy_token_root_address_hex,sender_hex,get_order.buy_token_type,get_order.buy_token_amount,uint8(1));
+    updateBalance(get_order.buy_token_root_address_hex,get_order.seller_resive_token_address_hex,get_order.buy_token_type,get_order.buy_token_amount,uint8(2));
+
+    //3. update order.
+    get_order.buyer_send_token_address_hex=sender_hex;
+    get_order.buyer_resive_token_address_hex=buyer_resive_token_address_hex;
+    get_order.order_status=2;
+    order_array.set_at(int(oder_idx),get_order);
+    result=uint8(1);
+    return result;
+
+  }
   
   //------------------------System function handle----------------------------------
   // received bounced message back
@@ -517,7 +548,9 @@ private:
 
    __always_inline std::pair<int32, order> getOrderByNo(uint32 order_no)
    {
-      order find_order={};
+     //inital a order to zero status, so that we can get a return for check.
+      order find_order={uint32(0),uint256(0),uint128(0),uint256(0),uint256(0),
+      {0x0},uint8(0),uint256(0),uint128(0),uint256(0),uint256(0),{0x0},uint8(0),uint8(0)};
       int32 idx(0);
       for (order order_:order_array){
         if(order_.order_no == order_no){

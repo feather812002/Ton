@@ -182,7 +182,8 @@
     "inputs": [
     { "name":"exchange_address", "type":"address" },
     { "name":"grams", "type":"uint128" },
-    { "name":"exchange_pubkey", "type":"uint256" }
+    { "name":"exchange_pubkey", "type":"uint256" },
+    { "name":"owner_addr", "type":"uint256" }
     ],
     "outputs": [
     ],

@@ -116,7 +116,7 @@ __interface ITonExchange {
   uint256 buy_token_addr_hex,uint128 buy_amount)=20;
   
   [[internal, external, noaccept, dyn_chain_parse]]
-  void cancelOrder(uint256 order_no)=21;
+  void cancelOrder(uint32 order_no)=21;
 
   [[getter]]
   dict_array<order> getAllOrder() = 22;
@@ -132,6 +132,9 @@ __interface ITonExchange {
 
    [[getter]]
   dict_array<order> getMyFilledOrders(uint256 maker_address) = 25;
+
+  [[internal, external, noaccept, dyn_chain_parse]]
+  uint8 fillOrder(uint32 order_no,uint256 buyer_resive_token_address_hex)=26;
   
 };
 

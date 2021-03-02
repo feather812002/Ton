@@ -264,6 +264,44 @@
     "outputs": [
     ],
     "id": "0x24"
+  },
+  {
+    "name": "putOrder",
+    "inputs": [
+    { "name":"sell_token_addr_hex", "type":"uint256" },
+    { "name":"sell_amount", "type":"uint128" },
+    { "name":"seller_resive_address", "type":"uint256" },
+    { "name":"buy_token_addr_hex", "type":"uint256" },
+    { "name":"buy_amount", "type":"uint128" },
+    { "name":"exchange_address", "type":"address" },
+    { "name":"grams", "type":"uint128" }
+    ],
+    "outputs": [
+    ],
+    "id": "0x25"
+  },
+  {
+    "name": "cancelOrder",
+    "inputs": [
+    { "name":"order_no", "type":"uint32" },
+    { "name":"exchange_address", "type":"address" },
+    { "name":"grams", "type":"uint128" }
+    ],
+    "outputs": [
+    ],
+    "id": "0x26"
+  },
+  {
+    "name": "fillOrder",
+    "inputs": [
+    { "name":"order_no", "type":"uint32" },
+    { "name":"buyer_resive_token_address_hex", "type":"uint256" },
+    { "name":"exchange_address", "type":"address" },
+    { "name":"grams", "type":"uint128" }
+    ],
+    "outputs": [
+    ],
+    "id": "0x27"
   }
   ],
   "events": [

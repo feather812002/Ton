@@ -332,6 +332,36 @@ public:
     dest_exchange(Grams(grams.get())).withdraw(root_address_hex,int8(1),tokenAmount);
   }
 
+  __always_inline
+  void putOrder(uint256 sell_token_addr_hex,uint128 sell_amount,uint256 seller_resive_address,
+  uint256 buy_token_addr_hex,uint128 buy_amount,address exchange_address,WalletGramsType grams)
+  {
+    check_owner();
+    tvm_accept();
+    handle<ITonExchange> dest_exchange(exchange_address);  
+    dest_exchange(Grams(grams.get())).putOrder(sell_token_addr_hex,sell_amount,seller_resive_address,buy_token_addr_hex,buy_amount);
+
+  }
+
+  __always_inline
+  void cancelOrder(uint32 order_no,address exchange_address,WalletGramsType grams)
+  {
+    check_owner();
+    tvm_accept();
+    handle<ITonExchange> dest_exchange(exchange_address);  
+    dest_exchange(Grams(grams.get())).cancelOrder(order_no);
+  }
+
+
+    __always_inline
+  void fillOrder(uint32 order_no,uint256 buyer_resive_token_address_hex,address exchange_address,WalletGramsType grams)
+  {
+    check_owner();
+    tvm_accept();
+    handle<ITonExchange> dest_exchange(exchange_address);  
+    dest_exchange(Grams(grams.get())).fillOrder(order_no,buyer_resive_token_address_hex);
+  }
+
 
 
   //-----------------------------System function--------------------------------
