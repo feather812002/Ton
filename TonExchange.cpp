@@ -259,7 +259,7 @@ public:
     uint256 buyer_send_address=uint256(0);
     uint256 buyer_resive_address=uint256(0);
     //1. check if the sell and buy tokens all already support by exchange.
-    //require(support_token_list.contains(sell_token_addr_hex.get()) && support_token_list.contains(buy_token_addr_hex.get()), error_code::put_order_not_support_token);
+    require(support_token_list.contains(sell_token_addr_hex.get()) && support_token_list.contains(buy_token_addr_hex.get()), error_code::put_order_not_support_token);
     
     
    
@@ -277,9 +277,9 @@ public:
     bytes buy_token_symbol=getTokenSymbol(buy_token_addr_hex);
    
     //2.check if the balance is enough for order maker.
-    //require(sell_token_type>0, error_code::put_order_type_error);
-    //require(buy_token_type>0, error_code::put_order_type_error);
-    //require(putOrderCheckBalance(sell_token_addr_hex,sender_hex,sell_token_type,sell_amount)>0,error_code::put_order_no_enough_balance);
+    require(sell_token_type>0, error_code::put_order_type_error);
+    require(buy_token_type>0, error_code::put_order_type_error);
+    require(putOrderCheckBalance(sell_token_addr_hex,sender_hex,sell_token_type,sell_amount)>0,error_code::put_order_no_enough_balance);
 
     //3. put order
     order_no_count++;
@@ -292,25 +292,24 @@ public:
     order_array.push_back(new_order);
 
     //4. update balance of exchange .remove already amount for put order.
-    //updateBalance(sell_token_addr_hex,sender_hex,sell_token_type,sell_amount,uint8(1),sender_hex);
+    updateBalance(sell_token_addr_hex,sender_hex,sell_token_type,sell_amount,uint8(1),sender_hex);
      
   }
   
   __always_inline 
   void cancelOrder(uint32 order_no){
     require(order_no>0,error_code::cancel_order_no_error);
-    //require(order_list.contains(order_no.get()),error_code::cancel_order_no_error);
     tvm_accept();
     uint256 sender_hex=uint256(0);
     if constexpr (Internal){
        auto sender = int_sender();
        sender_hex=std::get<addr_std>(sender()).address;
     }
-    //only maker can cancle order for itself.
+   
     auto [oder_idx,get_order]=getOrderByNo(order_no);
     require(oder_idx>=0,error_code::cancel_order_no_error);
-
-    //require(get_order.seller_send_token_address_hex==sender_hex,error_code::cancel_order_no_error);
+     //only maker can cancle order for itself.
+    require(get_order.seller_send_token_address_hex==sender_hex,error_code::cancel_order_no_error);
     get_order.order_status=uint8(4);
 
     //update the order array;
@@ -388,7 +387,7 @@ public:
     require(order_no>0,error_code::fill_order_input_error);
 
     tvm_accept();
-      uint256 sender_hex=uint256(0);
+    uint256 sender_hex=uint256(0);
     if constexpr (Internal){
        auto sender = int_sender();
        sender_hex=std::get<addr_std>(sender()).address;
