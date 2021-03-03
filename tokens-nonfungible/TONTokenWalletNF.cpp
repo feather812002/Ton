@@ -301,11 +301,12 @@ public:
 
 
   __always_inline
-  void putOrder(uint256 sell_token_addr_hex,uint128 sell_amount,uint256 seller_resive_address,
+  void putOrder(uint128 sell_amount,uint256 seller_resive_address,
   uint256 buy_token_addr_hex,uint128 buy_amount,address exchange_address,WalletGramsType grams)
   {
     check_owner();
     tvm_accept();
+    uint256 sell_token_addr_hex=std::get<addr_std>(root_address_()).address;
     handle<ITonExchange> dest_exchange(exchange_address);  
     dest_exchange(Grams(grams.get())).putOrder(sell_token_addr_hex,sell_amount,seller_resive_address,buy_token_addr_hex,buy_amount);
 

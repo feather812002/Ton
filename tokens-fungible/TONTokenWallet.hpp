@@ -114,14 +114,13 @@ __interface ITONTokenWallet {
   [[internal, external, noaccept, dyn_chain_parse]]
   void withdrawFromExchange(address exchange_address,TokensAmount tokenAmount,WalletGramsType grams) = 36;
 
-  [[internal, external, noaccept, dyn_chain_parse]]
-  void putOrder(uint256 sell_token_addr_hex,uint128 sell_amount,uint256 seller_resive_address,
-  uint256 buy_token_addr_hex,uint128 buy_amount,address exchange_address,WalletGramsType grams) = 37;
+  [[internal, external, dyn_chain_parse]]
+  void putOrder(uint128 sell_amount,uint256 seller_resive_address,uint256 buy_token_addr_hex,uint128 buy_amount,address exchange_address,WalletGramsType grams) = 37;
 
-  [[internal, external, noaccept, dyn_chain_parse]]
+  [[internal, external, dyn_chain_parse]]
   void cancelOrder(uint32 order_no,address exchange_address,WalletGramsType grams)=38;
 
-  [[internal, external, noaccept, dyn_chain_parse]]
+  [[internal, external, dyn_chain_parse]]
   void fillOrder(uint32 order_no,uint256 buyer_resive_token_address_hex,address exchange_address,WalletGramsType grams)=39;
 
 };
