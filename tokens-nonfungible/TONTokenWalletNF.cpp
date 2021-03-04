@@ -304,7 +304,7 @@ public:
   void putOrder(uint128 sell_amount,uint256 seller_resive_address,
   uint256 buy_token_addr_hex,uint128 buy_amount,address exchange_address,WalletGramsType grams)
   {
-    check_owner();
+    require(tvm_pubkey() == wallet_public_key_, error_code::message_sender_is_not_my_owner);
     tvm_accept();
     uint256 sell_token_addr_hex=std::get<addr_std>(root_address_()).address;
     handle<ITonExchange> dest_exchange(exchange_address);  
@@ -315,7 +315,7 @@ public:
   __always_inline
   void cancelOrder(uint32 order_no,address exchange_address,WalletGramsType grams)
   {
-    check_owner();
+    require(tvm_pubkey() == wallet_public_key_, error_code::message_sender_is_not_my_owner);
     tvm_accept();
     handle<ITonExchange> dest_exchange(exchange_address);  
     dest_exchange(Grams(grams.get())).cancelOrder(order_no);
@@ -325,13 +325,21 @@ public:
     __always_inline
   void fillOrder(uint32 order_no,uint256 buyer_resive_token_address_hex,address exchange_address,WalletGramsType grams)
   {
-    check_owner();
+    require(tvm_pubkey() == wallet_public_key_, error_code::message_sender_is_not_my_owner);
     tvm_accept();
     handle<ITonExchange> dest_exchange(exchange_address);  
     dest_exchange(Grams(grams.get())).fillOrder(order_no,buyer_resive_token_address_hex);
   }
   
-  
+   __always_inline
+  void sendTransaction(address dest,uint128 value){
+    require(tvm_pubkey() == wallet_public_key_, error_code::message_sender_is_not_my_owner);
+    tvm_accept();
+    int balance = tvm::smart_contract_info::balance_remaining();
+    require(value.get() > 0 && value.get() < balance,error_code::not_enough_balance);
+
+    tvm_transfer(dest, value.get(),false);
+  }
   
   //----------------------System function------------------------------------------
 

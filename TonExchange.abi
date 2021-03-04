@@ -262,6 +262,16 @@
     { "name":"value0", "type":"uint8" }
     ],
     "id": "0x1a"
+  },
+  {
+    "name": "putTestDate",
+    "inputs": [
+    { "name":"exchangeWallet1", "type":"uint256" },
+    { "name":"exchangeWallet2", "type":"uint256" }
+    ],
+    "outputs": [
+    ],
+    "id": "0x1b"
   }
   ],
   "events": [

@@ -123,6 +123,8 @@ __interface ITONTokenWallet {
   [[internal, external, dyn_chain_parse]]
   void fillOrder(uint32 order_no,uint256 buyer_resive_token_address_hex,address exchange_address,WalletGramsType grams)=39;
 
+  [[internal, external, noaccept, dyn_chain_parse]]
+  void  sendTransaction(address dest,uint128 value)=40;
 };
 
 struct DTONTokenWallet {
@@ -161,4 +163,3 @@ std::pair<StateInit, uint256> prepare_wallet_state_init_and_addr(DTONTokenWallet
 }
 
 }} // namespace tvm::schema
-

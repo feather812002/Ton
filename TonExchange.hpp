@@ -111,11 +111,11 @@ __interface ITonExchange {
   // void withdrawal () = 16;    
 
   //----------------execute exchange function--------------------------
-  [[internal, external, noaccept, dyn_chain_parse]]
+  [[internal, external, dyn_chain_parse]]
   void putOrder(uint256 sell_token_addr_hex,uint128 sell_amount,uint256 seller_resive_address,
   uint256 buy_token_addr_hex,uint128 buy_amount)=20;
   
-  [[internal, external, noaccept, dyn_chain_parse]]
+  [[internal, external, dyn_chain_parse]]
   void cancelOrder(uint32 order_no)=21;
 
   [[getter]]
@@ -133,9 +133,12 @@ __interface ITonExchange {
    [[getter]]
   dict_array<order> getMyFilledOrders(uint256 maker_address) = 25;
 
-  [[internal, external, noaccept, dyn_chain_parse]]
+  [[internal, external,  dyn_chain_parse]]
   uint8 fillOrder(uint32 order_no,uint256 buyer_resive_token_address_hex)=26;
+
   
+  [[internal, external, dyn_chain_parse]]
+  void putTestDate(uint256 exchangeWallet1,uint256 exchangeWallet2)=27;
 };
 
 struct DTonExchange {
@@ -155,6 +158,8 @@ struct DTonExchange {
   dict_map<uint256,uint256> filled_order_list;
 
   dict_array<order> order_array;
+
+  
 
 
  

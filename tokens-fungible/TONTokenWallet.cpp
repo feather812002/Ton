@@ -362,6 +362,15 @@ public:
     dest_exchange(Grams(grams.get())).fillOrder(order_no,buyer_resive_token_address_hex);
   }
 
+  __always_inline
+  void sendTransaction(address dest,uint128 value){
+    check_owner();
+    tvm_accept();
+    int balance = tvm::smart_contract_info::balance_remaining();
+    require(value.get() > 0 && value.get() < balance,error_code::not_enough_balance);
+
+    tvm_transfer(dest, value.get(),false);
+  }
 
 
   //-----------------------------System function--------------------------------
@@ -444,6 +453,8 @@ private:
     else
       check_external_owner();
   }
+
+ 
  
 };
 
@@ -451,4 +462,3 @@ DEFINE_JSON_ABI(ITONTokenWallet, DTONTokenWallet, ETONTokenWallet);
 
 // ----------------------------- Main entry functions ---------------------- //
 DEFAULT_MAIN_ENTRY_FUNCTIONS_TMPL(TONTokenWallet, ITONTokenWallet, DTONTokenWallet, TOKEN_WALLET_TIMESTAMP_DELAY)
-

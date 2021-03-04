@@ -39,7 +39,8 @@ public:
     static constexpr unsigned cancel_order_no_error           = 120;  
     static constexpr unsigned fill_order_input_error          = 121;
     static constexpr unsigned fill_order_status_error         = 122;
-    static constexpr unsigned fill_order_no_enough_balance     = 123;  
+    static constexpr unsigned fill_order_no_enough_balance    = 123; 
+    static constexpr unsigned fill_order_no_enough_fee        = 124;  
   };
 
   __always_inline
@@ -308,6 +309,8 @@ public:
    
     auto [oder_idx,get_order]=getOrderByNo(order_no);
     require(oder_idx>=0,error_code::cancel_order_no_error);
+    //only can cancle waiting or part fill order 
+    require(get_order.order_status==1 ||get_order.order_status==3,error_code::cancel_order_no_error);
      //only maker can cancle order for itself.
     require(get_order.seller_send_token_address_hex==sender_hex,error_code::cancel_order_no_error);
     get_order.order_status=uint8(4);
@@ -317,7 +320,7 @@ public:
     order_array.set_at(int(oder_idx),get_order);
 
     //update back to balance of exchange;
-    updateBalance(get_order.seller_send_token_address_hex,sender_hex,get_order.sell_token_type,get_order.sell_token_amount,uint8(2),sender_hex);
+    updateBalance(get_order.sell_token_root_address_hex,sender_hex,get_order.sell_token_type,get_order.sell_token_amount,uint8(2),sender_hex);
   }
 
 
@@ -404,20 +407,88 @@ public:
     require(putOrderCheckBalance(get_order.buy_token_root_address_hex,sender_hex,get_order.buy_token_type,get_order.buy_token_amount)>0,error_code::fill_order_no_enough_balance);
     //uint256 sender_hex=uint256(0);
     //start fill order........
+    get_order.buyer_send_token_address_hex=sender_hex;
+    get_order.buyer_resive_token_address_hex=buyer_resive_token_address_hex;
+    get_order.order_status=2;
+
     //2.1 sell token (only add to buyer) 
-    updateBalance(get_order.seller_send_token_address_hex,buyer_resive_token_address_hex,get_order.sell_token_type,get_order.sell_token_amount,uint8(2),get_order.seller_send_token_address_hex);
+    updateBalance(get_order.sell_token_root_address_hex,buyer_resive_token_address_hex,get_order.sell_token_type,get_order.sell_token_amount,uint8(2),get_order.seller_send_token_address_hex);
     //2.2 buyer send token to seller.
     updateBalance(get_order.buy_token_root_address_hex,sender_hex,get_order.buy_token_type,get_order.buy_token_amount,uint8(1),sender_hex);
     updateBalance(get_order.buy_token_root_address_hex,get_order.seller_resive_token_address_hex,get_order.buy_token_type,get_order.buy_token_amount,uint8(2),get_order.buyer_send_token_address_hex);
 
     //3. update order.
-    get_order.buyer_send_token_address_hex=sender_hex;
-    get_order.buyer_resive_token_address_hex=buyer_resive_token_address_hex;
-    get_order.order_status=2;
     order_array.set_at(int(oder_idx),get_order);
+    //4.send fee to taker and keep rest in the exchange .
+    if constexpr (Internal) {
+      auto value_gr = int_value();
+      require(value_gr>=1000000000,error_code::fill_order_no_enough_fee);
+      //transfer 0.5 TON to maker .
+      auto workchain_id = std::get<addr_std>(address{tvm_myaddr()}.val()).workchain_id;
+      address sender_wallet_addr = address::make_std(workchain_id, get_order.seller_send_token_address_hex);
+      tvm_transfer(sender_wallet_addr, 500000000,false);
+      
+
+    }
+   
+
     result=uint8(1);
     return result;
 
+  }
+  __always_inline 
+  void testTransaction(address sender_wallet_addr,uint128 value){
+    //tvm_accept();
+    if constexpr (Internal) {
+      auto value_gr = int_value();
+      //require(value_gr>=1000000000,error_code::fill_order_no_enough_fee);
+      //transfer 0.5 TON to maker .
+     // auto workchain_id = std::get<addr_std>(address{tvm_myaddr()}.val()).workchain_id;
+     // address sender_wallet_addr = address::make_std(workchain_id, get_order.seller_send_token_address_hex);
+      
+      
+
+    }
+    tvm_transfer(sender_wallet_addr, value.get(),false);
+  }
+  __always_inline 
+  void putTestDate(uint256 exchangeWallet1,uint256 exchangeWallet2){
+
+    tvm_accept();
+    support_token supporttoen1={exchangeWallet1,{0}};
+    support_token supporttoen2={exchangeWallet2,{0}};
+
+    support_token_list.set_at(0xcbb30ce4991335ab7f7698d1339c13387471e3626541c66b0428413998339ed7, supporttoen1);
+    support_token_list.set_at(0x93caf629948c3c0c73f93f9381e52bcbca5b24ac395d7c70559f9ddd55bc6614, supporttoen2);
+    
+    customer_token customer_balance={{0},{0},uint8(0),uint128(20)};
+    dict_map<uint256,customer_token> fungible_token_list={};
+    // fungible_token_list.set_at(0x74b16b79d2172edb4903630ff5a874f7d42e6c2e9a488729198a725a7ce58b03,customer_balance);
+    // token_balance_list.set_at(0x93caf629948c3c0c73f93f9381e52bcbca5b24ac395d7c70559f9ddd55bc6614,fungible_token_list);
+
+    customer_balance={{0},{0},uint8(0),uint128(50)};
+    fungible_token_list.set_at(0x52fd43a76cb8dceddf5ad15f268a8f0850851354381ca2130261fef326e0d97d,customer_balance);
+    token_balance_list.set_at(0xcbb30ce4991335ab7f7698d1339c13387471e3626541c66b0428413998339ed7,fungible_token_list);
+
+    
+ 
+    dict_set<TokenId>  tokenid_list={};
+    tokenid_list.insert(uint128(102));
+    tokenid_list.insert(uint128(100));
+    tokenid_list.insert(uint128(101));
+    customer_nftoken customer_balancenf={{0},{0},tokenid_list};
+    dict_map<uint256,customer_nftoken> nffungible_token_list={};
+    nffungible_token_list.set_at(0x74b16b79d2172edb4903630ff5a874f7d42e6c2e9a488729198a725a7ce58b03,customer_balancenf);
+    nftoken_balance_list.set_at(0x93caf629948c3c0c73f93f9381e52bcbca5b24ac395d7c70559f9ddd55bc6614,nffungible_token_list);
+
+
+
+    order new_order={uint32(1),uint256(0xcbb30ce4991335ab7f7698d1339c13387471e3626541c66b0428413998339ed7),
+    uint128(5),uint256(0x52fd43a76cb8dceddf5ad15f268a8f0850851354381ca2130261fef326e0d97d), 
+    uint256(0x745d17bbff9ad8fea8187fe66e2cebb0a1bdd0a1e97cc421e68bb4be591bf73a),{0},uint8(1),
+    uint256(0x93caf629948c3c0c73f93f9381e52bcbca5b24ac395d7c70559f9ddd55bc6614),uint128(100),
+    uint256(0),uint256(0),{0},uint8(2),uint8(1)};
+    order_array.push_back(new_order);
   }
   
   //------------------------System function handle----------------------------------
