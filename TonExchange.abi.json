@@ -11,8 +11,7 @@
     "inputs": [
     ],
     "outputs": [
-    ],
-    "id": "0xb"
+    ]
   },
   {
     "name": "regNewToken",
@@ -21,8 +20,7 @@
     { "name":"token_symbol", "type":"bytes" }
     ],
     "outputs": [
-    ],
-    "id": "0xc"
+    ]
   },
   {
     "name": "getRootAddress",
@@ -30,8 +28,7 @@
     ],
     "outputs": [
     { "name":"value0", "type":"uint256" }
-    ],
-    "id": "0xd"
+    ]
   },
   {
     "name": "getSupportTokenByRoot",
@@ -41,8 +38,7 @@
     "outputs": [
     { "name":"exchange_wallet_addr", "type":"uint256" },
     { "name":"token_symbol", "type":"bytes" }
-    ],
-    "id": "0xe"
+    ]
   },
   {
     "name": "deposit",
@@ -56,8 +52,7 @@
     { "name":"tokenAmount", "type":"uint128" }
     ],
     "outputs": [
-    ],
-    "id": "0xf"
+    ]
   },
   {
     "name": "getFungibleTokenBalance",
@@ -70,8 +65,7 @@
     { "name":"token_symbol", "type":"bytes" },
     { "name":"decimals", "type":"uint8" },
     { "name":"token_balance", "type":"uint128" }
-    ],
-    "id": "0x10"
+    ]
   },
   {
     "name": "withdraw",
@@ -81,8 +75,7 @@
     { "name":"tokenAmount", "type":"uint128" }
     ],
     "outputs": [
-    ],
-    "id": "0x11"
+    ]
   },
   {
     "name": "withdrawTest",
@@ -92,8 +85,7 @@
     { "name":"tokenAmount", "type":"uint128" }
     ],
     "outputs": [
-    ],
-    "id": "0x12"
+    ]
   },
   {
     "name": "getNFFungibleTokenBalance",
@@ -103,8 +95,7 @@
     ],
     "outputs": [
     { "name":"value0", "type":"uint128[]" }
-    ],
-    "id": "0x13"
+    ]
   },
   {
     "name": "putOrder",
@@ -116,8 +107,7 @@
     { "name":"buy_amount", "type":"uint128" }
     ],
     "outputs": [
-    ],
-    "id": "0x14"
+    ]
   },
   {
     "name": "cancelOrder",
@@ -125,8 +115,7 @@
     { "name":"order_no", "type":"uint32" }
     ],
     "outputs": [
-    ],
-    "id": "0x15"
+    ]
   },
   {
     "name": "getAllOrder",
@@ -149,8 +138,7 @@
       { "name":"buy_token_type", "type":"uint8" },
       { "name":"order_status", "type":"uint8" }
     ], "name":"value0", "type":"tuple[]" }
-    ],
-    "id": "0x16"
+    ]
   },
   {
     "name": "getMyMakerOrders",
@@ -174,8 +162,7 @@
       { "name":"buy_token_type", "type":"uint8" },
       { "name":"order_status", "type":"uint8" }
     ], "name":"value0", "type":"tuple[]" }
-    ],
-    "id": "0x17"
+    ]
   },
   {
     "name": "getMyTakerOrders",
@@ -199,8 +186,7 @@
       { "name":"buy_token_type", "type":"uint8" },
       { "name":"order_status", "type":"uint8" }
     ], "name":"value0", "type":"tuple[]" }
-    ],
-    "id": "0x17"
+    ]
   },
   {
     "name": "getMyCancelOrders",
@@ -224,8 +210,7 @@
       { "name":"buy_token_type", "type":"uint8" },
       { "name":"order_status", "type":"uint8" }
     ], "name":"value0", "type":"tuple[]" }
-    ],
-    "id": "0x18"
+    ]
   },
   {
     "name": "getMyFilledOrders",
@@ -249,8 +234,7 @@
       { "name":"buy_token_type", "type":"uint8" },
       { "name":"order_status", "type":"uint8" }
     ], "name":"value0", "type":"tuple[]" }
-    ],
-    "id": "0x19"
+    ]
   },
   {
     "name": "fillOrder",
@@ -260,8 +244,7 @@
     ],
     "outputs": [
     { "name":"value0", "type":"uint8" }
-    ],
-    "id": "0x1a"
+    ]
   },
   {
     "name": "putTestDate",
@@ -270,8 +253,7 @@
     { "name":"exchangeWallet2", "type":"uint256" }
     ],
     "outputs": [
-    ],
-    "id": "0x1b"
+    ]
   },
   {
     "name": "getAllSupportTokens",

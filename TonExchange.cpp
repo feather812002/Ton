@@ -74,6 +74,16 @@ public:
     return token_wallet;
   }
 
+  __always_inline   dict_array<support_token>  getAllSupportTokens(){
+     dict_array<support_token> supportTokenList={};
+     for(auto supporttoken:support_token_list){
+            support_token new_support_token={supporttoken.first,supporttoken.second.token_symbol};
+            supportTokenList.push_back(new_support_token);
+        }
+    return supportTokenList;
+  }
+
+
   //------------------------Customer Funds Manager---------------------------------
   __always_inline
   void deposit(uint256 customer_wallet_address_hex,uint256 token_root_hex,bytes tokenName,bytes tokenSymbol,uint8 decimals, int8 token_type,TokenAmount tokenAmount) {

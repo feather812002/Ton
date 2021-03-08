@@ -1,0 +1,2567 @@
+.globl	constructor
+.public	constructor
+.type	constructor, @function
+GETGLOB 1
+ISNULL
+PUSHCONT {
+	CALL $c4_to_c7_with_init_storage$
+}
+IF
+;; constructor protection
+GETGLOB 6
+THROWIF 51
+PUSHINT 1
+SETGLOB 6
+;; end constructor protection
+; Decode input parameters
+; Decode debotAbi
+LDREF
+ENDS
+;; param: debotAbi
+; constructor TonExchangeDebot
+GETGLOB 2
+GETGLOB 5
+DUP
+ISNULL
+PUSHCONT {
+	DROP
+	PUSHINT 0
+}
+IF
+;; ==
+EQUAL
+THROWIFNOT 100
+ACCEPT
+PUSHINT 1
+;; push identifier debotAbi
+PUSH S1
+NEWC
+ENDC
+PUSHSLICE x8000000000000000000000000000000000000000000000000000000000000000001_
+CALL $init_internal$
+DROP
+; end constructor TonExchangeDebot
+CALL $c7_to_c4$
+TRUE
+SETGLOB 7
+
+.globl	fetch
+.public	fetch
+.type	fetch, @function
+GETGLOB 1
+ISNULL
+PUSHCONT {
+	CALL $c4_to_c7$
+}
+IF
+PUSH S1
+PUSHCONT {
+	LDU 32
+	GETGLOB 4
+	ROT
+	SETINDEXQ 5
+	SETGLOB 4
+}
+IFNOT
+; Decode input parameters
+ENDS
+; function fetch
+;; ret param: contexts
+PUSHINT 0
+NEWDICT
+PAIR
+;; returning named params
+;; emitting 1 value(s)
+PUSH S1
+EQINT -1
+PUSHCONT {
+	PUSH S3
+	CTOS
+	LDU 2
+	LDMSGADDR
+	DROP
+	NIP
+	NEWC
+	STSLICECONST xc
+	STSLICE
+	PUSHINT 96
+	STZEROES
+	STSLICECONST 0
+	STSLICECONST 0
+	STSLICECONST xa5b934ca
+	PUSH S1
+	UNPAIR
+	XCHG s2
+	STU 32
+	STDICT
+	ENDC
+	PUSHINT 1
+	SENDRAWMSG
+}
+PUSHCONT {
+	GETGLOB 4
+	DUP
+	INDEX 3
+	PUSH S1
+	INDEX 2
+	GETGLOB 9
+	BLKSWAP 1, 3
+	INDEX 1
+	NEWC
+	PUSHINT 2
+	STZEROES
+	STI 1
+	PUSHINT 3
+	STZEROES
+	STSLICE
+	SWAP
+	STGRAMS
+	STDICT
+	PUSHINT 104
+	STZEROES
+	STSLICECONST 0
+	STSLICECONST 0
+	GETGLOB 4
+	INDEX 5
+	STUR 32
+	PUSH S1
+	UNPAIR
+	XCHG s2
+	STU 32
+	STDICT
+	ENDC
+	GETGLOB 4
+	INDEX 4
+	SENDRAWMSG
+}
+IFELSE
+DROP
+; end function fetch
+CALL $c7_to_c4$
+TRUE
+SETGLOB 7
+
+.globl	fetch_internal
+.type	fetch_internal, @function
+; function fetch
+;; ret param: contexts
+PUSHINT 0
+NEWDICT
+PAIR
+;; returning named params
+; end function fetch
+
+.globl	setTargetABI
+.public	setTargetABI
+.type	setTargetABI, @function
+GETGLOB 1
+ISNULL
+PUSHCONT {
+	CALL $c4_to_c7$
+}
+IF
+; Decode input parameters
+; Decode tabi
+LDREF
+ENDS
+;; param: tabi
+; modifier onlyOwnerAccept
+GETGLOB 2
+GETGLOB 5
+DUP
+ISNULL
+PUSHCONT {
+	DROP
+	PUSHINT 0
+}
+IF
+;; ==
+EQUAL
+THROWIFNOT 100
+ACCEPT
+; function setTargetABI
+; expValue
+; end expValue
+;; push identifier tabi
+DUP
+; colValue
+SETGLOB 12
+; end colValue
+PUSHINT 2
+; expValue
+;; fetch m_options
+GETGLOB 10
+; end expValue
+SWAP
+OR
+UFITS 8
+; colValue
+SETGLOB 10
+; end colValue
+; end function setTargetABI
+DROP
+; end modifier onlyOwnerAccept
+CALL $c7_to_c4$
+TRUE
+SETGLOB 7
+
+.globl	setTargetABI_internal
+.type	setTargetABI_internal, @function
+;; param: tabi
+; modifier onlyOwnerAccept
+GETGLOB 2
+GETGLOB 5
+DUP
+ISNULL
+PUSHCONT {
+	DROP
+	PUSHINT 0
+}
+IF
+;; ==
+EQUAL
+THROWIFNOT 100
+ACCEPT
+; function setTargetABI
+; expValue
+; end expValue
+;; push identifier tabi
+DUP
+; colValue
+SETGLOB 12
+; end colValue
+PUSHINT 2
+; expValue
+;; fetch m_options
+GETGLOB 10
+; end expValue
+SWAP
+OR
+UFITS 8
+; colValue
+SETGLOB 10
+; end colValue
+; end function setTargetABI
+DROP
+; end modifier onlyOwnerAccept
+
+.globl	start
+.public	start
+.type	start, @function
+GETGLOB 1
+ISNULL
+PUSHCONT {
+	CALL $c4_to_c7$
+}
+IF
+; Decode input parameters
+ENDS
+; function start
+PUSHSLICE x4d61696e206d656e75
+NEWC
+STSLICE
+ENDC
+PUSHSLICE x48656c6c6f2c205468697320697320546f6e2065786368616e6765206465626f74
+NEWC
+STSLICE
+ENDC
+PUSHINT 2
+NEWDICT
+PUSHSLICE x53656c6563742065786368616e6765
+NEWC
+STSLICE
+ENDC
+NEWC
+ENDC
+PUSHINT 1220624381
+TUPLE 3
+UNTUPLE 3
+NEWC
+PUSH S3
+STREFR
+PUSH S2
+STREFR
+PUSH S1
+STUR 32
+XCHG s3
+BLKDROP 3
+PUSHINT 0
+ROT
+PUSHINT 32
+DICTUSETB
+PUSHSLICE x45786974
+NEWC
+STSLICE
+ENDC
+NEWC
+ENDC
+PUSHINT 0
+TUPLE 3
+UNTUPLE 3
+NEWC
+PUSH S3
+STREFR
+PUSH S2
+STREFR
+PUSH S1
+STUR 32
+XCHG s3
+BLKDROP 3
+PUSHINT 1
+ROT
+PUSHINT 32
+DICTUSETB
+PAIR
+CALL $Menu_no_obj_select$
+; end function start
+CALL $c7_to_c4$
+TRUE
+SETGLOB 7
+
+.globl	start_internal
+.type	start_internal, @function
+; function start
+PUSHSLICE x4d61696e206d656e75
+NEWC
+STSLICE
+ENDC
+PUSHSLICE x48656c6c6f2c205468697320697320546f6e2065786368616e6765206465626f74
+NEWC
+STSLICE
+ENDC
+PUSHINT 2
+NEWDICT
+PUSHSLICE x53656c6563742065786368616e6765
+NEWC
+STSLICE
+ENDC
+NEWC
+ENDC
+PUSHINT 1220624381
+TUPLE 3
+UNTUPLE 3
+NEWC
+PUSH S3
+STREFR
+PUSH S2
+STREFR
+PUSH S1
+STUR 32
+XCHG s3
+BLKDROP 3
+PUSHINT 0
+ROT
+PUSHINT 32
+DICTUSETB
+PUSHSLICE x45786974
+NEWC
+STSLICE
+ENDC
+NEWC
+ENDC
+PUSHINT 0
+TUPLE 3
+UNTUPLE 3
+NEWC
+PUSH S3
+STREFR
+PUSH S2
+STREFR
+PUSH S1
+STUR 32
+XCHG s3
+BLKDROP 3
+PUSHINT 1
+ROT
+PUSHINT 32
+DICTUSETB
+PAIR
+CALL $Menu_no_obj_select$
+; end function start
+
+.globl	selectExchange
+.public	selectExchange
+.type	selectExchange, @function
+GETGLOB 1
+ISNULL
+PUSHCONT {
+	CALL $c4_to_c7$
+}
+IF
+; Decode input parameters
+; Decode index
+LDU 32
+ENDS
+;; param: index
+; function selectExchange
+; expValue
+; end expValue
+;; push identifier index
+DUP
+; colValue
+NIP
+; end colValue
+PUSHINT 0
+PUSHSLICE x506c656173652c20656e7465722065786368616e676520616464726573733a
+NEWC
+STSLICE
+ENDC
+CALL $Terminal_no_obj_print$
+PUSHINT 1353546420
+CALL $AddressInput_no_obj_select$
+DROP
+; end function selectExchange
+CALL $c7_to_c4$
+TRUE
+SETGLOB 7
+
+.globl	selectExchange_internal
+.type	selectExchange_internal, @function
+;; param: index
+; function selectExchange
+; expValue
+; end expValue
+;; push identifier index
+DUP
+; colValue
+NIP
+; end colValue
+PUSHINT 0
+PUSHSLICE x506c656173652c20656e7465722065786368616e676520616464726573733a
+NEWC
+STSLICE
+ENDC
+CALL $Terminal_no_obj_print$
+PUSHINT 1353546420
+CALL $AddressInput_no_obj_select$
+DROP
+; end function selectExchange
+
+.globl	checkExchange
+.public	checkExchange
+.type	checkExchange, @function
+GETGLOB 1
+ISNULL
+PUSHCONT {
+	CALL $c4_to_c7$
+}
+IF
+; Decode input parameters
+; Decode value
+LDMSGADDRQ
+PUSHCONT {
+	;; load next cell
+	LDREF
+	ENDS
+	CTOS
+	LDMSGADDR
+}
+IFNOT
+ENDS
+;; param: value
+; function checkExchange
+PUSHINT 281329239
+;; push identifier value
+PUSH S1
+CALL $Sdk_no_obj_getBalance$
+PUSHINT 510783836
+;; push identifier value
+PUSH S1
+CALL $Sdk_no_obj_getAccountType$
+; expValue
+; end expValue
+;; push identifier value
+DUP
+; colValue
+SETGLOB 16
+; end colValue
+DROP
+; end function checkExchange
+CALL $c7_to_c4$
+TRUE
+SETGLOB 7
+
+.globl	checkExchange_internal
+.type	checkExchange_internal, @function
+;; param: value
+; function checkExchange
+PUSHINT 281329239
+;; push identifier value
+PUSH S1
+CALL $Sdk_no_obj_getBalance$
+PUSHINT 510783836
+;; push identifier value
+PUSH S1
+CALL $Sdk_no_obj_getAccountType$
+; expValue
+; end expValue
+;; push identifier value
+DUP
+; colValue
+SETGLOB 16
+; end colValue
+DROP
+; end function checkExchange
+
+.globl	setBalance
+.public	setBalance
+.type	setBalance, @function
+GETGLOB 1
+ISNULL
+PUSHCONT {
+	CALL $c4_to_c7$
+}
+IF
+; Decode input parameters
+; Decode nanotokens
+LDUQ 128
+PUSHCONT {
+	;; load next cell
+	LDREF
+	ENDS
+	CTOS
+	LDU 128
+}
+IFNOT
+ENDS
+;; param: nanotokens
+; function setBalance
+; expValue
+; end expValue
+;; push identifier nanotokens
+DUP
+; colValue
+SETGLOB 15
+; end colValue
+DROP
+; end function setBalance
+CALL $c7_to_c4$
+TRUE
+SETGLOB 7
+
+.globl	setBalance_internal
+.type	setBalance_internal, @function
+;; param: nanotokens
+; function setBalance
+; expValue
+; end expValue
+;; push identifier nanotokens
+DUP
+; colValue
+SETGLOB 15
+; end colValue
+DROP
+; end function setBalance
+
+.globl	setExchange
+.public	setExchange
+.type	setExchange, @function
+GETGLOB 1
+ISNULL
+PUSHCONT {
+	CALL $c4_to_c7$
+}
+IF
+; Decode input parameters
+ENDS
+; function setExchange
+PUSHINT 0
+PUSHSLICE x506c656173652c20656e746572207468652065786368616e676520616464726573733a
+NEWC
+STSLICE
+ENDC
+CALL $Terminal_no_obj_print$
+; end function setExchange
+CALL $c7_to_c4$
+TRUE
+SETGLOB 7
+
+.globl	setExchange_internal
+.type	setExchange_internal, @function
+; function setExchange
+PUSHINT 0
+PUSHSLICE x506c656173652c20656e746572207468652065786368616e676520616464726573733a
+NEWC
+STSLICE
+ENDC
+CALL $Terminal_no_obj_print$
+; end function setExchange
+
+.globl	quit
+.public	quit
+.type	quit, @function
+GETGLOB 1
+ISNULL
+PUSHCONT {
+	CALL $c4_to_c7$
+}
+IF
+; Decode input parameters
+ENDS
+; function quit
+; end function quit
+CALL $c7_to_c4$
+TRUE
+SETGLOB 7
+
+.globl	quit_internal
+.type	quit_internal, @function
+; function quit
+; end function quit
+
+.globl	getExchangeAddress
+.public	getExchangeAddress
+.type	getExchangeAddress, @function
+GETGLOB 1
+ISNULL
+PUSHCONT {
+	CALL $c4_to_c7$
+}
+IF
+PUSH S1
+PUSHCONT {
+	LDU 32
+	GETGLOB 4
+	ROT
+	SETINDEXQ 5
+	SETGLOB 4
+}
+IFNOT
+; Decode input parameters
+ENDS
+; function getExchangeAddress
+;; return
+;; push identifier exchange_address
+GETGLOB 16
+;; emitting 1 value(s)
+PUSH S1
+EQINT -1
+PUSHCONT {
+	PUSH S3
+	CTOS
+	LDU 2
+	LDMSGADDR
+	DROP
+	NIP
+	NEWC
+	STSLICECONST xc
+	STSLICE
+	PUSHINT 96
+	STZEROES
+	STSLICECONST 0
+	STSLICECONST 0
+	STSLICECONST x8df75f93
+	PUSH S1
+	STSLICER
+	ENDC
+	PUSHINT 1
+	SENDRAWMSG
+}
+PUSHCONT {
+	GETGLOB 4
+	DUP
+	INDEX 3
+	PUSH S1
+	INDEX 2
+	GETGLOB 9
+	BLKSWAP 1, 3
+	INDEX 1
+	NEWC
+	PUSHINT 2
+	STZEROES
+	STI 1
+	PUSHINT 3
+	STZEROES
+	STSLICE
+	SWAP
+	STGRAMS
+	STDICT
+	PUSHINT 104
+	STZEROES
+	STSLICECONST 0
+	STSLICECONST 0
+	GETGLOB 4
+	INDEX 5
+	STUR 32
+	PUSH S1
+	STSLICER
+	ENDC
+	GETGLOB 4
+	INDEX 4
+	SENDRAWMSG
+}
+IFELSE
+DROP
+; end function getExchangeAddress
+PUSHCONT {
+	CALL $c7_to_c4$
+}
+IF
+TRUE
+SETGLOB 7
+
+.globl	getExchangeAddress_internal
+.type	getExchangeAddress_internal, @function
+; function getExchangeAddress
+;; return
+;; push identifier exchange_address
+GETGLOB 16
+; end function getExchangeAddress
+
+.globl	getVersion
+.public	getVersion
+.type	getVersion, @function
+GETGLOB 1
+ISNULL
+PUSHCONT {
+	CALL $c4_to_c7$
+}
+IF
+PUSH S1
+PUSHCONT {
+	LDU 32
+	GETGLOB 4
+	ROT
+	SETINDEXQ 5
+	SETGLOB 4
+}
+IFNOT
+; Decode input parameters
+ENDS
+; function getVersion
+;; ret param: name
+NEWC
+ENDC
+;; ret param: semver
+PUSHINT 0
+PUSHSLICE x546f6e2045786368616e6765
+NEWC
+STSLICE
+ENDC
+PUSHINT 1024
+SWAP
+; expValue
+; end expValue
+; colValue
+POP S3
+; end colValue
+; expValue
+; end expValue
+; colValue
+NIP
+; end colValue
+;; returning named params
+;; emitting 2 value(s)
+PUSH S2
+EQINT -1
+PUSHCONT {
+	PUSH S4
+	CTOS
+	LDU 2
+	LDMSGADDR
+	DROP
+	NIP
+	NEWC
+	STSLICECONST xc
+	STSLICE
+	PUSHINT 96
+	STZEROES
+	STSLICECONST 0
+	STSLICECONST 0
+	STSLICECONST xb541576f
+	PUSH S2
+	STREFR
+	PUSH S1
+	STUR 24
+	ENDC
+	PUSHINT 1
+	SENDRAWMSG
+}
+PUSHCONT {
+	GETGLOB 4
+	DUP
+	INDEX 3
+	PUSH S1
+	INDEX 2
+	GETGLOB 9
+	BLKSWAP 1, 3
+	INDEX 1
+	NEWC
+	PUSHINT 2
+	STZEROES
+	STI 1
+	PUSHINT 3
+	STZEROES
+	STSLICE
+	SWAP
+	STGRAMS
+	STDICT
+	PUSHINT 104
+	STZEROES
+	STSLICECONST 0
+	STSLICECONST 0
+	GETGLOB 4
+	INDEX 5
+	STUR 32
+	PUSH S2
+	STREFR
+	PUSH S1
+	STUR 24
+	ENDC
+	GETGLOB 4
+	INDEX 4
+	SENDRAWMSG
+}
+IFELSE
+DROP2
+; end function getVersion
+CALL $c7_to_c4$
+TRUE
+SETGLOB 7
+
+.globl	getVersion_internal
+.type	getVersion_internal, @function
+; function getVersion
+;; ret param: name
+NEWC
+ENDC
+;; ret param: semver
+PUSHINT 0
+PUSHSLICE x546f6e2045786368616e6765
+NEWC
+STSLICE
+ENDC
+PUSHINT 1024
+SWAP
+; expValue
+; end expValue
+; colValue
+POP S3
+; end colValue
+; expValue
+; end expValue
+; colValue
+NIP
+; end colValue
+;; returning named params
+; end function getVersion
+
+.globl	getAllSupportTokens
+.public	getAllSupportTokens
+.type	getAllSupportTokens, @function
+GETGLOB 1
+ISNULL
+PUSHCONT {
+	CALL $c4_to_c7$
+}
+IF
+; Decode input parameters
+; Decode acc_type
+LDI 8
+ENDS
+;; param: acc_type
+; function getAllSupportTokens
+PUSHCONT {
+	;; if
+	FALSE ; decl return flag
+	;; push identifier acc_type
+	PUSH S1
+	EQINT -1
+	PUSHCONT {
+		PUSHINT 0
+		NEWC
+		NULL
+		TUPLE 2
+		NEWC
+		PUSHSLICE x4163636f756e742077697468206164647265737320
+		CALL $storeStringInBuilders$
+		CALL $appendToList$
+		;; push identifier exchange_address
+		GETGLOB 16
+		CALL $convertAddressToHexString$
+		PUSHSLICE x20646f65736e2774206578697374
+		CALL $storeStringInBuilders$
+		CALL $appendToList$
+		CALL $assembleList$
+		CALL $Terminal_no_obj_print$
+	}
+	PUSHCONT {
+		NEWC
+		ENDC
+		;; decl: state
+		;; if
+		;; push identifier acc_type
+		PUSH S2
+		EQINT 0
+		PUSHCONT {
+			; expValue
+			; end expValue
+			PUSHSLICE x556e696e6974
+			NEWC
+			STSLICE
+			ENDC
+			; colValue
+			NIP
+			; end colValue
+		}
+		PUSHCONT {
+			;; if
+			;; push identifier acc_type
+			PUSH S2
+			EQINT 2
+			PUSHCONT {
+				; expValue
+				; end expValue
+				PUSHSLICE x46726f7a656e
+				NEWC
+				STSLICE
+				ENDC
+				; colValue
+				NIP
+				; end colValue
+			}
+			PUSHCONT {
+				;; if
+				;; push identifier acc_type
+				PUSH S2
+				EQINT 1
+				PUSHCONT {
+					; expValue
+					; end expValue
+					PUSHSLICE x416374697665
+					NEWC
+					STSLICE
+					ENDC
+					; colValue
+					NIP
+					; end colValue
+				}
+				IF
+				;; end if
+			}
+			IFELSE
+			;; end if
+		}
+		IFELSE
+		;; end if
+		PUSHINT 0
+		PUSHSLICE x45786368616e6765204163636f756e742073746174653a20
+		NEWC
+		STSLICE
+		ENDC
+		CTOS
+		;; push identifier state
+		PUSH S2
+		CTOS
+		SWAP
+		NEWC
+		STSLICE
+		STSLICE
+		ENDC
+		CALL $Terminal_no_obj_print$
+		;; push identifier m_balance
+		GETGLOB 15
+		CALL $tokens_internal$
+		;; decl: dec
+		;; decl: float
+		PUSHINT 0
+		NEWC
+		NULL
+		TUPLE 2
+		NEWC
+		PUSHSLICE x4163636f756e742062616c616e63653a20
+		CALL $storeStringInBuilders$
+		CALL $appendToList$
+		;; push identifier dec
+		PUSH S4
+		PUSHINT 0
+		FALSE
+		FALSE
+		CALL $convertIntToDecStr$
+		CALL $appendToList$
+		PUSHSLICE x2e
+		CALL $storeStringInBuilders$
+		CALL $appendToList$
+		;; push identifier float
+		PUSH S3
+		PUSHINT 0
+		FALSE
+		FALSE
+		CALL $convertIntToDecStr$
+		CALL $appendToList$
+		CALL $assembleList$
+		CALL $Terminal_no_obj_print$
+		;; if
+		;; push identifier state
+		PUSH S2
+		CTOS
+		PUSHSLICE x416374697665
+		NEWC
+		STSLICE
+		ENDC
+		CTOS
+		SDEQ
+		PUSHCONT {
+			;; return
+			BLKDROP 5
+			PUSHINT 4
+			RET
+		}
+		IFNOTJMP
+		;; end if
+		NULL
+		;; decl: pubkey
+		;; Remote call ITonExchange.getAllSupportTokens
+		;; push identifier exchange_address
+		GETGLOB 16
+		NEWC
+		STSLICECONST x497_
+		PUSHINT 16
+		STUR 32
+		PUSHINT 0
+		STUR 32
+		PUSHINT 2
+		STUR 8
+		STONE
+		STONE
+		STONE
+		NEWC
+		STSLICECONST xa_
+		STB
+		STSLICE
+		PUSHINT 4
+		STZEROES
+		STSLICECONST 0
+		PUSHINT 2
+		STZEROES
+		;; push identifier pubkey
+		PUSH S1
+		ISNULL
+		PUSHCONT {
+			STSLICECONST 0
+		}
+		PUSHCONT {
+			THROW 64
+			STSLICECONST 1
+			;; push identifier pubkey
+			PUSH S1
+			STUR 256
+		}
+		IFELSE
+		;; push identifier now
+		NOW
+		STUR 64
+		PUSHINT 16
+		STUR 32
+		STSLICECONST x77e5abfc
+		ENDC
+		PUSHINT 1
+		SENDRAWMSG
+		PUSHINT 0
+		NEWC
+		NULL
+		TUPLE 2
+		NEWC
+		PUSHSLICE x66756e6374696f6e6964203a
+		CALL $storeStringInBuilders$
+		CALL $appendToList$
+		PUSHINT 16
+		PUSHINT 0
+		FALSE
+		FALSE
+		CALL $convertIntToDecStr$
+		CALL $appendToList$
+		CALL $assembleList$
+		CALL $Terminal_no_obj_print$
+		PUSHINT 0
+		PUSHSLICE x54686973206973207374617274202067657420746f20616c6c20737570706f727420746f6b656e73206f6620746869732065786368616e6765
+		NEWC
+		STSLICE
+		ENDC
+		CALL $Terminal_no_obj_print$
+		PUSHINT 0
+		NEWC
+		NULL
+		TUPLE 2
+		NEWC
+		PUSHSLICE x45786368616e67652061646472657373203a
+		CALL $storeStringInBuilders$
+		CALL $appendToList$
+		;; push identifier exchange_address
+		GETGLOB 16
+		CALL $convertAddressToHexString$
+		PUSHSLICE x20
+		CALL $storeStringInBuilders$
+		CALL $appendToList$
+		CALL $assembleList$
+		CALL $Terminal_no_obj_print$
+		BLKDROP 4
+	}
+	IFELSE
+	EQINT 4
+	IFRET
+	;; end if
+	DROP
+}
+CALLX
+; end function getAllSupportTokens
+CALL $c7_to_c4$
+TRUE
+SETGLOB 7
+
+.globl	getAllSupportTokens_internal
+.type	getAllSupportTokens_internal, @function
+;; param: acc_type
+; function getAllSupportTokens
+;; if
+FALSE ; decl return flag
+;; push identifier acc_type
+PUSH S1
+EQINT -1
+PUSHCONT {
+	PUSHINT 0
+	NEWC
+	NULL
+	TUPLE 2
+	NEWC
+	PUSHSLICE x4163636f756e742077697468206164647265737320
+	CALL $storeStringInBuilders$
+	CALL $appendToList$
+	;; push identifier exchange_address
+	GETGLOB 16
+	CALL $convertAddressToHexString$
+	PUSHSLICE x20646f65736e2774206578697374
+	CALL $storeStringInBuilders$
+	CALL $appendToList$
+	CALL $assembleList$
+	CALL $Terminal_no_obj_print$
+}
+PUSHCONT {
+	NEWC
+	ENDC
+	;; decl: state
+	;; if
+	;; push identifier acc_type
+	PUSH S2
+	EQINT 0
+	PUSHCONT {
+		; expValue
+		; end expValue
+		PUSHSLICE x556e696e6974
+		NEWC
+		STSLICE
+		ENDC
+		; colValue
+		NIP
+		; end colValue
+	}
+	PUSHCONT {
+		;; if
+		;; push identifier acc_type
+		PUSH S2
+		EQINT 2
+		PUSHCONT {
+			; expValue
+			; end expValue
+			PUSHSLICE x46726f7a656e
+			NEWC
+			STSLICE
+			ENDC
+			; colValue
+			NIP
+			; end colValue
+		}
+		PUSHCONT {
+			;; if
+			;; push identifier acc_type
+			PUSH S2
+			EQINT 1
+			PUSHCONT {
+				; expValue
+				; end expValue
+				PUSHSLICE x416374697665
+				NEWC
+				STSLICE
+				ENDC
+				; colValue
+				NIP
+				; end colValue
+			}
+			IF
+			;; end if
+		}
+		IFELSE
+		;; end if
+	}
+	IFELSE
+	;; end if
+	PUSHINT 0
+	PUSHSLICE x45786368616e6765204163636f756e742073746174653a20
+	NEWC
+	STSLICE
+	ENDC
+	CTOS
+	;; push identifier state
+	PUSH S2
+	CTOS
+	SWAP
+	NEWC
+	STSLICE
+	STSLICE
+	ENDC
+	CALL $Terminal_no_obj_print$
+	;; push identifier m_balance
+	GETGLOB 15
+	CALL $tokens_internal$
+	;; decl: dec
+	;; decl: float
+	PUSHINT 0
+	NEWC
+	NULL
+	TUPLE 2
+	NEWC
+	PUSHSLICE x4163636f756e742062616c616e63653a20
+	CALL $storeStringInBuilders$
+	CALL $appendToList$
+	;; push identifier dec
+	PUSH S4
+	PUSHINT 0
+	FALSE
+	FALSE
+	CALL $convertIntToDecStr$
+	CALL $appendToList$
+	PUSHSLICE x2e
+	CALL $storeStringInBuilders$
+	CALL $appendToList$
+	;; push identifier float
+	PUSH S3
+	PUSHINT 0
+	FALSE
+	FALSE
+	CALL $convertIntToDecStr$
+	CALL $appendToList$
+	CALL $assembleList$
+	CALL $Terminal_no_obj_print$
+	;; if
+	;; push identifier state
+	PUSH S2
+	CTOS
+	PUSHSLICE x416374697665
+	NEWC
+	STSLICE
+	ENDC
+	CTOS
+	SDEQ
+	PUSHCONT {
+		;; return
+		BLKDROP 5
+		PUSHINT 4
+		RET
+	}
+	IFNOTJMP
+	;; end if
+	NULL
+	;; decl: pubkey
+	;; Remote call ITonExchange.getAllSupportTokens
+	;; push identifier exchange_address
+	GETGLOB 16
+	NEWC
+	STSLICECONST x497_
+	PUSHINT 16
+	STUR 32
+	PUSHINT 0
+	STUR 32
+	PUSHINT 2
+	STUR 8
+	STONE
+	STONE
+	STONE
+	NEWC
+	STSLICECONST xa_
+	STB
+	STSLICE
+	PUSHINT 4
+	STZEROES
+	STSLICECONST 0
+	PUSHINT 2
+	STZEROES
+	;; push identifier pubkey
+	PUSH S1
+	ISNULL
+	PUSHCONT {
+		STSLICECONST 0
+	}
+	PUSHCONT {
+		THROW 64
+		STSLICECONST 1
+		;; push identifier pubkey
+		PUSH S1
+		STUR 256
+	}
+	IFELSE
+	;; push identifier now
+	NOW
+	STUR 64
+	PUSHINT 16
+	STUR 32
+	STSLICECONST x77e5abfc
+	ENDC
+	PUSHINT 1
+	SENDRAWMSG
+	PUSHINT 0
+	NEWC
+	NULL
+	TUPLE 2
+	NEWC
+	PUSHSLICE x66756e6374696f6e6964203a
+	CALL $storeStringInBuilders$
+	CALL $appendToList$
+	PUSHINT 16
+	PUSHINT 0
+	FALSE
+	FALSE
+	CALL $convertIntToDecStr$
+	CALL $appendToList$
+	CALL $assembleList$
+	CALL $Terminal_no_obj_print$
+	PUSHINT 0
+	PUSHSLICE x54686973206973207374617274202067657420746f20616c6c20737570706f727420746f6b656e73206f6620746869732065786368616e6765
+	NEWC
+	STSLICE
+	ENDC
+	CALL $Terminal_no_obj_print$
+	PUSHINT 0
+	NEWC
+	NULL
+	TUPLE 2
+	NEWC
+	PUSHSLICE x45786368616e67652061646472657373203a
+	CALL $storeStringInBuilders$
+	CALL $appendToList$
+	;; push identifier exchange_address
+	GETGLOB 16
+	CALL $convertAddressToHexString$
+	PUSHSLICE x20
+	CALL $storeStringInBuilders$
+	CALL $appendToList$
+	CALL $assembleList$
+	CALL $Terminal_no_obj_print$
+	BLKDROP 4
+}
+IFELSE
+EQINT 4
+IFRET
+;; end if
+DROP
+; end function getAllSupportTokens
+
+.globl	getAllSupportTokensError
+.public	getAllSupportTokensError
+.type	getAllSupportTokensError, @function
+GETGLOB 1
+ISNULL
+PUSHCONT {
+	CALL $c4_to_c7$
+}
+IF
+; Decode input parameters
+ENDS
+; function getAllSupportTokensError
+PUSHINT 0
+PUSHSLICE x546869732069732077726f6e67207768656e2067657420746f20616c6c20737570706f727420746f6b656e73
+NEWC
+STSLICE
+ENDC
+CALL $Terminal_no_obj_print$
+; end function getAllSupportTokensError
+CALL $c7_to_c4$
+TRUE
+SETGLOB 7
+
+.globl	getAllSupportTokensError_internal
+.type	getAllSupportTokensError_internal, @function
+; function getAllSupportTokensError
+PUSHINT 0
+PUSHSLICE x546869732069732077726f6e67207768656e2067657420746f20616c6c20737570706f727420746f6b656e73
+NEWC
+STSLICE
+ENDC
+CALL $Terminal_no_obj_print$
+; end function getAllSupportTokensError
+
+.globl	showAllSupportTokens
+.public	showAllSupportTokens
+.type	showAllSupportTokens, @function
+GETGLOB 1
+ISNULL
+PUSHCONT {
+	CALL $c4_to_c7$
+}
+IF
+; Decode input parameters
+; Decode tokens
+LDU 32
+LDDICT
+ROTREV
+PAIR
+SWAP
+ENDS
+;; param: tokens
+; function showAllSupportTokens
+; expValue
+; end expValue
+;; push identifier tokens
+DUP
+; colValue
+SETGLOB 17
+; end colValue
+PUSHINT 0
+NEWC
+NULL
+TUPLE 2
+NEWC
+PUSHSLICE x546f74616c20737570706f727420746f6b656e733a20
+CALL $storeStringInBuilders$
+CALL $appendToList$
+;; get member length
+;; push identifier support_token_list
+GETGLOB 17
+INDEX 0
+PUSHINT 0
+FALSE
+FALSE
+CALL $convertIntToDecStr$
+CALL $appendToList$
+PUSHSLICE x20
+CALL $storeStringInBuilders$
+CALL $appendToList$
+CALL $assembleList$
+CALL $Terminal_no_obj_print$
+DROP
+; end function showAllSupportTokens
+CALL $c7_to_c4$
+TRUE
+SETGLOB 7
+
+.globl	showAllSupportTokens_internal
+.type	showAllSupportTokens_internal, @function
+;; param: tokens
+; function showAllSupportTokens
+; expValue
+; end expValue
+;; push identifier tokens
+DUP
+; colValue
+SETGLOB 17
+; end colValue
+PUSHINT 0
+NEWC
+NULL
+TUPLE 2
+NEWC
+PUSHSLICE x546f74616c20737570706f727420746f6b656e733a20
+CALL $storeStringInBuilders$
+CALL $appendToList$
+;; get member length
+;; push identifier support_token_list
+GETGLOB 17
+INDEX 0
+PUSHINT 0
+FALSE
+FALSE
+CALL $convertIntToDecStr$
+CALL $appendToList$
+PUSHSLICE x20
+CALL $storeStringInBuilders$
+CALL $appendToList$
+CALL $assembleList$
+CALL $Terminal_no_obj_print$
+DROP
+; end function showAllSupportTokens
+
+.globl	addNewToken
+.public	addNewToken
+.type	addNewToken, @function
+GETGLOB 1
+ISNULL
+PUSHCONT {
+	CALL $c4_to_c7$
+}
+IF
+; Decode input parameters
+ENDS
+; function addNewToken
+; end function addNewToken
+CALL $c7_to_c4$
+TRUE
+SETGLOB 7
+
+.globl	addNewToken_internal
+.type	addNewToken_internal, @function
+; function addNewToken
+; end function addNewToken
+
+.globl	tokens_internal
+.type	tokens_internal, @function
+;; param: nanotokens
+; function tokens
+;; push identifier nanotokens
+DUP
+PUSHINT 1000000000
+;; /
+DIV
+;; uint64
+UFITS 64
+;; decl: decimal
+;; push identifier nanotokens
+PUSH S1
+;; push identifier decimal
+PUSH S1
+PUSHINT 1000000000
+;; *
+MUL
+UFITS 64
+;; -
+SUB
+UFITS 128
+;; uint64
+UFITS 64
+;; decl: float
+;; return
+BLKDROP2 1, 2
+; end function tokens
+
+.globl	init_internal
+.type	init_internal, @function
+;; param: options
+;; param: debotAbi
+;; param: targetAbi
+;; param: targetAddr
+; function init
+;; if
+;; push identifier options
+PUSH S3
+PUSHINT 1
+;; &
+AND
+PUSHCONT {
+	; expValue
+	; end expValue
+	;; push identifier debotAbi
+	PUSH S2
+	; colValue
+	SETGLOB 11
+	; end colValue
+}
+IF
+;; end if
+;; if
+;; push identifier options
+PUSH S3
+PUSHINT 2
+;; &
+AND
+PUSHCONT {
+	; expValue
+	; end expValue
+	;; push identifier targetAbi
+	PUSH S1
+	; colValue
+	SETGLOB 12
+	; end colValue
+}
+IF
+;; end if
+;; if
+;; push identifier options
+PUSH S3
+PUSHINT 4
+;; &
+AND
+PUSHCONT {
+	; expValue
+	; end expValue
+	;; push identifier targetAddr
+	DUP
+	; colValue
+	SETGLOB 13
+	; end colValue
+}
+IF
+;; end if
+; expValue
+; end expValue
+;; push identifier options
+PUSH S3
+; colValue
+SETGLOB 10
+; end colValue
+BLKDROP 4
+; end function init
+
+.globl	getDebotOptions
+.public	getDebotOptions
+.type	getDebotOptions, @function
+GETGLOB 1
+ISNULL
+PUSHCONT {
+	CALL $c4_to_c7$
+}
+IF
+PUSH S1
+PUSHCONT {
+	LDU 32
+	GETGLOB 4
+	ROT
+	SETINDEXQ 5
+	SETGLOB 4
+}
+IFNOT
+; Decode input parameters
+ENDS
+; function getDebotOptions
+;; ret param: options
+PUSHINT 0
+;; ret param: debotAbi
+NEWC
+ENDC
+;; ret param: targetAbi
+NEWC
+ENDC
+;; ret param: targetAddr
+PUSHSLICE x8000000000000000000000000000000000000000000000000000000000000000001_
+;; push identifier m_debotAbi
+GETGLOB 11
+ISNULL
+NOT
+PUSHCONT {
+	;; push identifier m_debotAbi
+	GETGLOB 11
+	DUP
+	ISNULL
+	THROWIF 63
+}
+PUSHCONT {
+	NEWC
+	ENDC
+}
+IFELSE
+; expValue
+; end expValue
+; colValue
+POP S3
+; end colValue
+;; push identifier m_targetAbi
+GETGLOB 12
+ISNULL
+NOT
+PUSHCONT {
+	;; push identifier m_targetAbi
+	GETGLOB 12
+	DUP
+	ISNULL
+	THROWIF 63
+}
+PUSHCONT {
+	NEWC
+	ENDC
+}
+IFELSE
+; expValue
+; end expValue
+; colValue
+POP S2
+; end colValue
+;; push identifier m_target
+GETGLOB 13
+ISNULL
+NOT
+PUSHCONT {
+	;; push identifier m_target
+	GETGLOB 13
+	DUP
+	ISNULL
+	THROWIF 63
+}
+PUSHCONT {
+	PUSHSLICE x8000000000000000000000000000000000000000000000000000000000000000001_
+}
+IFELSE
+; expValue
+; end expValue
+; colValue
+NIP
+; end colValue
+; expValue
+; end expValue
+;; push identifier m_options
+GETGLOB 10
+; colValue
+POP S4
+; end colValue
+;; returning named params
+;; emitting 4 value(s)
+PUSH S4
+EQINT -1
+PUSHCONT {
+	PUSH S6
+	CTOS
+	LDU 2
+	LDMSGADDR
+	DROP
+	NIP
+	NEWC
+	STSLICECONST xc
+	STSLICE
+	PUSHINT 96
+	STZEROES
+	STSLICECONST 0
+	STSLICECONST 0
+	STSLICECONST xfdecd0db
+	PUSH S4
+	STUR 8
+	PUSH S3
+	STREFR
+	PUSH S2
+	STREFR
+	PUSH S1
+	STSLICER
+	ENDC
+	PUSHINT 1
+	SENDRAWMSG
+}
+PUSHCONT {
+	GETGLOB 4
+	DUP
+	INDEX 3
+	PUSH S1
+	INDEX 2
+	GETGLOB 9
+	BLKSWAP 1, 3
+	INDEX 1
+	NEWC
+	PUSHINT 2
+	STZEROES
+	STI 1
+	PUSHINT 3
+	STZEROES
+	STSLICE
+	SWAP
+	STGRAMS
+	STDICT
+	PUSHINT 104
+	STZEROES
+	STSLICECONST 0
+	STSLICECONST 0
+	GETGLOB 4
+	INDEX 5
+	STUR 32
+	PUSH S4
+	STUR 8
+	PUSH S3
+	STREFR
+	PUSH S2
+	STREFR
+	PUSH S1
+	STSLICER
+	ENDC
+	GETGLOB 4
+	INDEX 4
+	SENDRAWMSG
+}
+IFELSE
+BLKDROP 4
+; end function getDebotOptions
+PUSHCONT {
+	CALL $c7_to_c4$
+}
+IF
+TRUE
+SETGLOB 7
+
+.globl	getDebotOptions_internal
+.type	getDebotOptions_internal, @function
+; function getDebotOptions
+;; ret param: options
+PUSHINT 0
+;; ret param: debotAbi
+NEWC
+ENDC
+;; ret param: targetAbi
+NEWC
+ENDC
+;; ret param: targetAddr
+PUSHSLICE x8000000000000000000000000000000000000000000000000000000000000000001_
+;; push identifier m_debotAbi
+GETGLOB 11
+ISNULL
+NOT
+PUSHCONT {
+	;; push identifier m_debotAbi
+	GETGLOB 11
+	DUP
+	ISNULL
+	THROWIF 63
+}
+PUSHCONT {
+	NEWC
+	ENDC
+}
+IFELSE
+; expValue
+; end expValue
+; colValue
+POP S3
+; end colValue
+;; push identifier m_targetAbi
+GETGLOB 12
+ISNULL
+NOT
+PUSHCONT {
+	;; push identifier m_targetAbi
+	GETGLOB 12
+	DUP
+	ISNULL
+	THROWIF 63
+}
+PUSHCONT {
+	NEWC
+	ENDC
+}
+IFELSE
+; expValue
+; end expValue
+; colValue
+POP S2
+; end colValue
+;; push identifier m_target
+GETGLOB 13
+ISNULL
+NOT
+PUSHCONT {
+	;; push identifier m_target
+	GETGLOB 13
+	DUP
+	ISNULL
+	THROWIF 63
+}
+PUSHCONT {
+	PUSHSLICE x8000000000000000000000000000000000000000000000000000000000000000001_
+}
+IFELSE
+; expValue
+; end expValue
+; colValue
+NIP
+; end colValue
+; expValue
+; end expValue
+;; push identifier m_options
+GETGLOB 10
+; colValue
+POP S4
+; end colValue
+;; returning named params
+; end function getDebotOptions
+
+.globl	c7_to_c4
+.type	c7_to_c4, @function
+GETGLOB 2
+NEWC
+STU 256
+GETGLOB 3
+STUR 64
+GETGLOB 6
+STUR 1
+NEWC
+GETGLOB 13
+GETGLOB 14
+XCHG s2
+SWAP
+DUP
+ISNULL
+NOT
+PUSHCONT {
+	NEWC
+	STSLICE
+	SWAP
+	STSLICECONST 1
+	STBREF
+}
+PUSHCONT {
+	DROP
+	STSLICECONST 0
+}
+IFELSE
+STREF
+GETGLOB 10
+GETGLOB 11
+GETGLOB 12
+GETGLOB 15
+GETGLOB 16
+GETGLOB 17
+UNTUPLE 2
+REVERSE 9, 0
+STBREF
+STU 8
+SWAP
+DUP
+ISNULL
+NOT
+PUSHCONT {
+	NEWC
+	STREF
+	SWAP
+	STSLICECONST 1
+	STBREF
+}
+PUSHCONT {
+	DROP
+	STSLICECONST 0
+}
+IFELSE
+SWAP
+DUP
+ISNULL
+NOT
+PUSHCONT {
+	NEWC
+	STREF
+	SWAP
+	STSLICECONST 1
+	STBREF
+}
+PUSHCONT {
+	DROP
+	STSLICECONST 0
+}
+IFELSE
+STU 128
+STSLICE
+STU 32
+STDICT
+ENDC
+POP C4
+
+.globl	c4_to_c7
+.type	c4_to_c7, @function
+PUSHROOT
+CTOS        ; c4
+LDU 256      ; pubkey c4
+LDU 64      ; pubkey timestamp c4
+LDU 1       ; pubkey [timestamp] constructor_flag memory
+LDREFRTOS
+LDOPTREF
+SWAP
+DUP
+ISNULL
+PUSHCONT {
+	CTOS
+	LDMSGADDR
+	DROP
+}
+IFNOT
+SETGLOB 13
+PLDREF
+SETGLOB 14
+LDU 8
+LDOPTREF
+SWAP
+DUP
+ISNULL
+PUSHCONT {
+	CTOS
+	PLDREF
+}
+IFNOT
+SETGLOB 11
+LDOPTREF
+SWAP
+DUP
+ISNULL
+PUSHCONT {
+	CTOS
+	PLDREF
+}
+IFNOT
+SETGLOB 12
+LDU 128
+LDMSGADDR
+LDU 32
+PLDDICT
+PAIR
+SETGLOB 17
+SETGLOB 16
+SETGLOB 15
+SETGLOB 10
+TRUE
+SETGLOB 1   ; pubkey [timestamp] constructor_flag
+SETGLOB 6   ; pubkey [timestamp]
+SETGLOB 3   ; D
+SETGLOB 2
+
+.macro c4_to_c7_with_init_storage
+PUSHROOT
+CTOS        ; c4
+DUP        ; c4 c4
+SBITS      ; c4 bits
+GTINT 1    ; c4 bits>1
+PUSHCONT {
+	LDU 256      ; pubkey c4
+	LDU 64      ; pubkey timestamp c4
+	LDU 1       ; pubkey [timestamp] constructor_flag memory
+	LDREFRTOS
+	LDOPTREF
+	SWAP
+	DUP
+	ISNULL
+	PUSHCONT {
+		CTOS
+		LDMSGADDR
+		DROP
+	}
+	IFNOT
+	SETGLOB 13
+	PLDREF
+	SETGLOB 14
+	LDU 8
+	LDOPTREF
+	SWAP
+	DUP
+	ISNULL
+	PUSHCONT {
+		CTOS
+		PLDREF
+	}
+	IFNOT
+	SETGLOB 11
+	LDOPTREF
+	SWAP
+	DUP
+	ISNULL
+	PUSHCONT {
+		CTOS
+		PLDREF
+	}
+	IFNOT
+	SETGLOB 12
+	LDU 128
+	LDMSGADDR
+	LDU 32
+	PLDDICT
+	PAIR
+	SETGLOB 17
+	SETGLOB 16
+	SETGLOB 15
+	SETGLOB 10
+	TRUE
+	SETGLOB 1   ; pubkey [timestamp] constructor_flag
+	SETGLOB 6   ; pubkey [timestamp]
+	SETGLOB 3   ; D
+	SETGLOB 2
+}
+PUSHCONT {
+	PLDDICT   ; D
+	; init m_balance
+	PUSHINT 0
+	SETGLOB 15
+	; init exchange_address
+	PUSHSLICE x8000000000000000000000000000000000000000000000000000000000000000001_
+	SETGLOB 16
+	; init support_token_list
+	PUSHINT 0
+	NEWDICT
+	PAIR
+	SETGLOB 17
+	; init m_options
+	PUSHINT 0
+	SETGLOB 10
+	; init m_debotAbi
+	NULL
+	SETGLOB 11
+	; init m_targetAbi
+	NULL
+	SETGLOB 12
+	; init m_target
+	NULL
+	SETGLOB 13
+	; init empty
+	NEWC
+	ENDC
+	SETGLOB 14
+	; set contract pubkey
+	PUSHINT 0
+	SWAP
+	PUSHINT 64
+	DICTUGET
+	THROWIFNOT 61
+	PLDU 256
+	SETGLOB 2
+	PUSHINT 0 ; timestamp
+	SETGLOB 3
+	PUSHINT 0 ; constructor_flag
+	SETGLOB 6
+	TRUE
+	SETGLOB 1
+}
+IFELSE
+
+.internal-alias :main_internal,        0
+.internal	:main_internal
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Function: main_internal
+;; param: contract_balance
+;; param: msg_balance
+;; param: int_msg_info
+;; param: msg_body_slice
+PUSHINT 0  ; main_external trans id
+PUSH S2
+CTOS
+LDU 4       ; bounced tail
+LDMSGADDR   ; bounced src tail
+DROP
+SETGLOB 9
+MODPOW2 1
+GETGLOB 4
+TRUE
+SETINDEXQ 1
+PUSHINT 10000000
+SETINDEXQ 2
+NULL
+SETINDEXQ 3
+PUSHINT 1
+SETINDEXQ 4
+SETGLOB 4
+IFRET
+PUSH S1    ; body
+SEMPTY     ; isEmpty
+IFRET
+PUSH S1 ; body
+LDU 32  ; funcId body'
+PUSH S1 ; funcId body' funcId
+IFNOTRET
+PUSH S1 ; funcId body' funcId
+LESSINT 3            ; funcId body' funcId<3
+PUSH S2              ; funcId body' funcId<3 funcId
+PUSHINT 4294967293   ; funcId body' funcId<3 funcId 4294967293
+GREATER              ; funcId body' funcId<3 funcId>4294967293
+OR                   ; funcId body' funcId<3||funcId>4294967293
+PUSHCONT {
+	DROP2
+	THROW 60
+}
+IFJMP
+SWAP    ; body funcId
+CALL 1
+GETGLOB 7
+ISNULL
+PUSHCONT {
+	DROP
+	THROW 60
+}
+IF
+
+.internal-alias :main_external,        -1
+.internal	:main_external
+PUSHINT -1 ; main_external trans id
+PUSHSLICE x8000000000000000000000000000000000000000000000000000000000000000001_
+SETGLOB 9
+PUSH S1
+CALL $c4_to_c7_with_init_storage$
+LDU 1 ; haveSign msgSlice
+SWAP
+PUSHCONT {
+	PUSHINT 512
+	LDSLICEX ; signatureSlice msgSlice
+	DUP      ; signatureSlice msgSlice msgSlice
+	HASHSU   ; signatureSlice msgSlice hashMsgSlice
+	SWAP  ; signatureSlice hashMsgSlice msgSlice
+	LDU 1 ; signatureSlice hashMsgSlice havePubkey msgSlice
+	SWAP  ; signatureSlice hashMsgSlice msgSlice havePubkey
+	PUSHCONT {
+		LDU 256       ; signatureSlice hashMsgSlice pubkey msgSlice
+		XCHG s3
+		SWAP
+	}
+	PUSHCONT {
+		XCHG s2
+		GETGLOB 2
+	}
+	IFELSE
+	DUP
+	SETGLOB 5
+	CHKSIGNU      ; msgSlice isSigned
+	THROWIFNOT 40 ; msgSlice
+}
+PUSHCONT {
+	LDU 1      ; havePubkey msgSlice
+	SWAP       ; msgSlice havePubkey
+	THROWIF 58 ; msgSlice
+}
+IFELSE
+LDU 64                         ; timestamp msgSlice
+SWAP                           ; msgSlice timestamp
+CALL $replay_protection_macro$ ; msgSlice
+LDU 32  ; expireAt msgSlice
+SWAP    ; msgSlice expireAt
+NOW     ; msgSlice expireAt now
+GREATER ; msgSlice expireAt>now
+THROWIFNOT 57
+LDU  32 ; funcId body
+PUSH S1 ; funcId body funcId
+LESSINT 3            ; funcId body' funcId<3
+PUSH S2              ; funcId body' funcId<3 funcId
+PUSHINT 4294967293   ; funcId body' funcId<3 funcId 4294967293
+GREATER              ; funcId body' funcId<3 funcId>4294967293
+OR                   ; funcId body' funcId<3||funcId>4294967293
+PUSHCONT {
+	DROP2
+	THROW 60
+}
+IFJMP
+SWAP    ; body funcId
+CALL 1
+GETGLOB 7
+ISNULL
+PUSHCONT {
+	DROP
+	THROW 60
+}
+IF
+
+.globl	AddressInput_with_obj_select
+.type	AddressInput_with_obj_select, @function
+;; param: answerId
+; function select
+;; address.makeAddrStd()
+PUSHSLICE x9c3afda37b1cc4610e222de8a45cb1be15278aa418ade95bc47de7b12335308ca77_
+;; decl: addr
+;; Remote call IAddressInput.select
+;; push identifier addr
+DUP
+NEWC
+STSLICECONST x62_
+STSLICE
+PUSHSLICE x3989680000000000000000000000000004_
+STSLICER
+STSLICECONST 0
+STSLICECONST 0
+STSLICECONST x20cde9b8
+;; answerId
+;; push identifier answerId
+PUSH S2
+STUR 32
+ENDC
+PUSHINT 1
+SENDRAWMSG
+DROP
+; end function select
+
+.globl	AddressInput_no_obj_select
+.type	AddressInput_no_obj_select, @function
+;; param: answerId
+; function select
+;; address.makeAddrStd()
+PUSHSLICE x9c3afda37b1cc4610e222de8a45cb1be15278aa418ade95bc47de7b12335308ca77_
+;; decl: addr
+;; Remote call IAddressInput.select
+;; push identifier addr
+DUP
+NEWC
+STSLICECONST x62_
+STSLICE
+PUSHSLICE x3989680000000000000000000000000004_
+STSLICER
+STSLICECONST 0
+STSLICECONST 0
+STSLICECONST x20cde9b8
+;; answerId
+;; push identifier answerId
+PUSH S2
+STUR 32
+ENDC
+PUSHINT 1
+SENDRAWMSG
+DROP2
+; end function select
+
+.globl	Menu_with_obj_select
+.type	Menu_with_obj_select, @function
+;; param: title
+;; param: description
+;; param: items
+; function select
+;; address.makeAddrStd()
+PUSHSLICE x9c358349a7d9d4465c92f07be94475030479b94640bb8b19a4189b64b384ac0b691_
+;; decl: addr
+;; Remote call IMenu.select
+;; push identifier addr
+DUP
+NEWC
+STSLICECONST x62_
+STSLICE
+PUSHSLICE x3989680000000000000000000000000004_
+STSLICER
+STSLICECONST 0
+STSLICECONST 0
+STSLICECONST x69814639
+;; title
+;; push identifier title
+PUSH S4
+STREFR
+;; description
+;; push identifier description
+PUSH S3
+STREFR
+;; items
+;; push identifier items
+PUSH S2
+UNPAIR
+XCHG s2
+STU 32
+STDICT
+ENDC
+PUSHINT 1
+SENDRAWMSG
+BLKDROP 3
+; end function select
+
+.globl	Menu_no_obj_select
+.type	Menu_no_obj_select, @function
+;; param: title
+;; param: description
+;; param: items
+; function select
+;; address.makeAddrStd()
+PUSHSLICE x9c358349a7d9d4465c92f07be94475030479b94640bb8b19a4189b64b384ac0b691_
+;; decl: addr
+;; Remote call IMenu.select
+;; push identifier addr
+DUP
+NEWC
+STSLICECONST x62_
+STSLICE
+PUSHSLICE x3989680000000000000000000000000004_
+STSLICER
+STSLICECONST 0
+STSLICECONST 0
+STSLICECONST x69814639
+;; title
+;; push identifier title
+PUSH S4
+STREFR
+;; description
+;; push identifier description
+PUSH S3
+STREFR
+;; items
+;; push identifier items
+PUSH S2
+UNPAIR
+XCHG s2
+STU 32
+STDICT
+ENDC
+PUSHINT 1
+SENDRAWMSG
+BLKDROP 4
+; end function select
+
+.globl	Sdk_with_obj_getBalance
+.type	Sdk_with_obj_getBalance, @function
+;; param: answerId
+;; param: addr
+; function getBalance
+;; address.makeAddrStd()
+PUSHSLICE x9c31f8c8a9f200e593e3eda66275c2c11ec9e940cc18d5d3e858d16d4f3c5437897_
+;; decl: a
+;; Remote call ISdk.getBalance
+;; push identifier a
+DUP
+NEWC
+STSLICECONST x62_
+STSLICE
+PUSHSLICE x3989680000000000000000000000000004_
+STSLICER
+STSLICECONST 0
+STSLICECONST 0
+STSLICECONST x0036b4f3
+;; answerId
+;; push identifier answerId
+PUSH S3
+STUR 32
+;; addr
+;; push identifier addr
+PUSH S2
+STSLICER
+ENDC
+PUSHINT 1
+SENDRAWMSG
+DROP2
+; end function getBalance
+
+.globl	Sdk_no_obj_getBalance
+.type	Sdk_no_obj_getBalance, @function
+;; param: answerId
+;; param: addr
+; function getBalance
+;; address.makeAddrStd()
+PUSHSLICE x9c31f8c8a9f200e593e3eda66275c2c11ec9e940cc18d5d3e858d16d4f3c5437897_
+;; decl: a
+;; Remote call ISdk.getBalance
+;; push identifier a
+DUP
+NEWC
+STSLICECONST x62_
+STSLICE
+PUSHSLICE x3989680000000000000000000000000004_
+STSLICER
+STSLICECONST 0
+STSLICECONST 0
+STSLICECONST x0036b4f3
+;; answerId
+;; push identifier answerId
+PUSH S3
+STUR 32
+;; addr
+;; push identifier addr
+PUSH S2
+STSLICER
+ENDC
+PUSHINT 1
+SENDRAWMSG
+BLKDROP 3
+; end function getBalance
+
+.globl	Sdk_with_obj_getAccountType
+.type	Sdk_with_obj_getAccountType, @function
+;; param: answerId
+;; param: addr
+; function getAccountType
+;; address.makeAddrStd()
+PUSHSLICE x9c31f8c8a9f200e593e3eda66275c2c11ec9e940cc18d5d3e858d16d4f3c5437897_
+;; decl: a
+;; Remote call ISdk.getAccountType
+;; push identifier a
+DUP
+NEWC
+STSLICECONST x62_
+STSLICE
+PUSHSLICE x3989680000000000000000000000000004_
+STSLICER
+STSLICECONST 0
+STSLICECONST 0
+STSLICECONST x2b885111
+;; answerId
+;; push identifier answerId
+PUSH S3
+STUR 32
+;; addr
+;; push identifier addr
+PUSH S2
+STSLICER
+ENDC
+PUSHINT 1
+SENDRAWMSG
+DROP2
+; end function getAccountType
+
+.globl	Sdk_no_obj_getAccountType
+.type	Sdk_no_obj_getAccountType, @function
+;; param: answerId
+;; param: addr
+; function getAccountType
+;; address.makeAddrStd()
+PUSHSLICE x9c31f8c8a9f200e593e3eda66275c2c11ec9e940cc18d5d3e858d16d4f3c5437897_
+;; decl: a
+;; Remote call ISdk.getAccountType
+;; push identifier a
+DUP
+NEWC
+STSLICECONST x62_
+STSLICE
+PUSHSLICE x3989680000000000000000000000000004_
+STSLICER
+STSLICECONST 0
+STSLICECONST 0
+STSLICECONST x2b885111
+;; answerId
+;; push identifier answerId
+PUSH S3
+STUR 32
+;; addr
+;; push identifier addr
+PUSH S2
+STSLICER
+ENDC
+PUSHINT 1
+SENDRAWMSG
+BLKDROP 3
+; end function getAccountType
+
+.globl	Terminal_with_obj_print
+.type	Terminal_with_obj_print, @function
+;; param: answerId
+;; param: message
+; function print
+;; address.makeAddrStd()
+PUSHSLICE x9c30f2ca6c6cddc430a5b6adb996c178ac8b316c3190cbf8a1916356e81774251c7_
+;; decl: addr
+;; Remote call ITerminal.print
+;; push identifier addr
+DUP
+NEWC
+STSLICECONST x62_
+STSLICE
+PUSHSLICE x3989680000000000000000000000000004_
+STSLICER
+STSLICECONST 0
+STSLICECONST 0
+STSLICECONST x0ce649c2
+;; answerId
+;; push identifier answerId
+PUSH S3
+STUR 32
+;; message
+;; push identifier message
+PUSH S2
+STREFR
+ENDC
+PUSHINT 1
+SENDRAWMSG
+DROP2
+; end function print
+
+.globl	Terminal_no_obj_print
+.type	Terminal_no_obj_print, @function
+;; param: answerId
+;; param: message
+; function print
+;; address.makeAddrStd()
+PUSHSLICE x9c30f2ca6c6cddc430a5b6adb996c178ac8b316c3190cbf8a1916356e81774251c7_
+;; decl: addr
+;; Remote call ITerminal.print
+;; push identifier addr
+DUP
+NEWC
+STSLICECONST x62_
+STSLICE
+PUSHSLICE x3989680000000000000000000000000004_
+STSLICER
+STSLICECONST 0
+STSLICECONST 0
+STSLICECONST x0ce649c2
+;; answerId
+;; push identifier answerId
+PUSH S3
+STUR 32
+;; message
+;; push identifier message
+PUSH S2
+STREFR
+ENDC
+PUSHINT 1
+SENDRAWMSG
+BLKDROP 3
+; end function print
+

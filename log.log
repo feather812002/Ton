@@ -1,0 +1,17 @@
+Config: /Users/prominic2/work/TON/Ton/tonos-cli.conf.json
+Input arguments:
+     tvc: TonExchange.tvc
+      wc: None
+    keys: TonExchange.keys.json
+init_data: None
+is_update_tvc: None
+
+Seed phrase: "cute hold supreme fossil online hurt hunt mention type unveil client rival"
+Raw address: 0:a06a68c59e0891669562334ae91e01f24bdb9abdb909b5111d0e0df45e82f1f9
+testnet:
+Non-bounceable address (for init): 0QCgamjFngiRZpViM0rpHgHyS9uavbkJtREdDg30XoLx-cPA
+Bounceable address (for later access): kQCgamjFngiRZpViM0rpHgHyS9uavbkJtREdDg30XoLx-Z4F
+mainnet:
+Non-bounceable address (for init): UQCgamjFngiRZpViM0rpHgHyS9uavbkJtREdDg30XoLx-XhK
+Bounceable address (for later access): EQCgamjFngiRZpViM0rpHgHyS9uavbkJtREdDg30XoLx-SWP
+Succeeded

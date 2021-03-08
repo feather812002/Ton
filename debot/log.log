@@ -1,0 +1,17 @@
+Config: /Users/prominic2/work/TON/Ton/debot/tonos-cli.conf.json
+Input arguments:
+     tvc: TonExchangeDebot.tvc
+      wc: None
+    keys: TonExchangeDebot.keys.json
+init_data: None
+is_update_tvc: None
+
+Seed phrase: "motor high fresh muscle spoon alcohol certain onion picture mail crush merit"
+Raw address: 0:40af168d8f460ddd7b4f17e8beb8c90e41654a90da7c6ccd82e6ebc85fdb35a2
+testnet:
+Non-bounceable address (for init): 0QBArxaNj0YN3XtPF-i-uMkOQWVKkNp8bM2C5uvIX9s1oovk
+Bounceable address (for later access): kQBArxaNj0YN3XtPF-i-uMkOQWVKkNp8bM2C5uvIX9s1otYh
+mainnet:
+Non-bounceable address (for init): UQBArxaNj0YN3XtPF-i-uMkOQWVKkNp8bM2C5uvIX9s1ojBu
+Bounceable address (for later access): EQBArxaNj0YN3XtPF-i-uMkOQWVKkNp8bM2C5uvIX9s1om2r
+Succeeded
