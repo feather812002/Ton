@@ -107,7 +107,7 @@
 			"name": "showAllSupportTokens",
 			"id": "0x10",
 			"inputs": [
-				{"components":[{"name":"exchange_wallet_addr","type":"uint256"},{"name":"token_symbol","type":"bytes"}],"name":"tokens","type":"tuple[]"}
+				{"components":[{"name":"exchange_wallet_addr","type":"uint256"},{"name":"token_symbol","type":"bytes"}],"name":"supportTokens","type":"tuple[]"}
 			],
 			"outputs": [
 			]

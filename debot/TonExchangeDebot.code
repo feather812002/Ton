@@ -1009,6 +1009,13 @@ PUSHCONT {
 		}
 		IFNOTJMP
 		;; end if
+		;; push identifier now
+		NOW
+		PUSHINT 60000
+		;; +
+		ADD
+		UFITS 32
+		;; decl: expiretime
 		NULL
 		;; decl: pubkey
 		;; Remote call ITonExchange.getAllSupportTokens
@@ -1051,28 +1058,13 @@ PUSHCONT {
 		;; push identifier now
 		NOW
 		STUR 64
-		PUSHINT 16
+		;; push identifier expiretime
+		PUSH S2
 		STUR 32
 		STSLICECONST x77e5abfc
 		ENDC
 		PUSHINT 1
 		SENDRAWMSG
-		PUSHINT 0
-		NEWC
-		NULL
-		TUPLE 2
-		NEWC
-		PUSHSLICE x66756e6374696f6e6964203a
-		CALL $storeStringInBuilders$
-		CALL $appendToList$
-		PUSHINT 16
-		PUSHINT 0
-		FALSE
-		FALSE
-		CALL $convertIntToDecStr$
-		CALL $appendToList$
-		CALL $assembleList$
-		CALL $Terminal_no_obj_print$
 		PUSHINT 0
 		PUSHSLICE x54686973206973207374617274202067657420746f20616c6c20737570706f727420746f6b656e73206f6620746869732065786368616e6765
 		NEWC
@@ -1095,7 +1087,7 @@ PUSHCONT {
 		CALL $appendToList$
 		CALL $assembleList$
 		CALL $Terminal_no_obj_print$
-		BLKDROP 4
+		BLKDROP 5
 	}
 	IFELSE
 	EQINT 4
@@ -1260,6 +1252,13 @@ PUSHCONT {
 	}
 	IFNOTJMP
 	;; end if
+	;; push identifier now
+	NOW
+	PUSHINT 60000
+	;; +
+	ADD
+	UFITS 32
+	;; decl: expiretime
 	NULL
 	;; decl: pubkey
 	;; Remote call ITonExchange.getAllSupportTokens
@@ -1302,28 +1301,13 @@ PUSHCONT {
 	;; push identifier now
 	NOW
 	STUR 64
-	PUSHINT 16
+	;; push identifier expiretime
+	PUSH S2
 	STUR 32
 	STSLICECONST x77e5abfc
 	ENDC
 	PUSHINT 1
 	SENDRAWMSG
-	PUSHINT 0
-	NEWC
-	NULL
-	TUPLE 2
-	NEWC
-	PUSHSLICE x66756e6374696f6e6964203a
-	CALL $storeStringInBuilders$
-	CALL $appendToList$
-	PUSHINT 16
-	PUSHINT 0
-	FALSE
-	FALSE
-	CALL $convertIntToDecStr$
-	CALL $appendToList$
-	CALL $assembleList$
-	CALL $Terminal_no_obj_print$
 	PUSHINT 0
 	PUSHSLICE x54686973206973207374617274202067657420746f20616c6c20737570706f727420746f6b656e73206f6620746869732065786368616e6765
 	NEWC
@@ -1346,7 +1330,7 @@ PUSHCONT {
 	CALL $appendToList$
 	CALL $assembleList$
 	CALL $Terminal_no_obj_print$
-	BLKDROP 4
+	BLKDROP 5
 }
 IFELSE
 EQINT 4
@@ -1399,22 +1383,17 @@ PUSHCONT {
 }
 IF
 ; Decode input parameters
-; Decode tokens
+; Decode supportTokens
 LDU 32
 LDDICT
 ROTREV
 PAIR
 SWAP
 ENDS
-;; param: tokens
+;; param: supportTokens
+; modifier accept
+ACCEPT
 ; function showAllSupportTokens
-; expValue
-; end expValue
-;; push identifier tokens
-DUP
-; colValue
-SETGLOB 17
-; end colValue
 PUSHINT 0
 NEWC
 NULL
@@ -1424,8 +1403,8 @@ PUSHSLICE x546f74616c20737570706f727420746f6b656e733a20
 CALL $storeStringInBuilders$
 CALL $appendToList$
 ;; get member length
-;; push identifier support_token_list
-GETGLOB 17
+;; push identifier supportTokens
+PUSH S3
 INDEX 0
 PUSHINT 0
 FALSE
@@ -1437,23 +1416,117 @@ CALL $storeStringInBuilders$
 CALL $appendToList$
 CALL $assembleList$
 CALL $Terminal_no_obj_print$
+;; new struct SupportToken[]
+NEWDICT
+;; get member length
+;; push identifier supportTokens
+PUSH S1
+INDEX 0
+DUP
+DUP
+PUSHCONT {
+	DEC
+	NEWC
+	PUSHINT 256
+	STZEROES
+	NEWC
+	ENDC
+	STREFR
+	PUSH2 S1,S3
+	PUSHINT 32
+	DICTUSETB
+	POP S3
+}
+REPEAT
+DROP
+SWAP
+PAIR
+; expValue
+; end expValue
+; colValue
+SETGLOB 17
+; end colValue
+;; index
+PUSHINT 1
+;; push identifier supportTokens
+PUSH S1
+INDEX 1
+PUSHINT 32
+DICTUGET
+THROWIFNOT 50
+LDU 256
+PLDREF
+TUPLE 2
+;; decl: newSupportToen
+PUSHINT 0
+NEWC
+NULL
+TUPLE 2
+NEWC
+;; get member exchange_wallet_addr
+;; push identifier newSupportToen
+PUSH S3
+INDEX 0
+PUSHINT 0
+FALSE
+FALSE
+CALL $convertIntToDecStr$
+CALL $appendToList$
+CALL $assembleList$
+CALL $Terminal_no_obj_print$
+; for
+PUSHINT 0
+;; decl: i
+PUSHCONT {
+	;; push identifier i
+	DUP
+	;; get member length
+	;; push identifier supportTokens
+	PUSH S3
+	INDEX 0
+	;; <
+	LESS
+}
+PUSHCONT {
+	PUSHINT 0
+	NEWC
+	NULL
+	TUPLE 2
+	NEWC
+	;; push identifier i
+	PUSH S3
+	PUSHINT 0
+	FALSE
+	FALSE
+	CALL $convertIntToDecStr$
+	CALL $appendToList$
+	CALL $assembleList$
+	CALL $Terminal_no_obj_print$
+	;; ++
+	; expValue
+	; end expValue
+	INC
+	UFITS 32
+	; colValue
+	; end colValue
+}
+WHILE
+DROP
+; end for
 DROP
 ; end function showAllSupportTokens
+DROP
+; end modifier accept
 CALL $c7_to_c4$
 TRUE
 SETGLOB 7
 
 .globl	showAllSupportTokens_internal
 .type	showAllSupportTokens_internal, @function
-;; param: tokens
+;; param: supportTokens
+; modifier accept
+ACCEPT
 ; function showAllSupportTokens
-; expValue
-; end expValue
-;; push identifier tokens
-DUP
-; colValue
-SETGLOB 17
-; end colValue
 PUSHINT 0
 NEWC
 NULL
@@ -1463,8 +1536,8 @@ PUSHSLICE x546f74616c20737570706f727420746f6b656e733a20
 CALL $storeStringInBuilders$
 CALL $appendToList$
 ;; get member length
-;; push identifier support_token_list
-GETGLOB 17
+;; push identifier supportTokens
+PUSH S3
 INDEX 0
 PUSHINT 0
 FALSE
@@ -1476,8 +1549,107 @@ CALL $storeStringInBuilders$
 CALL $appendToList$
 CALL $assembleList$
 CALL $Terminal_no_obj_print$
+;; new struct SupportToken[]
+NEWDICT
+;; get member length
+;; push identifier supportTokens
+PUSH S1
+INDEX 0
+DUP
+DUP
+PUSHCONT {
+	DEC
+	NEWC
+	PUSHINT 256
+	STZEROES
+	NEWC
+	ENDC
+	STREFR
+	PUSH2 S1,S3
+	PUSHINT 32
+	DICTUSETB
+	POP S3
+}
+REPEAT
+DROP
+SWAP
+PAIR
+; expValue
+; end expValue
+; colValue
+SETGLOB 17
+; end colValue
+;; index
+PUSHINT 1
+;; push identifier supportTokens
+PUSH S1
+INDEX 1
+PUSHINT 32
+DICTUGET
+THROWIFNOT 50
+LDU 256
+PLDREF
+TUPLE 2
+;; decl: newSupportToen
+PUSHINT 0
+NEWC
+NULL
+TUPLE 2
+NEWC
+;; get member exchange_wallet_addr
+;; push identifier newSupportToen
+PUSH S3
+INDEX 0
+PUSHINT 0
+FALSE
+FALSE
+CALL $convertIntToDecStr$
+CALL $appendToList$
+CALL $assembleList$
+CALL $Terminal_no_obj_print$
+; for
+PUSHINT 0
+;; decl: i
+PUSHCONT {
+	;; push identifier i
+	DUP
+	;; get member length
+	;; push identifier supportTokens
+	PUSH S3
+	INDEX 0
+	;; <
+	LESS
+}
+PUSHCONT {
+	PUSHINT 0
+	NEWC
+	NULL
+	TUPLE 2
+	NEWC
+	;; push identifier i
+	PUSH S3
+	PUSHINT 0
+	FALSE
+	FALSE
+	CALL $convertIntToDecStr$
+	CALL $appendToList$
+	CALL $assembleList$
+	CALL $Terminal_no_obj_print$
+	;; ++
+	; expValue
+	; end expValue
+	INC
+	UFITS 32
+	; colValue
+	; end colValue
+}
+WHILE
+DROP
+; end for
 DROP
 ; end function showAllSupportTokens
+DROP
+; end modifier accept
 
 .globl	addNewToken
 .public	addNewToken

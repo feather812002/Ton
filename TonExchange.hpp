@@ -96,7 +96,7 @@ __interface ITonExchange {
   [[internal, external, noaccept, dyn_chain_parse]]
   void deposit(uint256 customer_wallet_address_hex,uint256 token_root_hex,bytes tokenName,bytes tokenSymbol,uint8 decimals, int8 token_type,TokenAmount tokenAmount) ;
   
-  [[getter,dyn_chain_parse]]
+  [[getter]]
   customer_token getFungibleTokenBalance(uint256 customer_wallet_address_hex,uint256 token_root_hex) ;
   
   [[internal, external, noaccept, dyn_chain_parse]]
@@ -105,7 +105,7 @@ __interface ITonExchange {
   [[internal, external, noaccept, dyn_chain_parse]]
   void withdrawTest(address exchange_wallet_address,address to_wallet_address,TokenAmount tokenAmount) ;
 
-  [[getter,dyn_chain_parse]]
+  [[getter]]
   dict_array<TokenId> getNFFungibleTokenBalance(uint256 customer_wallet_address_hex,uint256 token_root_hex) ;
   // [[internal, external, noaccept, dyn_chain_parse]]
   // void withdrawal () = 16;    
@@ -118,19 +118,19 @@ __interface ITonExchange {
   [[internal, external, dyn_chain_parse]]
   void cancelOrder(uint32 order_no);
 
-  [[getter,dyn_chain_parse]]
+  [[getter]]
   dict_array<order> getAllOrder() ;
 
-  [[getter,dyn_chain_parse]]
+  [[getter]]
   dict_array<order> getMyMakerOrders(uint256 maker_address) ;
 
-  [[getter,dyn_chain_parse]]
+  [[getter]]
   dict_array<order> getMyTakerOrders(uint256 taker_address) ;
 
-  [[getter,dyn_chain_parse]]
+  [[getter]]
   dict_array<order> getMyCancelOrders(uint256 maker_address) ;
 
-   [[getter,dyn_chain_parse]]
+   [[getter]]
   dict_array<order> getMyFilledOrders(uint256 maker_address) ;
 
   [[internal, external,  dyn_chain_parse]]
@@ -140,7 +140,7 @@ __interface ITonExchange {
   [[internal, external, dyn_chain_parse]]
   void putTestDate(uint256 exchangeWallet1,uint256 exchangeWallet2);
 
-  [[getter,dyn_chain_parse]]
+  [[getter]]
   dict_array<support_token> getAllSupportTokens();
 };
 

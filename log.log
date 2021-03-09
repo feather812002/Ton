@@ -6,12 +6,12 @@ Input arguments:
 init_data: None
 is_update_tvc: None
 
-Seed phrase: "cute hold supreme fossil online hurt hunt mention type unveil client rival"
-Raw address: 0:a06a68c59e0891669562334ae91e01f24bdb9abdb909b5111d0e0df45e82f1f9
+Seed phrase: "crisp genuine truck alter fossil blast silent decline father chapter catalog craft"
+Raw address: 0:6d6ea53cc7f4b1fcde2ed4194ba76ca1769a770b4a47c70efc79b4d0a0445d76
 testnet:
-Non-bounceable address (for init): 0QCgamjFngiRZpViM0rpHgHyS9uavbkJtREdDg30XoLx-cPA
-Bounceable address (for later access): kQCgamjFngiRZpViM0rpHgHyS9uavbkJtREdDg30XoLx-Z4F
+Non-bounceable address (for init): 0QBtbqU8x_Sx_N4u1BlLp2yhdpp3C0pHxw78ebTQoERddoR9
+Bounceable address (for later access): kQBtbqU8x_Sx_N4u1BlLp2yhdpp3C0pHxw78ebTQoERddtm4
 mainnet:
-Non-bounceable address (for init): UQCgamjFngiRZpViM0rpHgHyS9uavbkJtREdDg30XoLx-XhK
-Bounceable address (for later access): EQCgamjFngiRZpViM0rpHgHyS9uavbkJtREdDg30XoLx-SWP
+Non-bounceable address (for init): UQBtbqU8x_Sx_N4u1BlLp2yhdpp3C0pHxw78ebTQoERddj_3
+Bounceable address (for later access): EQBtbqU8x_Sx_N4u1BlLp2yhdpp3C0pHxw78ebTQoERddmIy
 Succeeded

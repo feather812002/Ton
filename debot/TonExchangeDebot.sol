@@ -9,10 +9,10 @@ import "./sdk/Sdk.sol";
 import "./sdk/Menu.sol";
 
 interface ITonExchange{
-     function getAllSupportTokens() external pure returns (support_token[] supportTokens);
+     function getAllSupportTokens() external view returns (SupportToken[] supportTokens);
 }
 
-struct support_token {
+struct SupportToken {
   uint256 exchange_wallet_addr;
   bytes token_symbol;
 }
@@ -25,8 +25,12 @@ contract TonExchangeDebot is Debot {
         tvm.accept();
         _;
     }
+    modifier accept() {
+        tvm.accept();
+        _;
+    }
     address exchange_address;
-    support_token[] support_token_list;
+    SupportToken[] support_token_list;
 
     constructor(string debotAbi) public {
         require(tvm.pubkey() == msg.pubkey(), 100);
@@ -103,7 +107,7 @@ contract TonExchangeDebot is Debot {
             if (state != "Active") {
                 return;
             }
-           //uint32 expiretime = now + 60000;
+           uint32 expiretime = now + 60000;
             optional(uint256) pubkey;
             ITonExchange(exchange_address).getAllSupportTokens{
                 extMsg: true,
@@ -113,9 +117,8 @@ contract TonExchangeDebot is Debot {
                 callbackId:0x10,
                 onErrorId:0,
                 abiVer:2,
-                expire: 0x10
+                expire: expiretime
             }();
-            Terminal.print(0, format("functionid :{}",tvm.functionId(showAllSupportTokens)));
             Terminal.print(0, "This is start  get to all support tokens of this exchange");
             Terminal.print(0, format("Exchange address :{} ",exchange_address));
            
@@ -129,13 +132,24 @@ contract TonExchangeDebot is Debot {
           Terminal.print(0, "This is wrong when get to all support tokens");
     }
 
-    function showAllSupportTokens(support_token[] tokens) public  functionID(0x10){
+    function showAllSupportTokens(SupportToken[] supportTokens) public accept functionID(0x10){
      
-        support_token_list=tokens;
-        Terminal.print(0,format("Total support tokens: {} ",support_token_list.length));
+        Terminal.print(0,format("Total support tokens: {} ",supportTokens.length));
+        
+        support_token_list = new SupportToken[](supportTokens.length);
+        SupportToken newSupportToen=supportTokens[1];
+        // newSupportToen.exchange_wallet_addr=uint256(10);
+        // newSupportToen.token_symbol="0";
+         Terminal.print(0, format("{}",newSupportToen.exchange_wallet_addr));
+	
+        for (uint32 i = 0; i < supportTokens.length; i++) {
+            
+            Terminal.print(0, format("{}",uint256(i)));
+		}
         // for (uint8 i = 0; i < support_token_list.length; i++) {
-        //     Terminal.print(0, format("{}.Token {} -Token root address:{} ",i,support_token_list[i].token_symbol,support_token_list[i].exchange_wallet_addr));
-        //  }
+        //      support_token supporttoken=support_token_list[i];
+        //      Terminal.print(0, format("{}. {}",i,supporttoken.exchange_wallet_addr));
+        // }
          
     }
 
