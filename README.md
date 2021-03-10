@@ -1,4 +1,24 @@
-# Ton Exchange Install
+# TonExchange Introduction
+
+TonExchange is a DEX trade system , it  work with Order Book mode. it already support follow function :
+
+* User can add new TIP3 token support (fungible and nonfugible).
+* User can deposit or withdrawal to exchange.
+* User can put ,cancle and fill order with already support TIP3 tokens.
+* Exchange supprt any fungible token or nonfugible token pair . (FT:FT,NFT:FT, NFT:NFT).
+* TonExchange will make sure the order trade success or fail in all.It can ensure that the transmission of both parties in the transaction constitutes an atomic transaction mode.
+make sure one order will  succeed at the same time, or fail at the same time.
+* TonExchange security control by smart contract, so it is enoguh security for a exchange .
+* TonExchange support charge fee.
+  The maker will 0 fee and only need pay gas fee for put order.
+  The taker will pay 1 Ton for each fill order , the 0.5 ton will tranfer to maker address as encourage fluidity.
+  (because we support NFT:FT tarde pairs , so the fee charge by trade token itself is diffcult and impossible, so for now ,I simple let the fee work with Ton)
+
+> Next: if I can get some support from community and the community think this can work in future, I will improve it support more comfortable web page and debot interface. let it support part fill for FT:FT token pairs. support auto merge/fill trade ,etc .
+
+
+
+# TonExchange Install
 
 ## 1. TIP3 improve and some limit 
 
@@ -25,9 +45,9 @@ Call  deployEmptyWallet or deployWallet method from root contract to deploy wall
 
 > Note: Don't deploy the TIP3 wallet by tonos-cli , only deploy it by the deployEmptyWallet or deployWallet function from the root contract.because ,According to TIP3's address calculation mechanism , when it try to get the expected address ,it must need the initial parameters input ,for example : token name, token symbol,token decimals etc. but when you work with tonos-cli command ,the command should be(/tonos-cli genaddr -v --genkey ${.key.json} {.tvc} ${.abi.json}) , it must can't pass these initial parameters, so in last you will get a different address, then you can success deploy the wallet contract to online ,but must can't send token to other one .
 
-## 4. Deploy TonExchange contract by ./deploy.sh
-
-Before you start deploy the TonExchange contract you should setting some environment variable:
+## 4. Deploy TonExchange contract 
+You can call by ./deploy.sh script deploy TonExchange contract.
+But before you start deploy the TonExchange contract you should setting some environment variable:
 
 ```
 export CLI_PATH=./tonos-cli/target/release
