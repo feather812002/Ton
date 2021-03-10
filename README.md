@@ -26,7 +26,7 @@ make sure one order will  succeed at the same time, or fail at the same time.
 
 * Add some exchange function , let customer can work with exchange from the wallet.
 
-* Add deployEmptyWallet to nonfugible Root contract .
+* Add deployEmptyWallet to nonfugible Root contract and exposed the deployEmptyWallet from fugible root contract(I don't know why the TIP3 source code hide the deployEmptyWallet to internal call).
 
 
 
