@@ -43,6 +43,10 @@ The fungible and nonfugilbe work .
 
 Call  deployEmptyWallet or deployWallet method from root contract to deploy wallet contract.
 
+* deployEmptyWallet can be call by any one from client or other contract in the source design , but in my test it only work with external call.
+
+* deployWallet only work with root contract owner at now .
+
 > Note: Don't deploy the TIP3 wallet by tonos-cli , only deploy it by the deployEmptyWallet or deployWallet function from the root contract.because ,According to TIP3's address calculation mechanism , when it try to get the expected address ,it must need the initial parameters input ,for example : token name, token symbol,token decimals etc. but when you work with tonos-cli command ,the command should be(/tonos-cli genaddr -v --genkey ${.key.json} {.tvc} ${.abi.json}) , it must can't pass these initial parameters, so in last you will get a different address, then you can success deploy the wallet contract to online ,but must can't send token to other one .
 
 ## 4. Deploy TonExchange contract 
