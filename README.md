@@ -12,7 +12,7 @@
 
 ## 2. Deploy TIP3 token root contract
 
-### 2.1 Deploy TIP3 fungible and nonfugible wotk follow this url:
+Deploy TIP3 fungible and nonfugible wotk follow this url:
 
 https://github.com/tonlabs/ton-labs-contracts/tree/master/cpp/tokens-fungible
 The fungible and nonfugilbe work .
