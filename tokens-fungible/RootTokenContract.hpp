@@ -60,8 +60,8 @@ __interface IRootTokenContract {
   uint256 getWalletCodeHash() = 24;
 
    // fix the wallet code 
-  [[internal,external, noaccept, dyn_chain_parse, answer_id]]
-  uint256 fixWalletCode(cell wallet_code) = 25;
+  // [[internal,external, noaccept, dyn_chain_parse, answer_id]]
+  // uint256 fixWalletCode(cell wallet_code) = 25;
 
   // [[internal,external, noaccept, dyn_chain_parse]]
   // void callDeploy(int8 workchain_id, uint256 pubkey, uint256 internal_owner,WalletGramsType grams,address to)=26;

@@ -6,12 +6,12 @@ Input arguments:
 init_data: None
 is_update_tvc: None
 
-Seed phrase: "crisp genuine truck alter fossil blast silent decline father chapter catalog craft"
-Raw address: 0:6d6ea53cc7f4b1fcde2ed4194ba76ca1769a770b4a47c70efc79b4d0a0445d76
+Seed phrase: "poverty bachelor blast drop hire face hill special wink surface fall thrive"
+Raw address: 0:b130cc4f67578fea45ae6aaa61bed45167bbbebdb280d49b9a8fa212d438e990
 testnet:
-Non-bounceable address (for init): 0QBtbqU8x_Sx_N4u1BlLp2yhdpp3C0pHxw78ebTQoERddoR9
-Bounceable address (for later access): kQBtbqU8x_Sx_N4u1BlLp2yhdpp3C0pHxw78ebTQoERddtm4
+Non-bounceable address (for init): 0QCxMMxPZ1eP6kWuaqphvtRRZ7u-vbKA1Juaj6IS1DjpkBST
+Bounceable address (for later access): kQCxMMxPZ1eP6kWuaqphvtRRZ7u-vbKA1Juaj6IS1DjpkElW
 mainnet:
-Non-bounceable address (for init): UQBtbqU8x_Sx_N4u1BlLp2yhdpp3C0pHxw78ebTQoERddj_3
-Bounceable address (for later access): EQBtbqU8x_Sx_N4u1BlLp2yhdpp3C0pHxw78ebTQoERddmIy
+Non-bounceable address (for init): UQCxMMxPZ1eP6kWuaqphvtRRZ7u-vbKA1Juaj6IS1DjpkK8Z
+Bounceable address (for later access): EQCxMMxPZ1eP6kWuaqphvtRRZ7u-vbKA1Juaj6IS1DjpkPLc
 Succeeded

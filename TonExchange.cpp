@@ -66,11 +66,24 @@ public:
     return root_address_hex;
   }
 
-  __always_inline support_token getSupportTokenByRoot(uint256 root_addr_hex) {
-    support_token token_wallet={uint256(0),{0x0}};
+  __always_inline show_support_token getSupportTokenByRoot(uint256 root_addr_hex) {
+    show_support_token token_wallet={uint256(0),{0x0}};
     if(support_token_list.contains(root_addr_hex.get())){
-        token_wallet=support_token_list.get_at(root_addr_hex.get());
+        token_wallet={root_addr_hex,support_token_list.get_at(root_addr_hex.get()).token_symbol};
     }
+    return token_wallet;
+  }
+
+  __always_inline show_support_token getSupportTokenByNo(uint128 token_count) {
+    uint128 start_count=uint128(0);
+    show_support_token token_wallet={uint256(0),{0x0}};
+     for(auto supporttoken:support_token_list){
+       if(token_count==start_count){
+         token_wallet={supporttoken.first,supporttoken.second.token_symbol};
+       }
+       start_count++;
+     }
+  
     return token_wallet;
   }
 
@@ -82,6 +95,8 @@ public:
         }
     return supportTokenList;
   }
+
+  
 
 
   //------------------------Customer Funds Manager---------------------------------
@@ -465,8 +480,8 @@ public:
   void putTestDate(uint256 exchangeWallet1,uint256 exchangeWallet2){
 
     tvm_accept();
-    support_token supporttoen1={exchangeWallet1,{0}};
-    support_token supporttoen2={exchangeWallet2,{0}};
+    support_token supporttoen1={exchangeWallet1,"30"};
+    support_token supporttoen2={exchangeWallet2,"30"};
 
     support_token_list.set_at(0xcbb30ce4991335ab7f7698d1339c13387471e3626541c66b0428413998339ed7, supporttoen1);
     support_token_list.set_at(0x93caf629948c3c0c73f93f9381e52bcbca5b24ac395d7c70559f9ddd55bc6614, supporttoen2);

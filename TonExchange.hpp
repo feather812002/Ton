@@ -24,6 +24,11 @@ struct support_token {
   bytes token_symbol;
 };
 
+struct show_support_token {
+  uint256 token_root_addr;
+  bytes token_symbol;
+};
+
 struct customer_token {
   //uint256 token_root_aadr_hex;
   bytes token_name;
@@ -84,12 +89,15 @@ __interface ITonExchange {
   [[internal, external, noaccept, dyn_chain_parse]]
   void regNewToken(uint256 token_wallet_hex,bytes token_symbol) ;
 
-  [[getter,dyn_chain_parse]]
+  [[getter]]
   uint256 getRootAddress() ;
 
-  [[getter,dyn_chain_parse]]
-  support_token getSupportTokenByRoot(uint256 root_addr_hex) ;
+  [[getter]]
+  show_support_token getSupportTokenByRoot(uint256 root_addr_hex) ;
 
+
+  [[getter]]
+  show_support_token getSupportTokenByNo(uint128 token_count) ;
   //---------------Customer Funds Manager---------------
   // [[internal, external, noaccept, dyn_chain_parse]]
   // void deposit() = 15;
@@ -142,6 +150,8 @@ __interface ITonExchange {
 
   [[getter]]
   dict_array<support_token> getAllSupportTokens();
+
+
 };
 
 struct DTonExchange {

@@ -1,272 +1,268 @@
 {
-  "ABI version": 2,
-  "header": [
-    "pubkey",
-    "time",
-    "expire"
-  ],
-  "functions": [
-  {
-    "name": "constructor",
-    "inputs": [
-    ],
-    "outputs": [
-    ]
-  },
-  {
-    "name": "regNewToken",
-    "inputs": [
-    { "name":"token_wallet_hex", "type":"uint256" },
-    { "name":"token_symbol", "type":"bytes" }
-    ],
-    "outputs": [
-    ]
-  },
-  {
-    "name": "getRootAddress",
-    "inputs": [
-    ],
-    "outputs": [
-    { "name":"value0", "type":"uint256" }
-    ]
-  },
-  {
-    "name": "getSupportTokenByRoot",
-    "inputs": [
-    { "name":"root_addr_hex", "type":"uint256" }
-    ],
-    "outputs": [
-    { "name":"exchange_wallet_addr", "type":"uint256" },
-    { "name":"token_symbol", "type":"bytes" }
-    ]
-  },
-  {
-    "name": "deposit",
-    "inputs": [
-    { "name":"customer_wallet_address_hex", "type":"uint256" },
-    { "name":"token_root_hex", "type":"uint256" },
-    { "name":"tokenName", "type":"bytes" },
-    { "name":"tokenSymbol", "type":"bytes" },
-    { "name":"decimals", "type":"uint8" },
-    { "name":"token_type", "type":"int8" },
-    { "name":"tokenAmount", "type":"uint128" }
-    ],
-    "outputs": [
-    ]
-  },
-  {
-    "name": "getFungibleTokenBalance",
-    "inputs": [
-    { "name":"customer_wallet_address_hex", "type":"uint256" },
-    { "name":"token_root_hex", "type":"uint256" }
-    ],
-    "outputs": [
-    { "name":"token_name", "type":"bytes" },
-    { "name":"token_symbol", "type":"bytes" },
-    { "name":"decimals", "type":"uint8" },
-    { "name":"token_balance", "type":"uint128" }
-    ]
-  },
-  {
-    "name": "withdraw",
-    "inputs": [
-    { "name":"token_root_hex", "type":"uint256" },
-    { "name":"token_type", "type":"int8" },
-    { "name":"tokenAmount", "type":"uint128" }
-    ],
-    "outputs": [
-    ]
-  },
-  {
-    "name": "withdrawTest",
-    "inputs": [
-    { "name":"exchange_wallet_address", "type":"address" },
-    { "name":"to_wallet_address", "type":"address" },
-    { "name":"tokenAmount", "type":"uint128" }
-    ],
-    "outputs": [
-    ]
-  },
-  {
-    "name": "getNFFungibleTokenBalance",
-    "inputs": [
-    { "name":"customer_wallet_address_hex", "type":"uint256" },
-    { "name":"token_root_hex", "type":"uint256" }
-    ],
-    "outputs": [
-    { "name":"value0", "type":"uint128[]" }
-    ]
-  },
-  {
-    "name": "putOrder",
-    "inputs": [
-    { "name":"sell_token_addr_hex", "type":"uint256" },
-    { "name":"sell_amount", "type":"uint128" },
-    { "name":"seller_resive_address", "type":"uint256" },
-    { "name":"buy_token_addr_hex", "type":"uint256" },
-    { "name":"buy_amount", "type":"uint128" }
-    ],
-    "outputs": [
-    ]
-  },
-  {
-    "name": "cancelOrder",
-    "inputs": [
-    { "name":"order_no", "type":"uint32" }
-    ],
-    "outputs": [
-    ]
-  },
-  {
-    "name": "getAllOrder",
-    "inputs": [
-    ],
-    "outputs": [
-    { "components":[
-      { "name":"order_no", "type":"uint32" },
-      { "name":"sell_token_root_address_hex", "type":"uint256" },
-      { "name":"sell_token_amount", "type":"uint128" },
-      { "name":"seller_send_token_address_hex", "type":"uint256" },
-      { "name":"seller_resive_token_address_hex", "type":"uint256" },
-      { "name":"sell_token_symbol", "type":"bytes" },
-      { "name":"sell_token_type", "type":"uint8" },
-      { "name":"buy_token_root_address_hex", "type":"uint256" },
-      { "name":"buy_token_amount", "type":"uint128" },
-      { "name":"buyer_send_token_address_hex", "type":"uint256" },
-      { "name":"buyer_resive_token_address_hex", "type":"uint256" },
-      { "name":"buy_token_symbol", "type":"bytes" },
-      { "name":"buy_token_type", "type":"uint8" },
-      { "name":"order_status", "type":"uint8" }
-    ], "name":"value0", "type":"tuple[]" }
-    ]
-  },
-  {
-    "name": "getMyMakerOrders",
-    "inputs": [
-    { "name":"maker_address", "type":"uint256" }
-    ],
-    "outputs": [
-    { "components":[
-      { "name":"order_no", "type":"uint32" },
-      { "name":"sell_token_root_address_hex", "type":"uint256" },
-      { "name":"sell_token_amount", "type":"uint128" },
-      { "name":"seller_send_token_address_hex", "type":"uint256" },
-      { "name":"seller_resive_token_address_hex", "type":"uint256" },
-      { "name":"sell_token_symbol", "type":"bytes" },
-      { "name":"sell_token_type", "type":"uint8" },
-      { "name":"buy_token_root_address_hex", "type":"uint256" },
-      { "name":"buy_token_amount", "type":"uint128" },
-      { "name":"buyer_send_token_address_hex", "type":"uint256" },
-      { "name":"buyer_resive_token_address_hex", "type":"uint256" },
-      { "name":"buy_token_symbol", "type":"bytes" },
-      { "name":"buy_token_type", "type":"uint8" },
-      { "name":"order_status", "type":"uint8" }
-    ], "name":"value0", "type":"tuple[]" }
-    ]
-  },
-  {
-    "name": "getMyTakerOrders",
-    "inputs": [
-    { "name":"taker_address", "type":"uint256" }
-    ],
-    "outputs": [
-    { "components":[
-      { "name":"order_no", "type":"uint32" },
-      { "name":"sell_token_root_address_hex", "type":"uint256" },
-      { "name":"sell_token_amount", "type":"uint128" },
-      { "name":"seller_send_token_address_hex", "type":"uint256" },
-      { "name":"seller_resive_token_address_hex", "type":"uint256" },
-      { "name":"sell_token_symbol", "type":"bytes" },
-      { "name":"sell_token_type", "type":"uint8" },
-      { "name":"buy_token_root_address_hex", "type":"uint256" },
-      { "name":"buy_token_amount", "type":"uint128" },
-      { "name":"buyer_send_token_address_hex", "type":"uint256" },
-      { "name":"buyer_resive_token_address_hex", "type":"uint256" },
-      { "name":"buy_token_symbol", "type":"bytes" },
-      { "name":"buy_token_type", "type":"uint8" },
-      { "name":"order_status", "type":"uint8" }
-    ], "name":"value0", "type":"tuple[]" }
-    ]
-  },
-  {
-    "name": "getMyCancelOrders",
-    "inputs": [
-    { "name":"maker_address", "type":"uint256" }
-    ],
-    "outputs": [
-    { "components":[
-      { "name":"order_no", "type":"uint32" },
-      { "name":"sell_token_root_address_hex", "type":"uint256" },
-      { "name":"sell_token_amount", "type":"uint128" },
-      { "name":"seller_send_token_address_hex", "type":"uint256" },
-      { "name":"seller_resive_token_address_hex", "type":"uint256" },
-      { "name":"sell_token_symbol", "type":"bytes" },
-      { "name":"sell_token_type", "type":"uint8" },
-      { "name":"buy_token_root_address_hex", "type":"uint256" },
-      { "name":"buy_token_amount", "type":"uint128" },
-      { "name":"buyer_send_token_address_hex", "type":"uint256" },
-      { "name":"buyer_resive_token_address_hex", "type":"uint256" },
-      { "name":"buy_token_symbol", "type":"bytes" },
-      { "name":"buy_token_type", "type":"uint8" },
-      { "name":"order_status", "type":"uint8" }
-    ], "name":"value0", "type":"tuple[]" }
-    ]
-  },
-  {
-    "name": "getMyFilledOrders",
-    "inputs": [
-    { "name":"maker_address", "type":"uint256" }
-    ],
-    "outputs": [
-    { "components":[
-      { "name":"order_no", "type":"uint32" },
-      { "name":"sell_token_root_address_hex", "type":"uint256" },
-      { "name":"sell_token_amount", "type":"uint128" },
-      { "name":"seller_send_token_address_hex", "type":"uint256" },
-      { "name":"seller_resive_token_address_hex", "type":"uint256" },
-      { "name":"sell_token_symbol", "type":"bytes" },
-      { "name":"sell_token_type", "type":"uint8" },
-      { "name":"buy_token_root_address_hex", "type":"uint256" },
-      { "name":"buy_token_amount", "type":"uint128" },
-      { "name":"buyer_send_token_address_hex", "type":"uint256" },
-      { "name":"buyer_resive_token_address_hex", "type":"uint256" },
-      { "name":"buy_token_symbol", "type":"bytes" },
-      { "name":"buy_token_type", "type":"uint8" },
-      { "name":"order_status", "type":"uint8" }
-    ], "name":"value0", "type":"tuple[]" }
-    ]
-  },
-  {
-    "name": "fillOrder",
-    "inputs": [
-    { "name":"order_no", "type":"uint32" },
-    { "name":"buyer_resive_token_address_hex", "type":"uint256" }
-    ],
-    "outputs": [
-    { "name":"value0", "type":"uint8" }
-    ]
-  },
-  {
-    "name": "putTestDate",
-    "inputs": [
-    { "name":"exchangeWallet1", "type":"uint256" },
-    { "name":"exchangeWallet2", "type":"uint256" }
-    ],
-    "outputs": [
-    ]
-  },
-  {
-    "name": "getAllSupportTokens",
-    "inputs": [
-    ],
-    "outputs": [
-    { "components":[
-      { "name":"exchange_wallet_addr", "type":"uint256" },
-      { "name":"token_symbol", "type":"bytes" }
-    ], "name":"value0", "type":"tuple[]" }
-    ]
-  }
-  ],
-  "events": [
-  ]
+	"ABI version": 2,
+	"header": ["pubkey", "time", "expire"],
+	"functions": [
+		{
+			"name": "constructor",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "regNewToken",
+			"id": "0x50",
+			"inputs": [
+				{"name":"tooken_wallet_address_hex","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getSupportTokenByRootHexAddres",
+			"id": "0x51",
+			"inputs": [
+				{"name":"root_address_hex","type":"uint256"}
+			],
+			"outputs": [
+				{"name":"value0","type":"uint256"}
+			]
+		},
+		{
+			"name": "sendUpdateRquestToWallet",
+			"id": "0x31",
+			"inputs": [
+				{"name":"token_wallet","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "queryWalletKey",
+			"id": "0x32",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "deployTipWalletByWalletAddress",
+			"id": "0x10",
+			"inputs": [
+				{"name":"wallet_address_","type":"address"},
+				{"name":"grams_","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "deployTipWalletByRootWalletAddress",
+			"id": "0x11",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "deployTipWalletByRootWalletAddress2",
+			"id": "0x18",
+			"inputs": [
+				{"name":"root_address","type":"address"},
+				{"name":"publickey","type":"uint256"},
+				{"name":"internal_owner","type":"uint256"},
+				{"name":"grams_value_","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "handelDeployEmptyWallteByRootaddress",
+			"id": "0x12",
+			"inputs": [
+				{"name":"walletress","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "approveWallet",
+			"id": "0x14",
+			"inputs": [
+				{"name":"dest_wallet_","type":"address"},
+				{"name":"spender_address_","type":"address"},
+				{"name":"tokens","type":"uint128"},
+				{"name":"grams_value_","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setGiver",
+			"id": "0x20",
+			"inputs": [
+				{"name":"giver_address","type":"address"},
+				{"name":"value","type":"uint256"},
+				{"name":"grams_value_","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "approveWalletExt",
+			"id": "0x15",
+			"inputs": [
+				{"name":"dest_wallet_","type":"address"},
+				{"name":"spender_address_","type":"address"},
+				{"name":"tokens","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "approveWalletExtError",
+			"id": "0x19",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getTvmpublic",
+			"id": "0x52",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"value0","type":"uint256"}
+			]
+		},
+		{
+			"name": "getName",
+			"id": "0x17",
+			"inputs": [
+				{"name":"root_address","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setName",
+			"id": "0x18",
+			"inputs": [
+				{"name":"value0","type":"bytes"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "showName",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"value0","type":"bytes"}
+			]
+		},
+		{
+			"name": "getReturnAddress",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"value0","type":"address"}
+			]
+		},
+		{
+			"name": "addNewTokenToDatabase",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "putOrder",
+			"inputs": [
+				{"name":"sellTokenWalletAddress","type":"address"},
+				{"name":"sellTokenNumber","type":"uint128"},
+				{"name":"buyTokenWalletAddress","type":"address"},
+				{"name":"buyTokenNumber","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "cancleOrder",
+			"inputs": [
+				{"name":"orderId","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "executeOrder",
+			"inputs": [
+				{"name":"orderId","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "putTestDate",
+			"inputs": [
+				{"name":"exchangeWallet1","type":"uint256"},
+				{"name":"exchangeWallet2","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getAllSupportTokens",
+			"inputs": [
+			],
+			"outputs": [
+				{"components":[{"name":"exchange_wallet_addr","type":"uint256"},{"name":"token_symbol","type":"bytes"}],"name":"value0","type":"tuple[]"}
+			]
+		},
+		{
+			"name": "counter",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"counter","type":"uint256"}
+			]
+		},
+		{
+			"name": "name",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"name","type":"bytes"}
+			]
+		},
+		{
+			"name": "symbol",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"symbol","type":"bytes"}
+			]
+		},
+		{
+			"name": "error",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"error","type":"bytes"}
+			]
+		},
+		{
+			"name": "roor_return_address",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"roor_return_address","type":"address"}
+			]
+		}
+	],
+	"data": [
+	],
+	"events": [
+	]
 }

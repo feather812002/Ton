@@ -97,6 +97,13 @@
 			]
 		},
 		{
+			"name": "printMain",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
 			"name": "getAllSupportTokensError",
 			"inputs": [
 			],
@@ -104,10 +111,20 @@
 			]
 		},
 		{
-			"name": "showAllSupportTokens",
+			"name": "getAllSupportTokensLength",
 			"id": "0x10",
 			"inputs": [
-				{"components":[{"name":"exchange_wallet_addr","type":"uint256"},{"name":"token_symbol","type":"bytes"}],"name":"supportTokens","type":"tuple[]"}
+				{"components":[{"name":"exchange_wallet_addr","type":"uint256"},{"name":"token_symbol","type":"bytes"}],"name":"value0","type":"tuple[]"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "showSupportToken",
+			"id": "0x11",
+			"inputs": [
+				{"name":"token_root_addr","type":"uint256"},
+				{"name":"token_symbol","type":"bytes"}
 			],
 			"outputs": [
 			]

@@ -14,7 +14,7 @@ using namespace schema;
 template<bool Internal>
 class RootTokenContract final : public smart_interface<IRootTokenContract>, public DRootTokenContract {
 public:
-  static constexpr unsigned wallet_hash = 0x81377f56b41447bec4df12f61213199820e7abe3bc9bf3a028781c106dc76ade;
+  static constexpr unsigned wallet_hash = 0xd1956a832d0eb308e08ddca34003a6e8fa14fedcea3da2e9c07f6b7e1c08d86b;
 
   struct error_code : tvm::error_code {
     static constexpr unsigned message_sender_is_not_my_owner  = 100;
@@ -49,13 +49,13 @@ public:
     }
     start_balance_ = tvm_balance();
   }
-  __always_inline
-  uint256 fixWalletCode(cell wallet_code){
-    check_owner();
-    tvm_accept();
-    wallet_code_ = wallet_code;
-    return uint256{__builtin_tvm_hashcu(wallet_code_)};
-  }
+  // __always_inline
+  // uint256 fixWalletCode(cell wallet_code){
+  //   check_owner();
+  //   tvm_accept();
+  //   wallet_code_ = wallet_code;
+  //   return uint256{__builtin_tvm_hashcu(wallet_code_)};
+  // }
 
 
   __always_inline

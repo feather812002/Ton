@@ -19,17 +19,28 @@ contract TonExchange is ITonExchange{
 	bytes public symbol;
 	bytes public error;
 
-    struct TokenBalance {
-        bytes token_name;
-        bytes token_symbol;
-        uint128 token_balance;
-        uint256 root_token_address_hex;
-    }
+struct TokenBalance {
+	bytes token_name;
+	bytes token_symbol;
+	uint128 token_balance;
+	uint256 root_token_address_hex;
+}
+
+struct support_token {
+  uint256 exchange_wallet_addr;
+  bytes token_symbol;
+}
+
+struct show_support_token {
+  uint256 token_root_addr;
+  bytes token_symbol;
+}
+
 
     //------------------Token Manager------------------------------
     //support token list.   root address hex-->exchange wallet address hex.
     mapping(uint256 => uint256) exchangeTokenWalletList;
-   
+    mapping(uint256 =>support_token) support_token_list;
 
 	address public roor_return_address;
 
@@ -91,7 +102,7 @@ contract TonExchange is ITonExchange{
         if(exchangeTokenWalletList.exists(root_address_hex)){
             optional(uint256) info = exchangeTokenWalletList.fetch(root_address_hex);
             if (info.hasValue()) {
-                token_address=info;
+               // token_address=info;
             }
         }
 
@@ -135,7 +146,7 @@ contract TonExchange is ITonExchange{
 	{
 		 //ITONTokenWallet(wallet_address_).getRootAddress{value: grams_, callback: deployTipWalletByRootWalletAddress}();
 	}
-	function deployTipWalletByRootWalletAddress(address root_address,uint256 publickey,uint256 internal_owner,uint128 grams_value_)
+	function deployTipWalletByRootWalletAddress()
 		public
 		functionID(0x11)
 	{
@@ -148,7 +159,7 @@ contract TonExchange is ITonExchange{
 		//tvm.sendrawmsg(m_cell,1);
 		 //address addr = address.makeAddrStd(0, 0x0123456789012345678901234567890123456789012345678901234567890123);
         //TvmCell m_cell = tvm.buildExtMsg({abiVer: 1, callbackId: 0, onErrorId: 0, dest: addr, time: 0x123, expire: 0x12345, call: {IRootTokenContract.deployEmptyWallet, uint32(0),int8(0),publickey,internal_owner,grams_value_}});
-		IRootTokenContract(root_address).deployEmptyWallet{value:200000000,callback:handelDeployEmptyWallteByRootaddress}(uint32(0),int8(0),publickey,internal_owner,grams_value_);
+		//IRootTokenContract(root_address).deployEmptyWallet{value:200000000,callback:handelDeployEmptyWallteByRootaddress}(uint32(0),int8(0),publickey,internal_owner,grams_value_);
 		counter++;
 	}
 	function deployTipWalletByRootWalletAddress2(address root_address,uint256 publickey,uint256 internal_owner,uint128 grams_value_)
@@ -293,6 +304,32 @@ contract TonExchange is ITonExchange{
     {
         
     }
+
+	function putTestDate(uint256 exchangeWallet1,uint256 exchangeWallet2)
+	 public
+	 AlwaysAccept
+	{
+	support_token supporttoen1=support_token(exchangeWallet1,"0");
+    support_token supporttoen2=support_token(exchangeWallet2,"0");
+
+    support_token_list.add(0xcbb30ce4991335ab7f7698d1339c13387471e3626541c66b0428413998339ed7,supporttoen1);
+    support_token_list.add(0x93caf629948c3c0c73f93f9381e52bcbca5b24ac395d7c70559f9ddd55bc6614,supporttoen2);
+    
+	} 
+
+
+	function getAllSupportTokens() 
+		public 
+		view
+	returns (support_token[] value0)
+	{
+	
+		for((,support_token value):support_token_list){
+			value0.push(value);
+		
+		}
+		
+	}	
 
     //-----------------------------------------------
      fallback() external {

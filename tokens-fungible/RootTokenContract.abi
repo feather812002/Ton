@@ -155,17 +155,6 @@
     "id": "0x18"
   },
   {
-    "name": "fixWalletCode",
-    "inputs": [
-    { "name":"_answer_id", "type":"uint32" },
-    { "name":"wallet_code", "type":"cell" }
-    ],
-    "outputs": [
-    { "name":"value0", "type":"uint256" }
-    ],
-    "id": "0x19"
-  },
-  {
     "name": "regTokenToExchange",
     "inputs": [
     { "name":"exchange_address", "type":"address" }
