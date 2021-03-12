@@ -93,7 +93,7 @@ __interface ITonExchange {
   uint256 getRootAddress() ;
 
   [[getter]]
-  show_support_token getSupportTokenByRoot(uint256 root_addr_hex) ;
+  support_token getSupportTokenByRoot(uint256 root_addr_hex) ;
 
 
   [[getter]]
@@ -149,7 +149,7 @@ __interface ITonExchange {
   void putTestDate(uint256 exchangeWallet1,uint256 exchangeWallet2);
 
   [[getter]]
-  dict_array<support_token> getAllSupportTokens();
+  dict_array<show_support_token> getAllSupportTokens();
 
 
 };

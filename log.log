@@ -6,12 +6,12 @@ Input arguments:
 init_data: None
 is_update_tvc: None
 
-Seed phrase: "poverty bachelor blast drop hire face hill special wink surface fall thrive"
-Raw address: 0:b130cc4f67578fea45ae6aaa61bed45167bbbebdb280d49b9a8fa212d438e990
+Seed phrase: "quarter million enrich fire try tower smooth humor radio weather legal attack"
+Raw address: 0:0b6274da1c14f3a34cc64b3b7370b7de1626d051fd015d18d6211e370b518d17
 testnet:
-Non-bounceable address (for init): 0QCxMMxPZ1eP6kWuaqphvtRRZ7u-vbKA1Juaj6IS1DjpkBST
-Bounceable address (for later access): kQCxMMxPZ1eP6kWuaqphvtRRZ7u-vbKA1Juaj6IS1DjpkElW
+Non-bounceable address (for init): 0QALYnTaHBTzo0zGSztzcLfeFibQUf0BXRjWIR43C1GNF9lx
+Bounceable address (for later access): kQALYnTaHBTzo0zGSztzcLfeFibQUf0BXRjWIR43C1GNF4S0
 mainnet:
-Non-bounceable address (for init): UQCxMMxPZ1eP6kWuaqphvtRRZ7u-vbKA1Juaj6IS1DjpkK8Z
-Bounceable address (for later access): EQCxMMxPZ1eP6kWuaqphvtRRZ7u-vbKA1Juaj6IS1DjpkPLc
+Non-bounceable address (for init): UQALYnTaHBTzo0zGSztzcLfeFibQUf0BXRjWIR43C1GNF2L7
+Bounceable address (for later access): EQALYnTaHBTzo0zGSztzcLfeFibQUf0BXRjWIR43C1GNFz8-
 Succeeded

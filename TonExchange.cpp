@@ -66,10 +66,10 @@ public:
     return root_address_hex;
   }
 
-  __always_inline show_support_token getSupportTokenByRoot(uint256 root_addr_hex) {
-    show_support_token token_wallet={uint256(0),{0x0}};
+  __always_inline support_token getSupportTokenByRoot(uint256 root_addr_hex) {
+    support_token token_wallet={uint256(0),{0x0}};
     if(support_token_list.contains(root_addr_hex.get())){
-        token_wallet={root_addr_hex,support_token_list.get_at(root_addr_hex.get()).token_symbol};
+        token_wallet=support_token_list.get_at(root_addr_hex.get());
     }
     return token_wallet;
   }
@@ -87,10 +87,10 @@ public:
     return token_wallet;
   }
 
-  __always_inline   dict_array<support_token>  getAllSupportTokens(){
-     dict_array<support_token> supportTokenList={};
+  __always_inline   dict_array<show_support_token>  getAllSupportTokens(){
+     dict_array<show_support_token> supportTokenList={};
      for(auto supporttoken:support_token_list){
-            support_token new_support_token={supporttoken.first,supporttoken.second.token_symbol};
+            show_support_token new_support_token={supporttoken.first,supporttoken.second.token_symbol};
             supportTokenList.push_back(new_support_token);
         }
     return supportTokenList;

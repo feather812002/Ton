@@ -2,8 +2,8 @@
 
 TonExchange is a DEX trade system , it  work with Order Book mode. it already support follow function :
 
-* User can add new TIP3 token support (fungible and nonfugible).
-* User can deposit or withdrawal to exchange.
+* User can add new TIP3 token support (fungible and nonfugible) by temself.
+* User can deposit or withdrawal TIP3 token to exchange.
 * User can put ,cancle and fill order with already support TIP3 tokens.
 * Exchange supprt any fungible token or nonfugible token pair . (FT:FT,NFT:FT, NFT:NFT).
 * TonExchange will make sure the order trade success or fail in all.It can ensure that the transmission of both parties in the transaction constitutes an atomic transaction mode.
@@ -14,7 +14,7 @@ make sure one order will  succeed at the same time, or fail at the same time.
   The taker will pay 1 Ton for each fill order , the 0.5 ton will tranfer to maker address as encourage fluidity.
   (because we support NFT:FT tarde pairs , so the fee charge by trade token itself is diffcult and impossible, so for now ,I simple let the fee work with Ton)
 
-> Next: if I can get some support from community and the community think this can work in future, I will improve it support more comfortable web page and debot interface. let it support part fill for FT:FT token pairs. support auto merge/fill trade ,etc .
+> Next: if I can get some support from community , I will improve it support more comfortable web page and debot interface. let it support part fill & AMM for FT:FT token pairs. support auto merge/fill order ,etc .
 
 
 
@@ -22,11 +22,11 @@ make sure one order will  succeed at the same time, or fail at the same time.
 
 ## 1. TIP3 improve and some limit 
 
-* Improve the (approve) and (allowance) function to support multiple address for fungible and nonfugible tokens. 
+* Improve the (approve) and (allowance) function to support multiple address for fungible and  non-fungible tokens. 
 
 * Add some exchange function , let customer can work with exchange from the wallet.
 
-* Add deployEmptyWallet to nonfugible Root contract and exposed the deployEmptyWallet from fugible root contract(I don't know why the TIP3 source code hide the deployEmptyWallet to internal call).
+* Add deployEmptyWallet to  non-fungible  Root contract and exposed the deployEmptyWallet from fugible root contract(I don't know why the TIP3 source code hide the deployEmptyWallet to internal call).
 
 
 

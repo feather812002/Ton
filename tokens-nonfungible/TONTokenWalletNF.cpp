@@ -8,6 +8,7 @@
 using namespace tvm;
 using namespace schema;
 
+template<bool Internal>
 class TONTokenWallet final : public smart_interface<ITONTokenWallet>, public DTONTokenWallet {
 public:
   struct error_code : tvm::error_code {
@@ -42,9 +43,15 @@ public:
 
   __always_inline
   void transfer(lazy<MsgAddressInt> dest, TokenId tokenId, WalletGramsType grams) {
-    auto sender = int_sender();
-    uint256 sender_hex=std::get<addr_std>(sender()).address;
-    require(sender_hex>0, error_code::message_sender_is_not_my_owner);
+    uint256 sender_hex=uint256(0);
+    auto sender=address::make_std(int8(0), uint256(0)); 
+    if constexpr (Internal){
+      sender= int_sender();
+      sender_hex=std::get<addr_std>(sender()).address;
+      require(sender_hex>0, error_code::message_sender_is_not_my_owner);
+    }
+     
+      
     require(tvm_pubkey() == wallet_public_key_ || sender_hex==owner_addr_, error_code::message_sender_is_not_my_owner);
 
     // Transfer to zero address is not allowed.
@@ -245,7 +252,8 @@ public:
   void depositToExchange(address exchange_address) {
       //check_owner();
       //get source_address from sender , only can handle and send self funds
-      auto sender = int_sender();
+      auto sender=int_sender(); 
+      
       uint256 sender_address_hex=std::get<addr_std>(sender()).address;
       uint256 root_address_hex= std::get<addr_std>(root_address_()).address;
       //require(exchange_address != 0,error_code::no_exchange_address_for_deposit);
@@ -409,5 +417,5 @@ private:
 DEFINE_JSON_ABI(ITONTokenWallet, DTONTokenWallet, ETONTokenWallet);
 
 // ----------------------------- Main entry functions ---------------------- //
-DEFAULT_MAIN_ENTRY_FUNCTIONS(TONTokenWallet, ITONTokenWallet, DTONTokenWallet, TOKEN_WALLET_TIMESTAMP_DELAY)
+DEFAULT_MAIN_ENTRY_FUNCTIONS_TMPL(TONTokenWallet, ITONTokenWallet, DTONTokenWallet, TOKEN_WALLET_TIMESTAMP_DELAY)
 
