@@ -34,9 +34,9 @@ fi
 sleep 1
 echo DEPLOY TonExchange
 $CLI_PATH/tonos-cli deploy $filenametvc "{}" --sign $filenamekeys --abi $filenameabi
-echo ADD TEST DATA
+# echo ADD TEST DATA
 
-$CLI_PATH/tonos-cli call $debot_address putTestDate "{\"exchangeWallet1\":\"0xb18bfc2d0689ebb63a9166a8f09b713cbcdfc8a7582c0d3576e5446bf9e03aae\",\"exchangeWallet2\":\"0xb68a44ffbed961600782883681cf855a0b03c9aab05b043c428e39c8e12999f0\"}" --sign $filenamekeys --abi $filenameabi
+# $CLI_PATH/tonos-cli call $debot_address putTestDate "{\"exchangeWallet1\":\"0xb18bfc2d0689ebb63a9166a8f09b713cbcdfc8a7582c0d3576e5446bf9e03aae\",\"exchangeWallet2\":\"0xb68a44ffbed961600782883681cf855a0b03c9aab05b043c428e39c8e12999f0\"}" --sign $filenamekeys --abi $filenameabi
 
 echo DONE
 echo $debot_address > address.log

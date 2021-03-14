@@ -2,19 +2,19 @@
 
 TonExchange is a DEX trade system , it  work with Order Book mode. it already support follow function :
 
-* User can add new TIP3 token support (fungible and nonfugible) by temself.
+* User can add new TIP3 token support (fungible and non fungible) by themself.
 * User can deposit or withdrawal TIP3 token to exchange.
-* User can put ,cancle and fill order with already support TIP3 tokens.
-* Exchange supprt any fungible token or nonfugible token pair . (FT:FT,NFT:FT, NFT:NFT).
+* User can put ,cancel and fill order with already support TIP3 tokens.
+* Exchange support any fungible token or non fungible token pair . (FT:FT,NFT:FT, NFT:NFT).
 * TonExchange will make sure the order trade success or fail in all.It can ensure that the transmission of both parties in the transaction constitutes an atomic transaction mode.
 make sure one order will  succeed at the same time, or fail at the same time.
-* TonExchange security control by smart contract, so it is enoguh security for a exchange .
+* TonExchange security control by smart contract, so it is enough security for a exchange .
 * TonExchange support charge fee.
   The maker will 0 fee and only need pay gas fee for put order.
-  The taker will pay 1 Ton for each fill order , the 0.5 ton will tranfer to maker address as encourage fluidity.
-  (because we support NFT:FT tarde pairs , so the fee charge by trade token itself is diffcult and impossible, so for now ,I simple let the fee work with Ton)
+  The taker will pay 1 Ton for each fill order , the 0.5 ton will transfer to maker address as encourage fluidity.
+  (because we support NFT:FT tarde pairs , so the fee charge by trade token itself is difficult and impossible, so for now ,I simple let the fee work with Ton)
 
-> Next: if I can get some support from community , I will improve it support more comfortable web page and debot interface. let it support part fill & AMM for FT:FT token pairs. support auto merge/fill order ,etc .
+
 
 
 

@@ -6,12 +6,12 @@ Input arguments:
 init_data: None
 is_update_tvc: None
 
-Seed phrase: "quarter million enrich fire try tower smooth humor radio weather legal attack"
-Raw address: 0:0b6274da1c14f3a34cc64b3b7370b7de1626d051fd015d18d6211e370b518d17
+Seed phrase: "aisle wage void opera now scene asset impose expose axis crisp juice"
+Raw address: 0:05d2c41cb6e9660b691f38ab2140907bdcd5b6b98fd77644ace1dbaa1dffe8fe
 testnet:
-Non-bounceable address (for init): 0QALYnTaHBTzo0zGSztzcLfeFibQUf0BXRjWIR43C1GNF9lx
-Bounceable address (for later access): kQALYnTaHBTzo0zGSztzcLfeFibQUf0BXRjWIR43C1GNF4S0
+Non-bounceable address (for init): 0QAF0sQctulmC2kfOKshQJB73NW2uY_XdkSs4duqHf_o_teg
+Bounceable address (for later access): kQAF0sQctulmC2kfOKshQJB73NW2uY_XdkSs4duqHf_o_opl
 mainnet:
-Non-bounceable address (for init): UQALYnTaHBTzo0zGSztzcLfeFibQUf0BXRjWIR43C1GNF2L7
-Bounceable address (for later access): EQALYnTaHBTzo0zGSztzcLfeFibQUf0BXRjWIR43C1GNFz8-
+Non-bounceable address (for init): UQAF0sQctulmC2kfOKshQJB73NW2uY_XdkSs4duqHf_o_mwq
+Bounceable address (for later access): EQAF0sQctulmC2kfOKshQJB73NW2uY_XdkSs4duqHf_o_jHv
 Succeeded

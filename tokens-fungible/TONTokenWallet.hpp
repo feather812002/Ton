@@ -102,14 +102,14 @@ __interface ITONTokenWallet {
   [[internal, external, noaccept, dyn_chain_parse]]
   void sendDepositToExchangeRequst(address exchange_wallet_address,address exchange_address,WalletGramsType grams_exchange) = 32;
 
-  [[internal, external, noaccept, dyn_chain_parse]]
-  void approveTest(address spender, TokensType tokens) = 33;
+  // [[internal, external, noaccept, dyn_chain_parse]]
+  // void approveTest(address spender, TokensType tokens) = 33;
 
   [[internal, external, noaccept, dyn_chain_parse]]
   void regTokenToExchangeFromRoot(address exchange_address,WalletGramsType grams) = 34;
 
-  [[internal, external, noaccept, dyn_chain_parse]]
-  void sendTransaction(address dest,WalletGramsType grams,cell msgBody) = 35;
+  // [[internal, external, noaccept, dyn_chain_parse]]
+  // void sendTransaction(address dest,WalletGramsType grams,cell msgBody) = 35;
 
   [[internal, external, noaccept, dyn_chain_parse]]
   void withdrawFromExchange(address exchange_address,TokensAmount tokenAmount,WalletGramsType grams) = 36;

@@ -13,61 +13,61 @@ __interface IRootTokenContract {
   // expected offchain constructor execution
   [[internal, external, dyn_chain_parse]]
   void constructor(bytes name, bytes symbol, uint8 decimals,
-    uint256 root_public_key, uint256 root_owner, cell wallet_code, TokensType total_supply) = 11;
+    uint256 root_public_key, uint256 root_owner, cell wallet_code, TokensType total_supply) ;
 
   // Should be provided pubkey (for external owned wallet) or std addr (for internal owned wallet).
   // The other value must be zero.
   [[internal, external, noaccept, dyn_chain_parse, answer_id]]
   address deployWallet(int8 workchain_id, uint256 pubkey, uint256 internal_owner,
-                       TokensType tokens, WalletGramsType grams) = 12;
+                       TokensType tokens, WalletGramsType grams) ;
 
   // Anyone may request to deploy an empty wallet
   [[internal, external,noaccept, dyn_chain_parse, answer_id]]
   address deployEmptyWallet(int8 workchain_id, uint256 pubkey, uint256 internal_owner,
-                            WalletGramsType grams) = 13;
+                            WalletGramsType grams) ;
 
   [[internal, external, noaccept, dyn_chain_parse]]
-  void grant(address dest, TokensType tokens, WalletGramsType grams) = 14;
+  void grant(address dest, TokensType tokens, WalletGramsType grams) ;
 
   [[internal, external, noaccept, dyn_chain_parse]]
-  void mint(TokensType tokens) = 15;
+  void mint(TokensType tokens) ;
 
   [[getter]]
-  bytes getName() = 16;
+  bytes getName() ;
 
   [[getter]]
-  bytes getSymbol() = 17;
+  bytes getSymbol() ;
 
   [[getter]]
-  uint8 getDecimals() = 18;
+  uint8 getDecimals() ;
 
   [[getter]]
-  uint256 getRootKey() = 19;
+  uint256 getRootKey() ;
 
   [[getter]]
-  TokensType getTotalSupply() = 20;
+  TokensType getTotalSupply() ;
 
   [[getter]]
-  TokensType getTotalGranted() = 21;
+  TokensType getTotalGranted() ;
 
   [[getter]]
-  cell getWalletCode() = 22;
+  cell getWalletCode() ;
 
   [[getter]]
-  address getWalletAddress(int8 workchain_id, uint256 pubkey, uint256 owner_std_addr) = 23;
+  address getWalletAddress(int8 workchain_id, uint256 pubkey, uint256 owner_std_addr) ;
 
   [[getter]]
-  uint256 getWalletCodeHash() = 24;
+  uint256 getWalletCodeHash() ;
 
-   // fix the wallet code 
-  // [[internal,external, noaccept, dyn_chain_parse, answer_id]]
-  // uint256 fixWalletCode(cell wallet_code) = 25;
+   //fix the wallet code 
+  [[internal,external, dyn_chain_parse, answer_id]]
+  uint256 fixWalletCode(cell wallet_code) ;
 
   // [[internal,external, noaccept, dyn_chain_parse]]
   // void callDeploy(int8 workchain_id, uint256 pubkey, uint256 internal_owner,WalletGramsType grams,address to)=26;
 
    [[internal, external, noaccept, dyn_chain_parse]]
-   void regTokenToExchange(address exchange_address) = 26;
+   void regTokenToExchange(address exchange_address) ;
 };
 
 struct DRootTokenContract {

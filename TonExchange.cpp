@@ -355,6 +355,18 @@ public:
     return order_array;
   }
 
+  // __always_inline 
+  // order getOrdersByIndex(uint32 index) {
+  //    auto [oder_idx,get_order]=getOrderByNo(index);
+  //    return get_order;
+  // }
+
+  // __always_inline 
+  // uint32 getAllOrdersSize() {
+  //   //set default value to 0
+  //   return order_no_count;
+  // }
+
   __always_inline 
   dict_array<order> getMyMakerOrders(uint256 maker_address) {
     //set default value to 0
@@ -408,6 +420,13 @@ public:
     return all_orders;
   }
 
+  
+  // __always_inline
+  // //address_type   1-address as maker, 2- address as taker.
+  // uint128 getMyOrderSize(uint256 maker_address,uint8 order_status,uint8 address_type)
+  // {
+
+  // }
   __always_inline 
   uint8 fillOrder(uint32 order_no,uint256 buyer_resive_token_address_hex){
     uint8 result=uint8(0);

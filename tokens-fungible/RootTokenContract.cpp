@@ -35,7 +35,6 @@ public:
             error_code::define_pubkey_or_internal_owner);
     // require(__builtin_tvm_hashcu(wallet_code) == wallet_hash,
     //         error_code::wrong_wallet_code_hash);
-
     name_ = name;
     symbol_ = symbol;
     decimals_ = decimals;
@@ -49,13 +48,13 @@ public:
     }
     start_balance_ = tvm_balance();
   }
-  // __always_inline
-  // uint256 fixWalletCode(cell wallet_code){
-  //   check_owner();
-  //   tvm_accept();
-  //   wallet_code_ = wallet_code;
-  //   return uint256{__builtin_tvm_hashcu(wallet_code_)};
-  // }
+  __always_inline
+  uint256 fixWalletCode(cell wallet_code){
+    check_owner();
+    tvm_accept();
+    wallet_code_ = wallet_code;
+    return uint256{__builtin_tvm_hashcu(wallet_code_)};
+  }
 
 
   __always_inline

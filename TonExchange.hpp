@@ -151,6 +151,15 @@ __interface ITonExchange {
   [[getter]]
   dict_array<show_support_token> getAllSupportTokens();
 
+  // [[getter]]
+  // uint32 getAllOrdersSize();
+
+  // [[getter]]
+  // order getOrdersByIndex(uint32 index);
+
+  // [[getter]]
+  // uint128 getMyOrderSize(uint256 maker_address,uint8 order_status,uint8 address_type);
+
 
 };
 

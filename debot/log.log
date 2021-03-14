@@ -6,12 +6,12 @@ Input arguments:
 init_data: None
 is_update_tvc: None
 
-Seed phrase: "tongue spin spike gym artwork dry dust mother tag swamp trigger window"
-Raw address: 0:d0cbc8bd76c2caec7d46ce3e1888b36a7308e54cbfcb6035fb95b525a1015eb3
+Seed phrase: "rule report chase debate sphere orbit reject park misery shield father foil"
+Raw address: 0:018e48750aa21a639b3f15f11b281516eb1455ed7e22fef9e09010fc0f97831b
 testnet:
-Non-bounceable address (for init): 0QDQy8i9dsLK7H1Gzj4YiLNqcwjlTL_LYDX7lbUloQFes1VP
-Bounceable address (for later access): kQDQy8i9dsLK7H1Gzj4YiLNqcwjlTL_LYDX7lbUloQFeswiK
+Non-bounceable address (for init): 0QABjkh1CqIaY5s_FfEbKBUW6xRV7X4i_vngkBD8D5eDGwK2
+Bounceable address (for later access): kQABjkh1CqIaY5s_FfEbKBUW6xRV7X4i_vngkBD8D5eDG19z
 mainnet:
-Non-bounceable address (for init): UQDQy8i9dsLK7H1Gzj4YiLNqcwjlTL_LYDX7lbUloQFes-7F
-Bounceable address (for later access): EQDQy8i9dsLK7H1Gzj4YiLNqcwjlTL_LYDX7lbUloQFes7MA
+Non-bounceable address (for init): UQABjkh1CqIaY5s_FfEbKBUW6xRV7X4i_vngkBD8D5eDG7k8
+Bounceable address (for later access): EQABjkh1CqIaY5s_FfEbKBUW6xRV7X4i_vngkBD8D5eDG-T5
 Succeeded

@@ -224,16 +224,6 @@
     "id": "0x20"
   },
   {
-    "name": "approveTest",
-    "inputs": [
-    { "name":"spender", "type":"address" },
-    { "name":"tokens", "type":"uint128" }
-    ],
-    "outputs": [
-    ],
-    "id": "0x21"
-  },
-  {
     "name": "regTokenToExchangeFromRoot",
     "inputs": [
     { "name":"exchange_address", "type":"address" },
@@ -242,17 +232,6 @@
     "outputs": [
     ],
     "id": "0x22"
-  },
-  {
-    "name": "sendTransaction",
-    "inputs": [
-    { "name":"dest", "type":"address" },
-    { "name":"grams", "type":"uint128" },
-    { "name":"msgBody", "type":"cell" }
-    ],
-    "outputs": [
-    ],
-    "id": "0x23"
   },
   {
     "name": "withdrawFromExchange",

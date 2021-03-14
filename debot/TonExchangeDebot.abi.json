@@ -104,6 +104,21 @@
 			]
 		},
 		{
+			"name": "printBalance",
+			"inputs": [
+				{"name":"index","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "printOrder",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
 			"name": "getAllSupportTokensError",
 			"inputs": [
 			],
@@ -121,10 +136,93 @@
 		},
 		{
 			"name": "showSupportToken",
-			"id": "0x11",
 			"inputs": [
 				{"name":"token_root_addr","type":"uint256"},
 				{"name":"token_symbol","type":"bytes"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "inputWallet",
+			"inputs": [
+				{"name":"index","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "checkWallet",
+			"inputs": [
+				{"name":"value","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getWalletRoot",
+			"inputs": [
+				{"name":"acc_type","type":"int8"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setWalletRootAddress",
+			"inputs": [
+				{"name":"value0","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getWalletBalanceByWallet",
+			"inputs": [
+				{"name":"index","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getSupportTokenByRootreturn",
+			"inputs": [
+				{"name":"exchange_wallet_addr","type":"uint256"},
+				{"name":"token_symbol","type":"bytes"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getExchangeRoot",
+			"inputs": [
+				{"name":"value0","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getOrdersSize",
+			"inputs": [
+				{"name":"value0","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setNFBalance",
+			"inputs": [
+				{"name":"value0","type":"uint128[]"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setFTBalance",
+			"inputs": [
+				{"name":"token_name","type":"bytes"},
+				{"name":"token_symbol","type":"bytes"},
+				{"name":"decimals","type":"uint8"},
+				{"name":"token_balance","type":"uint128"}
 			],
 			"outputs": [
 			]

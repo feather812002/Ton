@@ -18,8 +18,7 @@
     { "name":"total_supply", "type":"uint128" }
     ],
     "outputs": [
-    ],
-    "id": "0xb"
+    ]
   },
   {
     "name": "deployWallet",
@@ -33,8 +32,7 @@
     ],
     "outputs": [
     { "name":"value0", "type":"address" }
-    ],
-    "id": "0xc"
+    ]
   },
   {
     "name": "deployEmptyWallet",
@@ -47,8 +45,7 @@
     ],
     "outputs": [
     { "name":"value0", "type":"address" }
-    ],
-    "id": "0xd"
+    ]
   },
   {
     "name": "grant",
@@ -58,8 +55,7 @@
     { "name":"grams", "type":"uint128" }
     ],
     "outputs": [
-    ],
-    "id": "0xe"
+    ]
   },
   {
     "name": "mint",
@@ -67,8 +63,7 @@
     { "name":"tokens", "type":"uint128" }
     ],
     "outputs": [
-    ],
-    "id": "0xf"
+    ]
   },
   {
     "name": "getName",
@@ -76,8 +71,7 @@
     ],
     "outputs": [
     { "name":"value0", "type":"bytes" }
-    ],
-    "id": "0x10"
+    ]
   },
   {
     "name": "getSymbol",
@@ -85,8 +79,7 @@
     ],
     "outputs": [
     { "name":"value0", "type":"bytes" }
-    ],
-    "id": "0x11"
+    ]
   },
   {
     "name": "getDecimals",
@@ -94,8 +87,7 @@
     ],
     "outputs": [
     { "name":"value0", "type":"uint8" }
-    ],
-    "id": "0x12"
+    ]
   },
   {
     "name": "getRootKey",
@@ -103,8 +95,7 @@
     ],
     "outputs": [
     { "name":"value0", "type":"uint256" }
-    ],
-    "id": "0x13"
+    ]
   },
   {
     "name": "getTotalSupply",
@@ -112,8 +103,7 @@
     ],
     "outputs": [
     { "name":"value0", "type":"uint128" }
-    ],
-    "id": "0x14"
+    ]
   },
   {
     "name": "getTotalGranted",
@@ -121,8 +111,7 @@
     ],
     "outputs": [
     { "name":"value0", "type":"uint128" }
-    ],
-    "id": "0x15"
+    ]
   },
   {
     "name": "getWalletCode",
@@ -130,8 +119,7 @@
     ],
     "outputs": [
     { "name":"value0", "type":"cell" }
-    ],
-    "id": "0x16"
+    ]
   },
   {
     "name": "getWalletAddress",
@@ -142,8 +130,7 @@
     ],
     "outputs": [
     { "name":"value0", "type":"address" }
-    ],
-    "id": "0x17"
+    ]
   },
   {
     "name": "getWalletCodeHash",
@@ -151,8 +138,17 @@
     ],
     "outputs": [
     { "name":"value0", "type":"uint256" }
+    ]
+  },
+  {
+    "name": "fixWalletCode",
+    "inputs": [
+    { "name":"_answer_id", "type":"uint32" },
+    { "name":"wallet_code", "type":"cell" }
     ],
-    "id": "0x18"
+    "outputs": [
+    { "name":"value0", "type":"uint256" }
+    ]
   },
   {
     "name": "regTokenToExchange",
@@ -160,8 +156,7 @@
     { "name":"exchange_address", "type":"address" }
     ],
     "outputs": [
-    ],
-    "id": "0x1a"
+    ]
   }
   ],
   "events": [
